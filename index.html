@@ -136,217 +136,6 @@
             font-size: 0.9rem;
         }
         
-        /* AI Chat Interface */
-        .ai-chat-container {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ai-chat-container::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
-            animation: gradientShift 3s ease-in-out infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { transform: translateX(-100%); }
-            50% { transform: translateX(100%); }
-        }
-
-        .ai-chat-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .ai-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            animation: aiPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes aiPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
-        }
-
-        .ai-chat-title {
-            font-size: 1.4rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .ai-chat-subtitle {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        .chat-messages {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .chat-message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .chat-message.user {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            margin-left: auto;
-            text-align: right;
-        }
-
-        .chat-message.ai {
-            background: rgba(255, 255, 255, 0.9);
-            color: #2c3e50;
-            margin-right: auto;
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .chat-input {
-            flex: 1;
-            min-height: 40px;
-            max-height: 100px;
-            resize: vertical;
-            border-radius: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 15px;
-            font-size: 0.9rem;
-        }
-
-        .chat-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        .chat-send-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chat-send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .chat-send-btn:disabled {
-            background: #b2b2b2;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .thinking-indicator {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            color: #667eea;
-            font-style: italic;
-            margin-top: 10px;
-        }
-
-        .thinking-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .thinking-dot {
-            width: 6px;
-            height: 6px;
-            background: #667eea;
-            border-radius: 50%;
-            animation: thinkingBounce 1.4s ease-in-out infinite both;
-        }
-
-        .thinking-dot:nth-child(1) { animation-delay: -0.32s; }
-        .thinking-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes thinkingBounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-        .ai-examples {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .ai-examples h4 {
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            opacity: 0.9;
-        }
-
-        .example-prompts {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .example-prompt {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .example-prompt:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-        
         input, select, button, textarea {
             padding: 10px 15px;
             border: none;
@@ -496,6 +285,144 @@
         .wheel-container:hover {
             transform: scale(1.03);
         }
+
+        /* Enhanced Result Display */
+        .result-display {
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,248,255,0.9));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.1),
+                0 5px 15px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-display.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-display.winner {
+            animation: winnerPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .result-header h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-icon {
+            font-size: 1.8rem;
+            color: #f39c12;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        .result-content {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .result-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 12px;
+            background-color: rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.6);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-celebration {
+            margin-top: 15px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s ease;
+        }
+
+        .result-celebration.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .celebration-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+            animation: celebrationGlow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes winnerPulse {
+            0% {
+                box-shadow: 
+                    0 15px 35px rgba(0,0,0,0.1),
+                    0 5px 15px rgba(0,0,0,0.08),
+                    0 0 0 0 rgba(102, 126, 234, 0.4);
+            }
+            100% {
+                box-shadow: 
+                    0 20px 45px rgba(0,0,0,0.15),
+                    0 8px 25px rgba(0,0,0,0.12),
+                    0 0 0 10px rgba(102, 126, 234, 0.1);
+            }
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes celebrationGlow {
+            0% {
+                text-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 15px rgba(231, 76, 60, 0.8), 0 0 25px rgba(255, 193, 7, 0.6);
+                transform: scale(1.05);
+            }
+        }
         
         #wheel {
             width: 100%;
@@ -577,67 +504,40 @@
         
         .result-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             text-align: center;
-            margin: 30px auto 20px auto;
+            margin-top: 20px;
         }
         
         #result {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
-            min-height: 70px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,248,255,0.8));
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
             backdrop-filter: blur(15px);
-            border: 3px solid rgba(255,255,255,0.6);
-            border-radius: 20px;
-            padding: 25px;
-            color: #2c3e50;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.1),
-                0 5px 15px rgba(0,0,0,0.08),
-                inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-image: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c) 1;
-            position: relative;
-            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            animation: resultPulse 2s ease-in-out infinite;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        #result::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.8s ease-in-out;
-        }
-
-        #result.show {
-            animation: resultShow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        #result.show::before {
-            left: 100%;
-        }
-
-        @keyframes resultShow {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(-20px);
-                filter: blur(5px);
+        @keyframes resultPulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             }
             50% {
-                transform: scale(1.05) translateY(0);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-                filter: blur(0px);
+                transform: scale(1.02);
+                text-shadow: 0 0 20px rgba(255,255,255,0.8), 2px 2px 4px rgba(0,0,0,0.5);
             }
         }
 
@@ -2308,59 +2208,6 @@
             <button id="spinBtn"><i class="fas fa-sync-alt"></i> Spin the Wheel!</button>
         </div>
         
-        <!-- AI Chat Interface -->
-        <div class="ai-chat-container" id="aiChatContainer">
-            <div class="ai-chat-header">
-                <div class="ai-avatar">🤖</div>
-                <div>
-                    <div class="ai-chat-title">AI Wheel Creator</div>
-                    <div class="ai-chat-subtitle">Tell me your idea and I'll create the perfect wheel for you!</div>
-                </div>
-            </div>
-            
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat-message ai">
-                    <strong>👋 Hi there!</strong><br>
-                    I'm your AI assistant! Tell me what kind of wheel you want to create. For example:<br>
-                    • "Create a food decision wheel with 8 options"<br>
-                    • "Make a random activity wheel for 6 slices"<br>
-                    • "Generate a movie genre wheel with 10 choices"
-                </div>
-            </div>
-            
-            <div class="thinking-indicator" id="thinkingIndicator">
-                <span>🤖 AI is thinking</span>
-                <div class="thinking-dots">
-                    <div class="thinking-dot"></div>
-                    <div class="thinking-dot"></div>
-                    <div class="thinking-dot"></div>
-                </div>
-            </div>
-            
-            <div class="chat-input-container">
-                <textarea 
-                    class="chat-input" 
-                    id="chatInput" 
-                    placeholder="Describe your wheel idea... (e.g., 'Create a random hobby wheel with 8 fun activities')"
-                    rows="2"
-                ></textarea>
-                <button class="chat-send-btn" id="chatSendBtn">
-                    <i class="fas fa-paper-plane"></i>
-                    Send
-                </button>
-            </div>
-            
-            <div class="ai-examples">
-                <h4>💡 Quick Examples:</h4>
-                <div class="example-prompts">
-                    <span class="example-prompt" onclick="fillChatInput('Create a random food wheel with 8 cuisines')">🍕 Food wheel</span>
-                    <span class="example-prompt" onclick="fillChatInput('Make a daily exercise wheel with 6 workouts')">💪 Exercise wheel</span>
-                    <span class="example-prompt" onclick="fillChatInput('Generate a movie night wheel with 10 genres')">🎬 Movie wheel</span>
-                    <span class="example-prompt" onclick="fillChatInput('Create a weekend activity wheel with 12 fun things')">🎯 Activity wheel</span>
-                </div>
-            </div>
-        </div>
-        
         <div class="wheel-container" id="wheelContainer">
             <div id="wheel"></div>
             <button class="wheel-info-button" id="wheelInfoBtn">
@@ -2368,9 +2215,18 @@
             </button>
         </div>
         
-        <!-- Result Display -->
-        <div class="result-container" id="resultContainer">
-            <div class="result" id="result">🎯 Ready to Spin!</div>
+        <!-- Enhanced Result Display -->
+        <div class="result-display" id="resultDisplay">
+            <div class="result-header">
+                <i class="fas fa-trophy result-icon"></i>
+                <h3>🎯 Winner</h3>
+            </div>
+            <div class="result-content" id="resultContent">
+                <div class="result-text">Spin the wheel to see the result!</div>
+            </div>
+            <div class="result-celebration" id="resultCelebration">
+                <div class="celebration-text">🎉 Congratulations! 🎉</div>
+            </div>
         </div>
         
         <div class="preset-wheels" id="presetWheels">
@@ -2989,195 +2845,6 @@
         `;
         document.head.appendChild(style);
 
-        // AI Chat Functionality
-        class AIWheelCreator {
-            constructor() {
-                this.wheelTemplates = {
-                    food: {
-                        categories: ['Pizza', 'Sushi', 'Tacos', 'Burger', 'Thai Food', 'Italian', 'Chinese', 'Mexican', 'Indian', 'Greek', 'BBQ', 'Salad'],
-                        colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FECA57', '#FF9FF3', '#54A0FF', '#5F27CD']
-                    },
-                    activities: {
-                        categories: ['Reading', 'Gaming', 'Walking', 'Cooking', 'Movies', 'Exercise', 'Music', 'Art', 'Dancing', 'Photography', 'Gardening', 'Shopping'],
-                        colors: ['#6C5CE7', '#A29BFE', '#FD79A8', '#FDCB6E', '#6C5CE7', '#74B9FF', '#00B894', '#E17055']
-                    },
-                    exercise: {
-                        categories: ['Push-ups', 'Squats', 'Running', 'Yoga', 'Cycling', 'Swimming', 'Dancing', 'Weightlifting', 'Stretching', 'Hiking', 'Jump Rope', 'Planks'],
-                        colors: ['#00B894', '#00CEC9', '#6C5CE7', '#A29BFE', '#FD79A8', '#FDCB6E', '#E17055', '#74B9FF']
-                    },
-                    movies: {
-                        categories: ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi', 'Romance', 'Thriller', 'Animation', 'Documentary', 'Fantasy', 'Adventure', 'Mystery'],
-                        colors: ['#E74C3C', '#F39C12', '#F1C40F', '#2ECC71', '#3498DB', '#9B59B6', '#1ABC9C', '#E67E22']
-                    },
-                    hobbies: {
-                        categories: ['Drawing', 'Writing', 'Singing', 'Crafting', 'Coding', 'Baking', 'Collecting', 'Board Games', 'Puzzles', 'Knitting', 'Origami', 'Meditation'],
-                        colors: ['#FF7675', '#6C5CE7', '#00B894', '#FDCB6E', '#74B9FF', '#FD79A8', '#A29BFE', '#00CEC9']
-                    }
-                };
-            }
-
-            async processUserInput(userMessage) {
-                const lowerMessage = userMessage.toLowerCase();
-                
-                // Extract number of slices
-                const sliceMatch = userMessage.match(/(\d+)\s*(slice|option|choice|item)/i);
-                const numSlices = sliceMatch ? parseInt(sliceMatch[1]) : 8;
-                
-                // Determine category
-                let category = 'activities';
-                let customItems = [];
-                
-                if (lowerMessage.includes('food') || lowerMessage.includes('eat') || lowerMessage.includes('restaurant') || lowerMessage.includes('cuisine')) {
-                    category = 'food';
-                } else if (lowerMessage.includes('exercise') || lowerMessage.includes('workout') || lowerMessage.includes('fitness') || lowerMessage.includes('gym')) {
-                    category = 'exercise';
-                } else if (lowerMessage.includes('movie') || lowerMessage.includes('film') || lowerMessage.includes('genre')) {
-                    category = 'movies';
-                } else if (lowerMessage.includes('hobby') || lowerMessage.includes('craft') || lowerMessage.includes('skill')) {
-                    category = 'hobbies';
-                }
-                
-                // Generate wheel data
-                const template = this.wheelTemplates[category];
-                const shuffledItems = [...template.categories].sort(() => 0.5 - Math.random());
-                const selectedItems = shuffledItems.slice(0, numSlices);
-                const colors = template.colors;
-                
-                const wheelData = {
-                    name: this.generateWheelName(category, numSlices),
-                    slices: selectedItems.map((item, index) => ({
-                        text: item,
-                        color: colors[index % colors.length]
-                    }))
-                };
-                
-                return {
-                    response: this.generateResponse(category, numSlices, selectedItems),
-                    wheelData: wheelData
-                };
-            }
-
-            generateWheelName(category, numSlices) {
-                const names = {
-                    food: `Random Food Picker (${numSlices} Options)`,
-                    activities: `Activity Selector (${numSlices} Options)`,
-                    exercise: `Workout Randomizer (${numSlices} Options)`,
-                    movies: `Movie Genre Picker (${numSlices} Options)`,
-                    hobbies: `Hobby Selector (${numSlices} Options)`
-                };
-                return names[category] || `Random Wheel (${numSlices} Options)`;
-            }
-
-            generateResponse(category, numSlices, items) {
-                const responses = {
-                    food: `🍕 Perfect! I've created a delicious food wheel with ${numSlices} options: ${items.slice(0, 3).join(', ')}${items.length > 3 ? ', and more!' : '!'}`,
-                    activities: `🎯 Great choice! Your activity wheel has ${numSlices} fun options including ${items.slice(0, 3).join(', ')}${items.length > 3 ? ', and more!' : '!'}`,
-                    exercise: `💪 Awesome! I've built your workout wheel with ${numSlices} exercises: ${items.slice(0, 3).join(', ')}${items.length > 3 ? ', and more!' : '!'}`,
-                    movies: `🎬 Fantastic! Your movie genre wheel includes ${numSlices} options: ${items.slice(0, 3).join(', ')}${items.length > 3 ? ', and more!' : '!'}`,
-                    hobbies: `🎨 Wonderful! Your hobby wheel has ${numSlices} creative options: ${items.slice(0, 3).join(', ')}${items.length > 3 ? ', and more!' : '!'}`,
-                };
-                return responses[category] || `✨ Created your custom wheel with ${numSlices} options!`;
-            }
-        }
-
-        // Initialize AI Chat
-        let aiCreator = new AIWheelCreator();
-
-        function fillChatInput(text) {
-            document.getElementById('chatInput').value = text;
-        }
-
-        function addChatMessage(message, isUser = false) {
-            const chatMessages = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
-            messageDiv.innerHTML = message;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function showThinking(show) {
-            const indicator = document.getElementById('thinkingIndicator');
-            indicator.style.display = show ? 'flex' : 'none';
-        }
-
-        async function sendChatMessage() {
-            const chatInput = document.getElementById('chatInput');
-            const sendBtn = document.getElementById('chatSendBtn');
-            const message = chatInput.value.trim();
-            
-            if (!message) return;
-            
-            // Add user message
-            addChatMessage(message, true);
-            chatInput.value = '';
-            
-            // Disable send button and show thinking
-            sendBtn.disabled = true;
-            showThinking(true);
-            
-            try {
-                // Simulate AI processing delay
-                await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
-                
-                // Process with AI
-                const result = await aiCreator.processUserInput(message);
-                
-                // Hide thinking indicator
-                showThinking(false);
-                
-                // Add AI response
-                addChatMessage(result.response);
-                
-                // Apply the wheel data
-                if (result.wheelData) {
-                    // Update wheel name
-                    document.getElementById('wheelName').value = result.wheelData.name;
-                    
-                    // Update slice count
-                    document.getElementById('sliceCount').value = result.wheelData.slices.length;
-                    
-                    // Generate the wheel with AI data
-                    generateWheelFromAI(result.wheelData);
-                    
-                    addChatMessage("🎉 Your wheel has been generated! You can now spin it or make further adjustments.");
-                }
-                
-            } catch (error) {
-                showThinking(false);
-                addChatMessage("❌ Oops! Something went wrong. Please try again.");
-                console.error('AI Chat Error:', error);
-            }
-            
-            // Re-enable send button
-            sendBtn.disabled = false;
-        }
-
-        function generateWheelFromAI(wheelData) {
-            // Clear existing slices
-            slices = [];
-            
-            // Add new slices from AI
-            wheelData.slices.forEach(slice => {
-                slices.push({
-                    text: slice.text,
-                    color: slice.color
-                });
-            });
-            
-            // Update the wheel display
-            updateSliceConfiguration();
-            generateWheel();
-            updateWheelData();
-            
-            // Show success animation
-            const wheelContainer = document.getElementById('wheelContainer');
-            wheelContainer.style.animation = 'none';
-            setTimeout(() => {
-                wheelContainer.style.animation = 'wheelGlow 3s ease-in-out infinite alternate';
-            }, 100);
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM Content Loaded - Initializing wheel...');
             // Initialize particle system
@@ -3190,6 +2857,9 @@
             const spinBtn = document.getElementById('spinBtn');
             const sliceConfig = document.getElementById('sliceConfig');
             const resultDisplay = document.getElementById('result');
+            const newResultDisplay = document.getElementById('resultDisplay');
+            const resultContent = document.getElementById('resultContent');
+            const resultCelebration = document.getElementById('resultCelebration');
             const spinSound = document.getElementById('spinSound');
             const winSound = document.getElementById('winSound');
             const tickSound = document.getElementById('tickSound');
@@ -3581,23 +3251,6 @@
                 loadBtn.addEventListener('click', loadWheel);
                 copyBtn.addEventListener('click', copyWheelData);
                 fileInput.addEventListener('change', handleFileUpload);
-                
-                // AI Chat Event Listeners
-                const chatSendBtn = document.getElementById('chatSendBtn');
-                const chatInput = document.getElementById('chatInput');
-                
-                if (chatSendBtn) {
-                    chatSendBtn.addEventListener('click', sendChatMessage);
-                }
-                
-                if (chatInput) {
-                    chatInput.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            sendChatMessage();
-                        }
-                    });
-                }
                 
                 if (menuButton) {
                     menuButton.addEventListener('click', toggleMenu);
@@ -4130,9 +3783,18 @@
                 loadWheelStats();
                 
                 // Reset result display
-                resultDisplay.classList.remove('show');
-                resultDisplay.textContent = '🎯 Ready to Spin!';
-                resultDisplay.style.color = '#2c3e50';
+                if (resultDisplay) {
+                    resultDisplay.classList.remove('show');
+                    resultDisplay.textContent = '';
+                }
+                if (newResultDisplay) {
+                    newResultDisplay.classList.remove('show', 'winner');
+                    const resultText = newResultDisplay.querySelector('.result-text');
+                    if (resultText) resultText.textContent = 'Spin the wheel to see the result!';
+                }
+                if (resultCelebration) {
+                    resultCelebration.classList.remove('show');
+                }
             }
             
             // Update wheel data in textarea
@@ -4252,11 +3914,39 @@
                         confettiSound.play();
                     }
                     
-                    // Display result
+                    // Display result in both old and new displays
                     const selectedSlice = slices[selectedIndex];
-                    resultDisplay.textContent = selectedSlice.text;
-                    resultDisplay.style.color = selectedSlice.color;
-                    resultDisplay.classList.add('show');
+                    
+                    // Update old result display (for compatibility)
+                    if (resultDisplay) {
+                        resultDisplay.textContent = selectedSlice.text;
+                        resultDisplay.style.color = selectedSlice.color;
+                        resultDisplay.classList.add('show');
+                    }
+                    
+                    // Update new enhanced result display
+                    if (newResultDisplay && resultContent) {
+                        const resultText = resultContent.querySelector('.result-text');
+                        if (resultText) {
+                            resultText.textContent = selectedSlice.text;
+                            resultText.style.background = `linear-gradient(45deg, ${selectedSlice.color}, #667eea, #764ba2)`;
+                            resultText.style.webkitBackgroundClip = 'text';
+                            resultText.style.webkitTextFillColor = 'transparent';
+                        }
+                        
+                        // Show the result display with animation
+                        setTimeout(() => {
+                            newResultDisplay.classList.add('show');
+                        }, 500);
+                        
+                        // Add winner effect
+                        setTimeout(() => {
+                            newResultDisplay.classList.add('winner');
+                            if (resultCelebration) {
+                                resultCelebration.classList.add('show');
+                            }
+                        }, 800);
+                    }
                     
                     // Add to statistics
                     addWinToStats(selectedSlice.text);
