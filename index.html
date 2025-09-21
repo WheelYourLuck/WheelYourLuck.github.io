@@ -1153,6 +1153,68 @@
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
             backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            transform: translateX(0);
+        }
+
+        .theme-selector.hidden {
+            transform: translateX(-100px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .theme-close-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 50%;
+            background: #ff4757;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1002;
+        }
+
+        .theme-close-btn:hover {
+            background: #ff3838;
+            transform: scale(1.1);
+        }
+
+        .theme-show-btn {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 1001;
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-show-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .theme-show-btn.visible {
+            display: flex;
         }
 
         .theme-button {
@@ -2143,6 +2205,7 @@
     
     <!-- Theme Selector -->
     <div class="theme-selector" id="themeSelector">
+        <button class="theme-close-btn" id="themeCloseBtn" title="Hide theme panel">&times;</button>
         <button class="theme-button theme-normal" id="normalTheme" title="Normal">🎨</button>
         <button class="theme-button theme-dark" id="darkTheme" title="Dark Mode">🌙</button>
         <button class="theme-button theme-rainbow" id="rainbowTheme" title="Rainbow">🌈</button>
@@ -2150,6 +2213,9 @@
         <button class="theme-button theme-3d" id="3dTheme" title="3D Mode">🎲</button>
         <button class="theme-button theme-disco" id="discoTheme" title="Disco">🕺</button>
     </div>
+    
+    <!-- Theme Show Button (appears when theme selector is hidden) -->
+    <button class="theme-show-btn" id="themeShowBtn" title="Show theme panel">🎨</button>
     
     <div class="menu-panel" id="menuPanel">
         <h2>Menu</h2>
@@ -2887,6 +2953,9 @@
             const resetStatsBtn = document.getElementById('resetStatsBtn');
             
             // Theme elements
+            const themeSelector = document.getElementById('themeSelector');
+            const themeCloseBtn = document.getElementById('themeCloseBtn');
+            const themeShowBtn = document.getElementById('themeShowBtn');
             const normalTheme = document.getElementById('normalTheme');
             const darkTheme = document.getElementById('darkTheme');
             const rainbowTheme = document.getElementById('rainbowTheme');
@@ -3332,6 +3401,32 @@
             if (normalTheme) normalTheme.addEventListener('click', () => setTheme('normal'));
             if (darkTheme) darkTheme.addEventListener('click', () => setTheme('dark'));
             if (rainbowTheme) rainbowTheme.addEventListener('click', () => setTheme('rainbow'));
+            
+            // Theme panel toggle functionality
+            if (themeCloseBtn) {
+                themeCloseBtn.addEventListener('click', hideThemePanel);
+            }
+            if (themeShowBtn) {
+                themeShowBtn.addEventListener('click', showThemePanel);
+            }
+            
+            function hideThemePanel() {
+                if (themeSelector) {
+                    themeSelector.classList.add('hidden');
+                }
+                if (themeShowBtn) {
+                    themeShowBtn.classList.add('visible');
+                }
+            }
+            
+            function showThemePanel() {
+                if (themeSelector) {
+                    themeSelector.classList.remove('hidden');
+                }
+                if (themeShowBtn) {
+                    themeShowBtn.classList.remove('visible');
+                }
+            }
 
             // NEW FEATURE EVENT LISTENERS
 
