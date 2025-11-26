@@ -2930,8 +2930,7 @@
             const generateBtn = document.getElementById('generateBtn');
             const spinBtn = document.getElementById('spinBtn');
             const sliceConfig = document.getElementById('sliceConfig');
-            const resultDisplay = document.getElementById('result');
-            const newResultDisplay = document.getElementById('resultDisplay');
+            const resultDisplay = document.getElementById('resultDisplay');
             const resultContent = document.getElementById('resultContent');
             const resultCelebration = document.getElementById('resultCelebration');
             const spinSound = document.getElementById('spinSound');
@@ -4017,18 +4016,11 @@
                         confettiSound.play();
                     }
                     
-                    // Display result in both old and new displays
+                    // Display result
                     const selectedSlice = slices[selectedIndex];
                     
-                    // Update old result display (for compatibility)
-                    if (resultDisplay) {
-                        resultDisplay.textContent = selectedSlice.text;
-                        resultDisplay.style.color = selectedSlice.color;
-                        resultDisplay.classList.add('show');
-                    }
-                    
-                    // Update new enhanced result display
-                    if (newResultDisplay && resultContent) {
+                    // Update enhanced result display
+                    if (resultDisplay && resultContent) {
                         const resultText = resultContent.querySelector('.result-text');
                         if (resultText) {
                             resultText.textContent = selectedSlice.text;
@@ -4039,12 +4031,12 @@
                         
                         // Show the result display with animation
                         setTimeout(() => {
-                            newResultDisplay.classList.add('show');
+                            resultDisplay.classList.add('show');
                         }, 500);
                         
                         // Add winner effect
                         setTimeout(() => {
-                            newResultDisplay.classList.add('winner');
+                            resultDisplay.classList.add('winner');
                             if (resultCelebration) {
                                 resultCelebration.classList.add('show');
                             }
