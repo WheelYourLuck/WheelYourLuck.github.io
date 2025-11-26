@@ -987,6 +987,35 @@
             padding: 10px;
         }
 
+        .delete-spin-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(255, 71, 87, 0.3);
+        }
+
+        .delete-spin-btn:hover {
+            background: #ee5a6f;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.5);
+        }
+
+        .delete-spin-btn:active {
+            transform: scale(0.95);
+        }
+
         .win-item {
             display: flex;
             justify-content: space-between;
@@ -3557,12 +3586,25 @@
                 if (stats.winHistory.length === 0) {
                     winList.innerHTML = '<p style="text-align: center; color: #999;">No spins yet!</p>';
                 } else {
-                    winList.innerHTML = stats.winHistory.slice(-10).reverse().map(win => `
-                        <div style="padding: 8px; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between;">
-                            <span style="font-weight: bold;">${win.result}</span>
-                            <span style="color: #666; font-size: 0.9em;">${new Date(win.timestamp).toLocaleDateString()}</span>
+                    winList.innerHTML = stats.winHistory.slice(-10).reverse().map((win, index) => {
+                        const actualIndex = stats.winHistory.length - 1 - index;
+                        return `
+                        <div style="padding: 8px; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: bold; flex: 1;">${win.result}</span>
+                            <span style="color: #666; font-size: 0.9em; margin-right: 10px;">${new Date(win.timestamp).toLocaleDateString()}</span>
+                            <button class="delete-spin-btn" data-index="${actualIndex}" title="Delete this result">×</button>
                         </div>
-                    `).join('');
+                    `;
+                    }).join('');
+                    
+                    // Add event listeners to delete buttons
+                    document.querySelectorAll('.delete-spin-btn').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const index = parseInt(this.getAttribute('data-index'));
+                            deleteSingleSpin(index);
+                        });
+                    });
                 }
             }
             
@@ -3602,6 +3644,30 @@
                     wheelName: wheelNameInput.value || 'Custom Wheel'
                 });
                 saveWheelStats();
+            }
+            
+            // Delete a single spin from history
+            function deleteSingleSpin(index) {
+                const wheelName = wheelNameInput.value || 'Custom Wheel';
+                const spinResult = wheelStats.winHistory[index].result;
+                const spinDate = new Date(wheelStats.winHistory[index].timestamp).toLocaleString();
+                
+                if (confirm(`Are you sure you want to delete this spin result?\n\nResult: ${spinResult}\nDate: ${spinDate}\n\nThis action cannot be undone.`)) {
+                    // Load current stats
+                    loadWheelStats();
+                    
+                    // Remove the specific spin
+                    wheelStats.winHistory.splice(index, 1);
+                    
+                    // Update total spins count
+                    wheelStats.totalSpins = Math.max(0, wheelStats.totalSpins - 1);
+                    
+                    // Save updated stats
+                    saveWheelStats();
+                    
+                    // Refresh the display
+                    updateWheelStatsDisplay();
+                }
             }
             
             // Reset wheel statistics
