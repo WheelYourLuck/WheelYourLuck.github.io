@@ -364,16 +364,9 @@
             font-size: 1.8rem;
             font-weight: bold;
             color: #2c3e50;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 15px;
             border-radius: 12px;
-            background-color: rgba(255,255,255,0.4);
+            background-color: rgba(255,255,255,0.6);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.6);
             min-height: 60px;
@@ -2970,12 +2963,6 @@
             const theme3d = document.getElementById('3dTheme');
             const discoTheme = document.getElementById('discoTheme');
             
-            console.log('Elements found:', {
-                wheelInfoBtn: wheelInfoBtn,
-                menuButton: menuButton,
-                wheelInfoPanel: wheelInfoPanel
-            });
-            
             // Menu buttons
             const presetWheelsBtn = document.getElementById('presetWheelsBtn');
             const customWheelBtn = document.getElementById('customWheelBtn');
@@ -3542,6 +3529,10 @@
             
             // Show wheel info panel
             function showWheelInfo() {
+                if (!wheelInfoPanel || !wheelInfoOverlay) {
+                    console.error('Required elements not found for wheel info panel');
+                    return;
+                }
                 loadWheelStats(); // Load current wheel's specific stats
                 updateWheelStatsDisplay();
                 wheelInfoPanel.classList.add('show');
@@ -3886,12 +3877,8 @@
                 
                 // Reset result display
                 if (resultDisplay) {
-                    resultDisplay.classList.remove('show');
-                    resultDisplay.textContent = '';
-                }
-                if (newResultDisplay) {
-                    newResultDisplay.classList.remove('show', 'winner');
-                    const resultText = newResultDisplay.querySelector('.result-text');
+                    resultDisplay.classList.remove('show', 'winner');
+                    const resultText = resultDisplay.querySelector('.result-text');
                     if (resultText) resultText.textContent = 'Spin the wheel to see the result!';
                 }
                 if (resultCelebration) {
@@ -4024,9 +4011,9 @@
                         const resultText = resultContent.querySelector('.result-text');
                         if (resultText) {
                             resultText.textContent = selectedSlice.text;
-                            resultText.style.background = `linear-gradient(45deg, ${selectedSlice.color}, #667eea, #764ba2)`;
-                            resultText.style.webkitBackgroundClip = 'text';
-                            resultText.style.webkitTextFillColor = 'transparent';
+                            resultText.style.color = selectedSlice.color;
+                            resultText.style.fontWeight = 'bold';
+                            resultText.style.textShadow = `0 0 10px ${selectedSlice.color}`;
                         }
                         
                         // Show the result display with animation
@@ -4041,6 +4028,8 @@
                                 resultCelebration.classList.add('show');
                             }
                         }, 800);
+                    } else {
+                        console.error('Result display elements not found');
                     }
                     
                     // Add to statistics
