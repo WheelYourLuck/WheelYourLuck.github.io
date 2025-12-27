@@ -834,9 +834,41 @@
             background-color: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
         }
+
+        .menu-panel .menu-link {
+            width: 100%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .menu-panel .menu-link i {
+            color: #ff0000;
+            font-size: 1rem;
+        }
         
         .menu-panel button:hover {
             background-color: var(--primary-color);
+        }
+
+        .menu-panel .menu-link:hover {
+            background-color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        .menu-panel .menu-link:hover i {
+            color: white;
         }
         
         .audio-toggle {
@@ -2432,6 +2464,9 @@
     
     <div class="menu-panel" id="menuPanel">
         <h2>Menu</h2>
+        <a class="menu-link" href="https://youtube.com/@yourluckyspin?si=-ye6oqAIu8ZpW1o-" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel (opens in a new tab)">
+            <i class="fab fa-youtube"></i> Subscribe on YouTube
+        </a>
         <button id="presetWheelsBtn"><i class="fas fa-star"></i> Preset Wheels</button>
         <button id="customWheelBtn"><i class="fas fa-cog"></i> Custom Wheel</button>
         <button id="savedWheelsBtn"><i class="fas fa-history"></i> Saved Wheels</button>
