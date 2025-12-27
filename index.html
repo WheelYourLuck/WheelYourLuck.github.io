@@ -1132,9 +1132,19 @@
             max-height: none;
             padding: 10px;
 
+            /* Defaults that JS can override to fit all results on one screen */
+            --win-item-gap: 8px;
+            --win-item-padding-y: 8px;
+            --win-item-padding-x: 12px;
+            --win-item-font-size: 14px;
+            --win-date-font-size: 12px;
+            --delete-btn-size: 24px;
+            --delete-btn-font-size: 16px;
+
             /* Multi-column flow makes better use of horizontal space */
             column-count: 3;
             column-gap: 12px;
+            column-fill: auto;
         }
 
         @media (max-width: 1100px) {
@@ -1151,7 +1161,35 @@
 
         .win-list.expanded .win-item {
             break-inside: avoid;
-            margin: 0 0 8px 0;
+            margin: 0 0 var(--win-item-gap) 0;
+        }
+
+        /* When expanded, allow JS-driven fitting */
+        .wheel-info-panel.history-expanded .win-list.expanded .win-item {
+            padding: var(--win-item-padding-y) var(--win-item-padding-x);
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded .win-text {
+            font-size: var(--win-item-font-size);
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded .win-date {
+            font-size: var(--win-date-font-size);
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded.fit-hide-date .win-date {
+            display: none;
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded .delete-spin-btn {
+            width: var(--delete-btn-size);
+            height: var(--delete-btn-size);
+            font-size: var(--delete-btn-font-size);
         }
 
         /* Compact mode: smaller rows + hide date to fit huge histories into one screen */
@@ -3855,6 +3893,8 @@
                     winList.innerHTML = '<p style="text-align: center; color: #999;">No spins yet!</p>';
                     winList.classList.remove('expanded');
                     winList.classList.add('collapsed');
+                    winList.classList.remove('fit-hide-date');
+                    clearWinHistoryFit(winList);
                     if (historyCount) historyCount.textContent = '';
                     if (toggleBtn) {
                         toggleBtn.disabled = true;
@@ -3881,9 +3921,13 @@
                         wheelInfoPanelEl.classList.toggle('history-expanded', winHistoryExpanded);
                     }
 
-                    // Auto-enable compact mode for large histories when expanded
+                    // Compact mode remains as a fallback, but fitting is primarily handled dynamically
                     const shouldCompact = winHistoryExpanded && total > 120;
                     winList.classList.toggle('compact', shouldCompact);
+                    if (!winHistoryExpanded) {
+                        winList.classList.remove('fit-hide-date');
+                        clearWinHistoryFit(winList);
+                    }
 
                     // Update history count display
                     if (historyCount) {
@@ -3960,7 +4004,96 @@
                 
                 winList.innerHTML = '';
                 winList.appendChild(fragment);
+
+                // If the user expanded the list, shrink-to-fit based on result count
+                scheduleWinHistoryFit();
             }
+
+            let winHistoryFitRaf = null;
+            function scheduleWinHistoryFit() {
+                if (!winHistoryExpanded) return;
+                const winList = document.getElementById('winList');
+                const panel = document.getElementById('wheelInfoPanel');
+                if (!winList || !panel) return;
+                if (!panel.classList.contains('history-expanded')) return;
+                if (!winList.classList.contains('expanded')) return;
+
+                if (winHistoryFitRaf) cancelAnimationFrame(winHistoryFitRaf);
+                winHistoryFitRaf = requestAnimationFrame(() => {
+                    winHistoryFitRaf = null;
+                    applyWinHistoryFit(winList);
+                    // Second pass helps after layout settles (columns/scrollbars)
+                    setTimeout(() => {
+                        if (winHistoryExpanded) applyWinHistoryFit(winList);
+                    }, 0);
+                });
+            }
+
+            function clearWinHistoryFit(winList) {
+                if (!winList) return;
+                winList.style.removeProperty('--win-item-gap');
+                winList.style.removeProperty('--win-item-padding-y');
+                winList.style.removeProperty('--win-item-padding-x');
+                winList.style.removeProperty('--win-item-font-size');
+                winList.style.removeProperty('--win-date-font-size');
+                winList.style.removeProperty('--delete-btn-size');
+                winList.style.removeProperty('--delete-btn-font-size');
+            }
+
+            function clampNumber(value, min, max) {
+                return Math.max(min, Math.min(max, value));
+            }
+
+            function getExpandedColumnCount(winList) {
+                const cs = window.getComputedStyle(winList);
+                const raw = parseInt(cs.columnCount, 10);
+                if (!Number.isFinite(raw) || raw <= 0) return 1;
+                return raw;
+            }
+
+            function applyWinHistoryFit(winList) {
+                const items = winList.querySelectorAll('.win-item');
+                const total = items.length;
+                if (!total) return;
+
+                const cs = window.getComputedStyle(winList);
+                const paddingTop = parseFloat(cs.paddingTop) || 0;
+                const paddingBottom = parseFloat(cs.paddingBottom) || 0;
+                const availableHeight = Math.max(0, winList.clientHeight - paddingTop - paddingBottom);
+
+                const colCount = getExpandedColumnCount(winList);
+                const itemsPerCol = Math.max(1, Math.ceil(total / colCount));
+                const rowHeight = availableHeight / itemsPerCol;
+
+                // Gap between rows (smaller when many items)
+                const gap = clampNumber(Math.floor(rowHeight * 0.18), 2, 8);
+                // Font-size scales with row height but remains readable
+                const fontSize = clampNumber(Math.floor(rowHeight * 0.42), 10, 16);
+                const dateFontSize = clampNumber(Math.floor(fontSize * 0.85), 9, 13);
+                // Padding tries to keep rows comfortable without causing overflow
+                const paddingY = clampNumber(Math.floor((rowHeight - gap - (fontSize * 1.2)) / 2), 1, 10);
+                const paddingX = clampNumber(Math.floor(fontSize * 0.9), 6, 14);
+
+                const deleteBtnSize = clampNumber(Math.floor(fontSize * 1.6), 16, 24);
+                const deleteBtnFont = clampNumber(Math.floor(deleteBtnSize * 0.65), 12, 16);
+
+                winList.style.setProperty('--win-item-gap', `${gap}px`);
+                winList.style.setProperty('--win-item-padding-y', `${paddingY}px`);
+                winList.style.setProperty('--win-item-padding-x', `${paddingX}px`);
+                winList.style.setProperty('--win-item-font-size', `${fontSize}px`);
+                winList.style.setProperty('--win-date-font-size', `${dateFontSize}px`);
+                winList.style.setProperty('--delete-btn-size', `${deleteBtnSize}px`);
+                winList.style.setProperty('--delete-btn-font-size', `${deleteBtnFont}px`);
+
+                // Hide the date only when we need the space
+                const hideDate = rowHeight < 22 || fontSize <= 11;
+                winList.classList.toggle('fit-hide-date', hideDate);
+            }
+
+            // Keep expanded history fitted when viewport changes
+            window.addEventListener('resize', () => {
+                if (winHistoryExpanded) scheduleWinHistoryFit();
+            });
             
             // Load wheel statistics from localStorage
             function loadWheelStats() {
