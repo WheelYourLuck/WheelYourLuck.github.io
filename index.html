@@ -113,6 +113,16 @@
             animation: gradientText 3s ease infinite, titlePulse 2s ease-in-out infinite;
         }
 
+        .subtitle {
+            text-align: center;
+            margin-top: -2px;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+        }
+
         @keyframes gradientText {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -205,6 +215,8 @@
             background: white;
             overflow: hidden;
             animation: wheelGlow 3s ease-in-out infinite alternate;
+            transform-style: preserve-3d;
+            will-change: transform;
         }
 
         @keyframes wheelGlow {
@@ -593,6 +605,37 @@
             background: rgba(255, 255, 255, 0.2);
             padding: 10px 15px;
             border-radius: 8px;
+            transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .slice-item:focus-within {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+        }
+
+        .slice-item.edited {
+            animation: sliceEditedPop 420ms ease-out;
+        }
+
+        @keyframes sliceEditedPop {
+            0% { transform: translateY(0) scale(1); }
+            40% { transform: translateY(-2px) scale(1.015); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body {
+                animation: none !important;
+            }
+            .wheel-container,
+            h1 {
+                animation: none !important;
+                transition: none !important;
+            }
+            .particle {
+                animation: none !important;
+            }
         }
         
         .slice-item label {
@@ -900,6 +943,29 @@
             font-weight: 500;
         }
 
+        /* When history is expanded, use a fullscreen layout so results can fit on one screen */
+        .wheel-info-panel.history-expanded {
+            top: 50%;
+            left: 50%;
+            max-width: min(1400px, 96vw);
+            width: 96vw;
+            height: 92vh;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wheel-info-panel.history-expanded .wheel-stats {
+            margin-bottom: 12px;
+        }
+
+        .wheel-info-panel.history-expanded .win-history {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
         .wheel-info-panel.show {
             transform: translate(-50%, -50%) scale(1);
         }
@@ -973,18 +1039,123 @@
             margin-bottom: 20px;
         }
 
-        .win-history h3 {
-            color: #2c3e50;
+        .win-history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 15px;
+        }
+
+        .win-history-header h3 {
+            color: #2c3e50;
+            margin: 0;
             font-size: 18px;
         }
 
+        .win-history-toggle {
+            background: rgba(0, 0, 0, 0.06);
+            color: #2c3e50;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            transition: all 0.2s ease;
+        }
+
+        .win-history-toggle:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .win-history-toggle:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .win-list {
-            max-height: 200px;
-            overflow-y: auto;
             background: rgba(0,0,0,0.05);
             border-radius: 10px;
             padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Default: keep the current compact scrolling behavior */
+        .win-list.collapsed {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Expanded: NO SCROLL. Fit everything into the available viewport area using columns.
+           (If there are too many items, they will be squeezed smaller via the "compact" class.) */
+        .win-list.expanded {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            max-height: none;
+            padding: 10px;
+
+            /* Multi-column flow makes better use of horizontal space */
+            column-count: 3;
+            column-gap: 12px;
+        }
+
+        @media (max-width: 1100px) {
+            .wheel-info-panel.history-expanded .win-list.expanded { column-count: 2; }
+        }
+
+        @media (max-width: 700px) {
+            .wheel-info-panel.history-expanded .win-list.expanded { column-count: 1; }
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded {
+            width: 100%;
+        }
+
+        .win-list.expanded .win-item {
+            break-inside: avoid;
+            margin: 0 0 8px 0;
+        }
+
+        /* Compact mode: smaller rows + hide date to fit huge histories into one screen */
+        .wheel-info-panel.history-expanded .win-list.expanded.compact .win-item {
+            padding: 6px 10px;
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded.compact .win-date {
+            display: none;
+        }
+
+        .wheel-info-panel.history-expanded .win-list.expanded.compact .delete-spin-btn {
+            width: 20px;
+            height: 20px;
+            font-size: 14px;
+        }
+
+        /* Expanded has no scrollbar by design */
+
+        /* Smooth scrollbar for collapsed view too */
+        .win-list.collapsed::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .win-list.collapsed::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+
+        .win-list.collapsed::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+
+        .win-list.collapsed::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.3);
         }
 
         .delete-spin-btn {
@@ -1030,6 +1201,13 @@
         .win-text {
             font-weight: bold;
             color: #2c3e50;
+        }
+
+        .win-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-right: 10px;
+            white-space: nowrap;
         }
 
         .win-count {
@@ -2278,6 +2456,7 @@
     
     <div class="container">
         <h1><i class="fas fa-redo"></i> Ultimate Spin Wheel</h1>
+        <p class="subtitle">Make it yours — ideas, dares, prizes, anything.</p>
         
         <div class="controls-panel">
             <div class="control-group">
@@ -2302,7 +2481,7 @@
             
             <div class="control-group wheel-name-input">
                 <label for="wheelName"><i class="fas fa-tag"></i> Wheel Name:</label>
-                <input type="text" id="wheelName" placeholder="My Awesome Wheel">
+                <input type="text" id="wheelName" placeholder="Movie Night Roulette">
             </div>
             
             <button id="generateBtn"><i class="fas fa-cog"></i> Generate Wheel</button>
@@ -2391,7 +2570,12 @@
             </div>
             
             <div class="win-history">
-                <h3>Winning History</h3>
+                <div class="win-history-header">
+                    <h3>Winning History <span id="historyCount" style="font-size: 14px; font-weight: normal; color: #666;"></span></h3>
+                    <button class="win-history-toggle" id="toggleWinHistoryBtn" type="button" title="Show all history" aria-label="Toggle winning history">
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                </div>
                 <div class="win-list" id="winList">
                     <p style="text-align: center; color: #999;">No spins yet!</p>
                 </div>
@@ -3041,6 +3225,38 @@
             let audioEnabled = false;
             let audioMuted = false;
             let wheelStats = {totalSpins: 0, winHistory: [], wheelName: 'Custom Wheel'};
+            let winHistoryExpanded = false;
+
+            // Subtle 3D tilt on the wheel to feel more playful/creative.
+            // Disabled while spinning and for reduced-motion users.
+            const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!prefersReducedMotion && wheelContainer) {
+                let tiltRaf = null;
+
+                const resetTilt = () => {
+                    if (isSpinning) return;
+                    wheelContainer.style.transform = '';
+                };
+
+                const handleTilt = (event) => {
+                    if (isSpinning) return;
+                    const rect = wheelContainer.getBoundingClientRect();
+                    const x = (event.clientX - rect.left) / rect.width - 0.5;
+                    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+                    const rotateY = x * 10;
+                    const rotateX = -y * 10;
+
+                    wheelContainer.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
+                };
+
+                wheelContainer.addEventListener('mousemove', (event) => {
+                    if (tiltRaf) cancelAnimationFrame(tiltRaf);
+                    tiltRaf = requestAnimationFrame(() => handleTilt(event));
+                });
+                wheelContainer.addEventListener('mouseleave', resetTilt);
+                wheelContainer.addEventListener('blur', resetTilt);
+            }
             
             // Enhanced color palette with better contrast between adjacent colors
             const colorPalette = [
@@ -3549,6 +3765,18 @@
             
             // Load saved wheel statistics
             loadWheelStats();
+
+            // Winning history expand/collapse
+            const toggleWinHistoryBtn = document.getElementById('toggleWinHistoryBtn');
+            if (toggleWinHistoryBtn) {
+                toggleWinHistoryBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    winHistoryExpanded = !winHistoryExpanded;
+                    loadWheelStats();
+                    updateWheelStatsDisplay();
+                });
+            }
         };
             
             // Toggle menu panel
@@ -3583,29 +3811,120 @@
                 
                 // Update win history
                 const winList = document.getElementById('winList');
+                const toggleBtn = document.getElementById('toggleWinHistoryBtn');
+                const historyCount = document.getElementById('historyCount');
+                const wheelInfoPanelEl = document.getElementById('wheelInfoPanel');
+                
                 if (stats.winHistory.length === 0) {
+                    winHistoryExpanded = false;
                     winList.innerHTML = '<p style="text-align: center; color: #999;">No spins yet!</p>';
+                    winList.classList.remove('expanded');
+                    winList.classList.add('collapsed');
+                    if (historyCount) historyCount.textContent = '';
+                    if (toggleBtn) {
+                        toggleBtn.disabled = true;
+                        toggleBtn.title = 'No history yet';
+                        toggleBtn.innerHTML = '<i class="fas fa-chevron-down" aria-hidden="true"></i>';
+                    }
                 } else {
-                    winList.innerHTML = stats.winHistory.slice(-10).reverse().map((win, index) => {
-                        const actualIndex = stats.winHistory.length - 1 - index;
-                        return `
-                        <div style="padding: 8px; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-weight: bold; flex: 1;">${win.result}</span>
-                            <span style="color: #666; font-size: 0.9em; margin-right: 10px;">${new Date(win.timestamp).toLocaleDateString()}</span>
-                            <button class="delete-spin-btn" data-index="${actualIndex}" title="Delete this result">×</button>
-                        </div>
-                    `;
-                    }).join('');
-                    
-                    // Add event listeners to delete buttons
-                    document.querySelectorAll('.delete-spin-btn').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const index = parseInt(this.getAttribute('data-index'));
-                            deleteSingleSpin(index);
-                        });
-                    });
+                    const total = stats.winHistory.length;
+                    const indicesToRender = [];
+                    if (winHistoryExpanded) {
+                        for (let i = total - 1; i >= 0; i--) indicesToRender.push(i);
+                    } else {
+                        const start = Math.max(0, total - 10);
+                        for (let i = total - 1; i >= start; i--) indicesToRender.push(i);
+                    }
+
+                    winList.classList.toggle('expanded', winHistoryExpanded);
+                    winList.classList.toggle('collapsed', !winHistoryExpanded);
+
+                    // Fullscreen panel + compact mode when expanded.
+                    // Note: "one screen without scrolling" is physically impossible for arbitrarily many items
+                    // unless we reduce per-item height; compact mode helps squeeze more items into the viewport.
+                    if (wheelInfoPanelEl) {
+                        wheelInfoPanelEl.classList.toggle('history-expanded', winHistoryExpanded);
+                    }
+
+                    // Auto-enable compact mode for large histories when expanded
+                    const shouldCompact = winHistoryExpanded && total > 120;
+                    winList.classList.toggle('compact', shouldCompact);
+
+                    // Update history count display
+                    if (historyCount) {
+                        if (winHistoryExpanded) {
+                            historyCount.textContent = `(${total} ${total === 1 ? 'result' : 'results'})`;
+                        } else {
+                            const shown = Math.min(10, total);
+                            historyCount.textContent = `(${shown} of ${total})`;
+                        }
+                    }
+
+                    if (toggleBtn) {
+                        toggleBtn.disabled = false;
+                        const hiddenCount = Math.max(0, total - 10);
+                        if (winHistoryExpanded) {
+                            toggleBtn.title = `Collapse history (showing all ${total} results)`;
+                            toggleBtn.innerHTML = '<i class="fas fa-chevron-up" aria-hidden="true"></i>';
+                        } else {
+                            if (hiddenCount > 0) {
+                                toggleBtn.title = `Show all ${total} results (${hiddenCount} more)`;
+                                toggleBtn.innerHTML = `<i class="fas fa-chevron-down" aria-hidden="true"></i> <span style="font-size: 11px; margin-left: 4px;">+${hiddenCount}</span>`;
+                            } else {
+                                toggleBtn.title = 'Show all history';
+                                toggleBtn.innerHTML = '<i class="fas fa-chevron-down" aria-hidden="true"></i>';
+                            }
+                        }
+                    }
+
+                    // Render
+                    if (winHistoryExpanded && indicesToRender.length > 300) {
+                        winList.innerHTML = '<p style="text-align: center; color: #999;"><i class="fas fa-spinner fa-spin"></i> Preparing full history…</p>';
+                        setTimeout(() => renderWinHistory(winList, indicesToRender, stats), 10);
+                    } else {
+                        renderWinHistory(winList, indicesToRender, stats);
+                    }
                 }
+            }
+            
+            // Render win history items efficiently
+            function renderWinHistory(winList, indicesToRender, stats) {
+                // Use DocumentFragment for better performance with large lists
+                const fragment = document.createDocumentFragment();
+                
+                indicesToRender.forEach((actualIndex) => {
+                    const win = stats.winHistory[actualIndex];
+                    const winItem = document.createElement('div');
+                    winItem.className = 'win-item';
+                    
+                    const winText = document.createElement('span');
+                    winText.className = 'win-text';
+                    winText.style.flex = '1';
+                    winText.textContent = win.result;
+                    
+                    const winDate = document.createElement('span');
+                    winDate.className = 'win-date';
+                    winDate.textContent = new Date(win.timestamp).toLocaleDateString();
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-spin-btn';
+                    deleteBtn.setAttribute('data-index', actualIndex);
+                    deleteBtn.title = 'Delete this result';
+                    deleteBtn.textContent = '×';
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        deleteSingleSpin(index);
+                    });
+                    
+                    winItem.appendChild(winText);
+                    winItem.appendChild(winDate);
+                    winItem.appendChild(deleteBtn);
+                    fragment.appendChild(winItem);
+                });
+                
+                winList.innerHTML = '';
+                winList.appendChild(fragment);
             }
             
             // Load wheel statistics from localStorage
@@ -3886,14 +4205,14 @@
                         text.setAttribute('font-size', '16');
                         text.setAttribute('font-family', 'Arial, sans-serif');
                         text.style.filter = 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))';
-                        text.textContent = `ITEM ${i + 1}`;
+                        text.textContent = `IDEA ${i + 1}`;
                         
                         svg.appendChild(text);
                     }
                     
                     // Store slice data
                     slices.push({
-                        text: `ITEM ${i + 1}`,
+                        text: `IDEA ${i + 1}`,
                         color: color,
                         path: path,
                         textElement: text
@@ -3913,12 +4232,18 @@
                     
                     const textInput = document.createElement('input');
                     textInput.type = 'text';
-                    textInput.value = `ITEM ${i + 1}`;
+                    textInput.value = `IDEA ${i + 1}`;
                     textInput.addEventListener('input', function() {
                         slices[i].text = this.value;
                         if (text) { // Only update text if it exists (20 or fewer slices)
                             text.textContent = this.value;
                         }
+
+                        // Quick visual feedback to make editing feel snappy.
+                        sliceItem.classList.remove('edited');
+                        // Force reflow so the animation can restart on rapid edits.
+                        void sliceItem.offsetWidth;
+                        sliceItem.classList.add('edited');
                     });
                     
                     sliceItem.appendChild(colorInput);
