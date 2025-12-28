@@ -3839,17 +3839,8 @@
             // Load saved wheel statistics
             loadWheelStats();
 
-            // Winning history expand/collapse
-            const toggleWinHistoryBtn = document.getElementById('toggleWinHistoryBtn');
-            if (toggleWinHistoryBtn) {
-                toggleWinHistoryBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    winHistoryExpanded = !winHistoryExpanded;
-                    loadWheelStats();
-                    updateWheelStatsDisplay();
-                });
-            }
+            // Winning history expand/collapse (delegated for robustness)
+            bindWinHistoryToggle();
         };
             
             // Toggle menu panel
@@ -4007,6 +3998,27 @@
 
                 // If the user expanded the list, shrink-to-fit based on result count
                 scheduleWinHistoryFit();
+            }
+
+            let winHistoryToggleBound = false;
+            function bindWinHistoryToggle() {
+                if (winHistoryToggleBound) return;
+                winHistoryToggleBound = true;
+
+                document.addEventListener('click', (e) => {
+                    const btn = e.target && e.target.closest ? e.target.closest('#toggleWinHistoryBtn') : null;
+                    if (!btn) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    winHistoryExpanded = !winHistoryExpanded;
+                    loadWheelStats();
+                    updateWheelStatsDisplay();
+
+                    if (winHistoryExpanded) {
+                        scheduleWinHistoryFit();
+                    }
+                });
             }
 
             let winHistoryFitRaf = null;
