@@ -3155,10 +3155,10 @@
         <source src="winsound.mp3" type="audio/mpeg">
     </audio>
     <audio id="tickSound" preload="auto">
-        <source src="ticksound.mp3" type="audio/mpeg">
+        <!-- <source src="ticksound.mp3" type="audio/mpeg"> -->
     </audio>
     <audio id="confettiSound" preload="auto">
-        <source src="confettisound.mp3" type="audio/mpeg">
+        <!-- <source src="confettisound.mp3" type="audio/mpeg"> -->
     </audio>
 
     <script>
@@ -4603,13 +4603,13 @@
                 if (audioEnabled && !audioMuted) {
                     spinSound.currentTime = 0;
                     spinSound.loop = true; // Enable looping
-                    spinSound.play();
+                    spinSound.play().catch(() => {});
                     
                     // Play tick sound during spinning
                     let tickCount = 0;
                     tickInterval = setInterval(() => {
                         tickSound.currentTime = 0;
-                        tickSound.play();
+                        tickSound.play().catch(() => {});
                         tickCount++;
                         
                         if (tickCount > 20) {
@@ -4659,10 +4659,10 @@
                     // Play win sound and confetti sound
                     if (audioEnabled && !audioMuted) {
                         winSound.currentTime = 0;
-                        winSound.play();
+                        winSound.play().catch(() => {});
                         
                         confettiSound.currentTime = 0;
-                        confettiSound.play();
+                        confettiSound.play().catch(() => {});
                     }
                     
                     // Display result
@@ -5541,6 +5541,38 @@
                     unlockAchievement(achievement);
                 }
             });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const content = document.getElementById('notificationContent');
+            
+            if (!notification || !content) return;
+            
+            // Reset classes
+            notification.className = 'notification';
+            if (type) {
+                notification.classList.add(type);
+            }
+            
+            content.textContent = message;
+            notification.classList.add('show');
+            
+            // Clear existing timeout to prevent premature hiding
+            if (notification.timeoutId) {
+                clearTimeout(notification.timeoutId);
+            }
+            
+            // Hide after 3 seconds
+            notification.timeoutId = setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function createAchievementEffect() {
+            if (typeof createConfetti === 'function') {
+                createConfetti();
+            }
         }
 
         function unlockAchievement(achievement) {
