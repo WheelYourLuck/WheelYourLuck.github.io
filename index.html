@@ -11,8 +11,16 @@
 
   gtag('config', 'G-204SCVQ959');
 </script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4359125303604791"
-     crossorigin="anonymous"></script>
+<script>
+  if (window.location.protocol !== 'file:') {
+    var script = document.createElement('script');
+    script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4359125303604791";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    document.head.appendChild(script);
+  }
+</script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2432,6 +2440,77 @@
         .feature-active {
             background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.1));
         }
+        /* Screenshot functionality styles */
+        .history-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .screenshot-dropdown {
+            position: relative;
+        }
+        
+        .screenshot-btn {
+            background: none !important;
+            border: none !important;
+            color: #666 !important;
+            cursor: pointer;
+            padding: 5px !important;
+            font-size: 1.1rem !important;
+            transition: color 0.3s ease;
+            box-shadow: none !important;
+        }
+        
+        .screenshot-btn:hover {
+            color: var(--primary-color) !important;
+            transform: scale(1.1) !important;
+            background: none !important;
+        }
+        
+        .screenshot-options {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 5px;
+            z-index: 100;
+            min-width: 120px;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .screenshot-options.show {
+            display: block;
+        }
+        
+        .screenshot-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px !important;
+            background: none !important;
+            border: none !important;
+            color: #333 !important;
+            font-size: 13px !important;
+            cursor: pointer;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+            justify-content: flex-start !important;
+        }
+        
+        .screenshot-option:hover {
+            background-color: #f5f6fa !important;
+            color: var(--primary-color) !important;
+            transform: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -2606,9 +2685,22 @@
             <div class="win-history">
                 <div class="win-history-header">
                     <h3>Winning History <span id="historyCount" style="font-size: 14px; font-weight: normal; color: #666;"></span></h3>
-                    <button class="win-history-toggle" id="toggleWinHistoryBtn" type="button" title="Show all history" aria-label="Toggle winning history">
-                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                    </button>
+                    <div class="history-controls">
+                        <div class="screenshot-dropdown">
+                            <button class="screenshot-btn" id="screenshotBtn" title="Take Screenshot">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            <div class="screenshot-options" id="screenshotOptions">
+                                <button class="screenshot-option" data-count="10">Last 10</button>
+                                <button class="screenshot-option" data-count="50">Last 50</button>
+                                <button class="screenshot-option" data-count="100">Last 100</button>
+                                <button class="screenshot-option" data-count="all">All Results</button>
+                            </div>
+                        </div>
+                        <button class="win-history-toggle" id="toggleWinHistoryBtn" type="button" title="Show all history" aria-label="Toggle winning history">
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="win-list" id="winList">
                     <p style="text-align: center; color: #999;">No spins yet!</p>
@@ -4128,6 +4220,7 @@
             function getWheelStats() {
                 return wheelStats;
             }
+            window.getWheelStats = getWheelStats;
             
             // Add win to statistics
             function addWinToStats(result) {
@@ -4453,6 +4546,7 @@
                     resultCelebration.classList.remove('show');
                 }
             }
+            window.generateWheel = generateWheel;
             
             // Update wheel data in textarea
             function updateWheelData() {
@@ -4950,17 +5044,20 @@
         // Initialize login system
         function initializeLogin() {
             const savedUser = localStorage.getItem('wheelUser');
+        }
+
         // Initialize the application without login system
         function initializeApp() {
             // Initialize game without login
-            generateWheel();
+            if (typeof window.generateWheel === 'function') {
+                window.generateWheel();
+            }
             initializeGameState();
         }
 
         function initializeGameState() {
             // Simple game state initialization
             updateDisplays();
-        }
         }
 
         function resetGameState() {
@@ -6086,6 +6183,168 @@
                 }
             });
         }, 500);
+        // Screenshot Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const screenshotBtn = document.getElementById('screenshotBtn');
+            const screenshotOptions = document.getElementById('screenshotOptions');
+            
+            if (screenshotBtn && screenshotOptions) {
+                // Toggle dropdown
+                screenshotBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    screenshotOptions.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!screenshotBtn.contains(e.target) && !screenshotOptions.contains(e.target)) {
+                        screenshotOptions.classList.remove('show');
+                    }
+                });
+                
+                // Handle screenshot options
+                const options = screenshotOptions.querySelectorAll('.screenshot-option');
+                options.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const count = this.getAttribute('data-count');
+                        takeScreenshot(count);
+                        screenshotOptions.classList.remove('show');
+                    });
+                });
+            }
+        });
+
+        function takeScreenshot(count) {
+            const panel = document.getElementById('wheelInfoPanel');
+            if (!panel) return;
+
+            // Create a clone to modify for screenshot
+            const clone = panel.cloneNode(true);
+            
+            // Style the clone to ensure it captures everything
+            clone.style.position = 'absolute';
+            clone.style.top = '-9999px';
+            clone.style.left = '-9999px';
+            clone.style.width = '500px'; // Fixed width for consistency
+            clone.style.height = 'auto';
+            clone.style.maxHeight = 'none';
+            clone.style.overflow = 'visible';
+            // Copy computed styles for background and border
+            const computedStyle = getComputedStyle(panel);
+            clone.style.background = computedStyle.background;
+            clone.style.backgroundColor = computedStyle.backgroundColor; // Ensure background color is captured
+            clone.style.borderRadius = computedStyle.borderRadius;
+            clone.style.padding = computedStyle.padding;
+            clone.style.boxShadow = 'none'; // Remove shadow for cleaner screenshot
+            clone.style.border = '1px solid #eee'; // Add border for definition
+            
+            // Hide controls in the clone
+            const controls = clone.querySelector('.history-controls');
+            if (controls) controls.style.display = 'none';
+            
+            const closeBtn = clone.querySelector('.close-info');
+            if (closeBtn) closeBtn.style.display = 'none';
+            
+            const resetBtn = clone.querySelector('#resetStatsBtn');
+            if (resetBtn) resetBtn.parentElement.style.display = 'none';
+
+            // Handle history items
+            const winList = clone.querySelector('#winList');
+            if (winList) {
+                winList.innerHTML = ''; // Clear existing
+                winList.classList.remove('expanded');
+                winList.classList.remove('collapsed');
+                winList.style.maxHeight = 'none';
+                winList.style.overflow = 'visible';
+                winList.style.display = 'flex';
+                winList.style.flexDirection = 'column';
+                winList.style.gap = '5px';
+                winList.style.gridTemplateColumns = 'none'; // Reset grid
+                winList.style.gridTemplateRows = 'none';
+                
+                const stats = getWheelStats();
+                const total = stats.winHistory.length;
+                let indices = [];
+                
+                if (count === 'all') {
+                    for (let i = total - 1; i >= 0; i--) indices.push(i);
+                } else {
+                    const limit = parseInt(count);
+                    const start = Math.max(0, total - limit);
+                    for (let i = total - 1; i >= start; i--) indices.push(i);
+                }
+                
+                if (indices.length === 0) {
+                     const emptyMsg = document.createElement('p');
+                     emptyMsg.textContent = 'No spins yet!';
+                     emptyMsg.style.textAlign = 'center';
+                     emptyMsg.style.color = '#999';
+                     winList.appendChild(emptyMsg);
+                } else {
+                    // Manually render items
+                    indices.forEach(index => {
+                        const win = stats.winHistory[index];
+                        const item = document.createElement('div');
+                        item.className = 'win-item';
+                        item.style.display = 'flex';
+                        item.style.justifyContent = 'space-between';
+                        item.style.alignItems = 'center';
+                        item.style.padding = '8px 12px';
+                        item.style.background = 'rgba(0,0,0,0.05)';
+                        item.style.borderRadius = '6px';
+                        item.style.marginBottom = '4px';
+                        item.style.color = '#333'; // Ensure text color
+                        
+                        const text = document.createElement('span');
+                        text.textContent = win.result;
+                        text.style.fontWeight = 'bold';
+                        
+                        const date = document.createElement('span');
+                        date.textContent = new Date(win.timestamp).toLocaleDateString();
+                        date.style.fontSize = '0.85em';
+                        date.style.color = '#666';
+                        
+                        item.appendChild(text);
+                        item.appendChild(date);
+                        winList.appendChild(item);
+                    });
+                }
+                
+                // Update count text in clone
+                const countSpan = clone.querySelector('#historyCount');
+                if (countSpan) {
+                    countSpan.textContent = `(${indices.length} results)`;
+                }
+            }
+
+            document.body.appendChild(clone);
+
+            // Use html2canvas
+            html2canvas(clone, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                link.download = `wheel-stats-${count}-${timestamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                document.body.removeChild(clone);
+                
+                if (typeof showNotification === 'function') {
+                    showNotification('Screenshot saved!', 'success');
+                }
+            }).catch(err => {
+                console.error('Screenshot failed:', err);
+                document.body.removeChild(clone);
+                if (typeof showNotification === 'function') {
+                    showNotification('Screenshot failed', 'error');
+                }
+            });
+        }
     </script>
 </body>
 </html>
