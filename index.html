@@ -1131,49 +1131,116 @@
             max-height: none;
             padding: 10px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 8px;
+            gap: 6px;
             align-content: flex-start;
+        }
+
+        /* Dynamic sizing classes based on item count */
+        .win-list.expanded.size-xs {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 3px;
+        }
+        .win-list.expanded.size-s {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 4px;
+        }
+        .win-list.expanded.size-m {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 5px;
+        }
+        .win-list.expanded.size-l {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 6px;
+        }
+        .win-list.expanded.size-xl {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 8px;
         }
 
         .win-list.expanded .win-item {
             padding: 6px 8px;
             font-size: 12px;
             min-width: 0;
+            margin-bottom: 0;
+        }
+
+        /* Size-based item styling */
+        .win-list.expanded.size-xs .win-item {
+            padding: 2px 4px;
+            font-size: 9px;
+        }
+        .win-list.expanded.size-s .win-item {
+            padding: 3px 5px;
+            font-size: 10px;
+        }
+        .win-list.expanded.size-m .win-item {
+            padding: 4px 6px;
+            font-size: 11px;
+        }
+        .win-list.expanded.size-l .win-item {
+            padding: 5px 7px;
+            font-size: 12px;
+        }
+        .win-list.expanded.size-xl .win-item {
+            padding: 6px 10px;
+            font-size: 13px;
         }
 
         .win-list.expanded .win-text {
-            font-size: 12px;
+            font-size: inherit;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .win-list.expanded .win-date {
-            font-size: 10px;
+            font-size: inherit;
+            opacity: 0.7;
+        }
+
+        /* Hide date for smaller sizes to save space */
+        .win-list.expanded.size-xs .win-date,
+        .win-list.expanded.size-s .win-date {
+            display: none;
         }
 
         .win-list.expanded .delete-spin-btn {
-            width: 20px;
-            height: 20px;
-            font-size: 14px;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .win-list.expanded.size-xs .delete-spin-btn {
+            width: 14px;
+            height: 14px;
+            font-size: 10px;
+        }
+        .win-list.expanded.size-s .delete-spin-btn {
+            width: 16px;
+            height: 16px;
+            font-size: 11px;
         }
 
         @media (max-width: 1100px) {
-            .win-list.expanded {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            .win-list.expanded.size-l,
+            .win-list.expanded.size-xl {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             }
         }
 
         @media (max-width: 700px) {
             .win-list.expanded {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important;
+            }
+            .win-list.expanded .win-date {
+                display: none;
             }
         }
 
         /* Compact mode: smaller rows + hide date to fit huge histories into one screen */
         .wheel-info-panel.history-expanded .win-list.expanded.compact .win-item {
-            padding: 6px 10px;
+            padding: 3px 6px;
         }
 
         .wheel-info-panel.history-expanded .win-list.expanded.compact .win-date {
@@ -1181,9 +1248,9 @@
         }
 
         .wheel-info-panel.history-expanded .win-list.expanded.compact .delete-spin-btn {
-            width: 20px;
-            height: 20px;
-            font-size: 14px;
+            width: 16px;
+            height: 16px;
+            font-size: 12px;
         }
 
         /* Expanded has no scrollbar by design */
@@ -1241,10 +1308,17 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 12px;
-            margin-bottom: 8px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Add margin only for collapsed mode where it's not in a grid */
+        .win-list.collapsed .win-item {
+            margin-bottom: 8px;
+        }
+        .win-list.collapsed .win-item:last-child {
+            margin-bottom: 0;
         }
 
         .win-text {
@@ -3883,13 +3957,30 @@
                     winList.classList.toggle('collapsed', !winHistoryExpanded);
 
                     // Fullscreen panel + compact mode when expanded.
-                    // Note: "one screen without scrolling" is physically impossible for arbitrarily many items
-                    // unless we reduce per-item height; compact mode helps squeeze more items into the viewport.
                     if (wheelInfoPanelEl) {
                         wheelInfoPanelEl.classList.toggle('history-expanded', winHistoryExpanded);
                     }
 
-                    // CSS grid auto-shrinks to fit all items on one screen
+                    // Dynamic sizing: adjust item size based on total count to fit on one screen
+                    // Remove all size classes first
+                    winList.classList.remove('size-xs', 'size-s', 'size-m', 'size-l', 'size-xl');
+                    
+                    if (winHistoryExpanded) {
+                        // Calculate appropriate size class based on item count
+                        let sizeClass;
+                        if (total <= 10) {
+                            sizeClass = 'size-xl';  // Large items for few results
+                        } else if (total <= 25) {
+                            sizeClass = 'size-l';   // Medium-large items
+                        } else if (total <= 50) {
+                            sizeClass = 'size-m';   // Medium items
+                        } else if (total <= 100) {
+                            sizeClass = 'size-s';   // Small items
+                        } else {
+                            sizeClass = 'size-xs';  // Extra small for 100+ items
+                        }
+                        winList.classList.add(sizeClass);
+                    }
 
                     // Update history count display
                     if (historyCount) {
