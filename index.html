@@ -1123,134 +1123,42 @@
             overflow-y: auto;
         }
 
-        /* Expanded: NO SCROLL. Auto-shrink items to fit all on screen */
+        /* Expanded: CSS Grid that fills available space - JS sets columns/rows */
         .win-list.expanded {
             flex: 1;
             min-height: 0;
             overflow: hidden;
             max-height: none;
-            padding: 10px;
+            padding: 8px;
             display: grid;
-            gap: 6px;
-            align-content: flex-start;
-        }
-
-        /* Dynamic sizing classes based on item count */
-        .win-list.expanded.size-xs {
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 3px;
-        }
-        .win-list.expanded.size-s {
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 4px;
-        }
-        .win-list.expanded.size-m {
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 5px;
-        }
-        .win-list.expanded.size-l {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 6px;
-        }
-        .win-list.expanded.size-xl {
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 8px;
+            align-content: stretch;
+            justify-content: stretch;
         }
 
         .win-list.expanded .win-item {
-            padding: 6px 8px;
-            font-size: 12px;
             min-width: 0;
             margin-bottom: 0;
-        }
-
-        /* Size-based item styling */
-        .win-list.expanded.size-xs .win-item {
-            padding: 2px 4px;
-            font-size: 9px;
-        }
-        .win-list.expanded.size-s .win-item {
-            padding: 3px 5px;
-            font-size: 10px;
-        }
-        .win-list.expanded.size-m .win-item {
-            padding: 4px 6px;
-            font-size: 11px;
-        }
-        .win-list.expanded.size-l .win-item {
-            padding: 5px 7px;
-            font-size: 12px;
-        }
-        .win-list.expanded.size-xl .win-item {
-            padding: 6px 10px;
-            font-size: 13px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .win-list.expanded .win-text {
-            font-size: inherit;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            flex: 1;
         }
 
         .win-list.expanded .win-date {
-            font-size: inherit;
             opacity: 0.7;
-        }
-
-        /* Hide date for smaller sizes to save space */
-        .win-list.expanded.size-xs .win-date,
-        .win-list.expanded.size-s .win-date {
-            display: none;
+            margin: 0 4px;
+            white-space: nowrap;
         }
 
         .win-list.expanded .delete-spin-btn {
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
             flex-shrink: 0;
-        }
-
-        .win-list.expanded.size-xs .delete-spin-btn {
-            width: 14px;
-            height: 14px;
-            font-size: 10px;
-        }
-        .win-list.expanded.size-s .delete-spin-btn {
-            width: 16px;
-            height: 16px;
-            font-size: 11px;
-        }
-
-        @media (max-width: 1100px) {
-            .win-list.expanded.size-l,
-            .win-list.expanded.size-xl {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            }
-        }
-
-        @media (max-width: 700px) {
-            .win-list.expanded {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important;
-            }
-            .win-list.expanded .win-date {
-                display: none;
-            }
-        }
-
-        /* Compact mode: smaller rows + hide date to fit huge histories into one screen */
-        .wheel-info-panel.history-expanded .win-list.expanded.compact .win-item {
-            padding: 3px 6px;
-        }
-
-        .wheel-info-panel.history-expanded .win-list.expanded.compact .win-date {
-            display: none;
-        }
-
-        .wheel-info-panel.history-expanded .win-list.expanded.compact .delete-spin-btn {
-            width: 16px;
-            height: 16px;
-            font-size: 12px;
         }
 
         /* Expanded has no scrollbar by design */
@@ -3956,30 +3864,9 @@
                     winList.classList.toggle('expanded', winHistoryExpanded);
                     winList.classList.toggle('collapsed', !winHistoryExpanded);
 
-                    // Fullscreen panel + compact mode when expanded.
+                    // Fullscreen panel when expanded.
                     if (wheelInfoPanelEl) {
                         wheelInfoPanelEl.classList.toggle('history-expanded', winHistoryExpanded);
-                    }
-
-                    // Dynamic sizing: adjust item size based on total count to fit on one screen
-                    // Remove all size classes first
-                    winList.classList.remove('size-xs', 'size-s', 'size-m', 'size-l', 'size-xl');
-                    
-                    if (winHistoryExpanded) {
-                        // Calculate appropriate size class based on item count
-                        let sizeClass;
-                        if (total <= 10) {
-                            sizeClass = 'size-xl';  // Large items for few results
-                        } else if (total <= 25) {
-                            sizeClass = 'size-l';   // Medium-large items
-                        } else if (total <= 50) {
-                            sizeClass = 'size-m';   // Medium items
-                        } else if (total <= 100) {
-                            sizeClass = 'size-s';   // Small items
-                        } else {
-                            sizeClass = 'size-xs';  // Extra small for 100+ items
-                        }
-                        winList.classList.add(sizeClass);
                     }
 
                     // Update history count display
@@ -4021,6 +3908,85 @@
             
             // Render win history items efficiently
             function renderWinHistory(winList, indicesToRender, stats) {
+                const isExpanded = winList.classList.contains('expanded');
+                const total = indicesToRender.length;
+                
+                // For expanded mode, calculate optimal grid to fit all items on screen
+                if (isExpanded && total > 0) {
+                    // Wait for DOM to update, then calculate grid
+                    requestAnimationFrame(() => {
+                        const listRect = winList.getBoundingClientRect();
+                        const availableWidth = listRect.width - 16; // padding
+                        const availableHeight = listRect.height - 16;
+                        
+                        if (availableWidth <= 0 || availableHeight <= 0) return;
+                        
+                        // Calculate optimal grid: find cols/rows that fit all items
+                        // Try different column counts to find best fit
+                        let bestCols = 1;
+                        let bestRows = total;
+                        let bestCellHeight = availableHeight / total;
+                        
+                        for (let cols = 1; cols <= Math.min(total, 12); cols++) {
+                            const rows = Math.ceil(total / cols);
+                            const cellWidth = availableWidth / cols;
+                            const cellHeight = availableHeight / rows;
+                            
+                            // Minimum readable width ~80px, minimum height ~18px
+                            if (cellWidth >= 80 && cellHeight >= 18) {
+                                if (cellHeight > bestCellHeight) {
+                                    bestCols = cols;
+                                    bestRows = rows;
+                                    bestCellHeight = cellHeight;
+                                }
+                            }
+                        }
+                        
+                        const gap = Math.max(2, Math.min(6, bestCellHeight * 0.1));
+                        const cellWidth = (availableWidth - gap * (bestCols - 1)) / bestCols;
+                        const cellHeight = (availableHeight - gap * (bestRows - 1)) / bestRows;
+                        
+                        // Calculate font size based on cell height (readable range 8-14px)
+                        const fontSize = Math.max(8, Math.min(14, cellHeight * 0.45));
+                        const padding = Math.max(2, Math.min(8, cellHeight * 0.15));
+                        const btnSize = Math.max(12, Math.min(20, cellHeight * 0.6));
+                        
+                        // Hide date if cells are too small
+                        const showDate = cellWidth > 150 && cellHeight > 22;
+                        
+                        // Apply grid styles
+                        winList.style.gridTemplateColumns = `repeat(${bestCols}, 1fr)`;
+                        winList.style.gridTemplateRows = `repeat(${bestRows}, 1fr)`;
+                        winList.style.gap = `${gap}px`;
+                        
+                        // Style each item
+                        const items = winList.querySelectorAll('.win-item');
+                        items.forEach(item => {
+                            item.style.padding = `${padding}px ${padding + 2}px`;
+                            item.style.fontSize = `${fontSize}px`;
+                            item.style.borderRadius = `${Math.max(3, padding)}px`;
+                            
+                            const dateEl = item.querySelector('.win-date');
+                            if (dateEl) {
+                                dateEl.style.display = showDate ? '' : 'none';
+                                dateEl.style.fontSize = `${fontSize * 0.85}px`;
+                            }
+                            
+                            const btn = item.querySelector('.delete-spin-btn');
+                            if (btn) {
+                                btn.style.width = `${btnSize}px`;
+                                btn.style.height = `${btnSize}px`;
+                                btn.style.fontSize = `${btnSize * 0.7}px`;
+                            }
+                        });
+                    });
+                } else {
+                    // Reset inline styles for collapsed mode
+                    winList.style.gridTemplateColumns = '';
+                    winList.style.gridTemplateRows = '';
+                    winList.style.gap = '';
+                }
+                
                 // Use DocumentFragment for better performance with large lists
                 const fragment = document.createDocumentFragment();
                 
@@ -4057,6 +4023,68 @@
                 
                 winList.innerHTML = '';
                 winList.appendChild(fragment);
+                
+                // Re-apply grid styling after appending items (for expanded mode)
+                if (isExpanded && total > 0) {
+                    requestAnimationFrame(() => {
+                        const listRect = winList.getBoundingClientRect();
+                        const availableWidth = listRect.width - 16;
+                        const availableHeight = listRect.height - 16;
+                        
+                        if (availableWidth <= 0 || availableHeight <= 0) return;
+                        
+                        let bestCols = 1;
+                        let bestRows = total;
+                        let bestCellHeight = availableHeight / total;
+                        
+                        for (let cols = 1; cols <= Math.min(total, 12); cols++) {
+                            const rows = Math.ceil(total / cols);
+                            const cellWidth = availableWidth / cols;
+                            const cellHeight = availableHeight / rows;
+                            
+                            if (cellWidth >= 80 && cellHeight >= 18) {
+                                if (cellHeight > bestCellHeight) {
+                                    bestCols = cols;
+                                    bestRows = rows;
+                                    bestCellHeight = cellHeight;
+                                }
+                            }
+                        }
+                        
+                        const gap = Math.max(2, Math.min(6, bestCellHeight * 0.1));
+                        const cellHeight = (availableHeight - gap * (bestRows - 1)) / bestRows;
+                        const cellWidth = (availableWidth - gap * (bestCols - 1)) / bestCols;
+                        
+                        const fontSize = Math.max(8, Math.min(14, cellHeight * 0.45));
+                        const padding = Math.max(2, Math.min(8, cellHeight * 0.15));
+                        const btnSize = Math.max(12, Math.min(20, cellHeight * 0.6));
+                        const showDate = cellWidth > 150 && cellHeight > 22;
+                        
+                        winList.style.gridTemplateColumns = `repeat(${bestCols}, 1fr)`;
+                        winList.style.gridTemplateRows = `repeat(${bestRows}, 1fr)`;
+                        winList.style.gap = `${gap}px`;
+                        
+                        const items = winList.querySelectorAll('.win-item');
+                        items.forEach(item => {
+                            item.style.padding = `${padding}px ${padding + 2}px`;
+                            item.style.fontSize = `${fontSize}px`;
+                            item.style.borderRadius = `${Math.max(3, padding)}px`;
+                            
+                            const dateEl = item.querySelector('.win-date');
+                            if (dateEl) {
+                                dateEl.style.display = showDate ? '' : 'none';
+                                dateEl.style.fontSize = `${fontSize * 0.85}px`;
+                            }
+                            
+                            const btn = item.querySelector('.delete-spin-btn');
+                            if (btn) {
+                                btn.style.width = `${btnSize}px`;
+                                btn.style.height = `${btnSize}px`;
+                                btn.style.fontSize = `${btnSize * 0.7}px`;
+                            }
+                        });
+                    });
+                }
             }
 
             let winHistoryToggleBound = false;
