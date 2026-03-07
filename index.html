@@ -246,9 +246,6 @@
             background: transparent;
             z-index: 10;
             will-change: transform;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            transform: translateZ(0);
         }
 
         @keyframes wheelGlow {
@@ -346,7 +343,7 @@
         }
 
         .wheel-container:hover {
-            transform: scale(1.03);
+            transform: perspective(800px) scale(1.03);
         }
 
         /* Enhanced Result Display */
@@ -550,11 +547,7 @@
             border-radius: 50%;
             overflow: hidden;
             transition: transform 12s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            transform: rotate(0deg) translateZ(0);
-            -webkit-mask-image: -webkit-radial-gradient(white, black);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            will-change: transform;
+            transform: rotate(0deg);
         }
 
         .wheel-slice {
@@ -3630,6 +3623,8 @@
 
             // Subtle 3D tilt on the wheel to feel more playful/creative.
             // Disabled while spinning and for reduced-motion users.
+            // NOTE: perspective() is included directly in the transform to avoid
+            // clipping artefacts that occur when rotateX/Y are used without it.
             const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (!prefersReducedMotion && wheelContainer) {
                 let tiltRaf = null;
@@ -3645,10 +3640,13 @@
                     const x = (event.clientX - rect.left) / rect.width - 0.5;
                     const y = (event.clientY - rect.top) / rect.height - 0.5;
 
-                    const rotateY = x * 10;
-                    const rotateX = -y * 10;
+                    // Keep tilt very gentle (max ±4deg) and include perspective
+                    // in the transform so the 3D rotation renders correctly
+                    // without clipping the circular wheel content.
+                    const rotateY = x * 4;
+                    const rotateX = -y * 4;
 
-                    wheelContainer.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
+                    wheelContainer.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.02)`;
                 };
 
                 wheelContainer.addEventListener('mousemove', (event) => {
