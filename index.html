@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-204SCVQ959"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-204SCVQ959"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-204SCVQ959');
-</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4359125303604791"
-     crossorigin="anonymous"></script>
+        gtag('config', 'G-204SCVQ959');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4359125303604791"
+        crossorigin="anonymous"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,13 +28,13 @@
             --positive-color: #00b894;
             --negative-color: #d63031;
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
@@ -48,7 +49,7 @@
             overflow-x: hidden;
             position: relative;
         }
-        
+
         /* Floating particles background */
         .particles {
             position: fixed;
@@ -59,37 +60,48 @@
             pointer-events: none;
             z-index: -1;
         }
-        
+
         .particle {
             position: absolute;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             animation: float 20s infinite linear;
         }
-        
+
         @keyframes float {
             0% {
                 transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 1;
             }
+
             90% {
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-100px) rotate(360deg);
                 opacity: 0;
             }
         }
-        
+
         @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
-        
+
         .container {
             width: 100%;
             max-width: 1200px;
@@ -99,11 +111,11 @@
             gap: 30px;
             z-index: 1;
         }
-        
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             text-align: center;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
             background-size: 400% 400%;
@@ -120,19 +132,33 @@
             font-size: 1rem;
             line-height: 1.4;
             color: rgba(255, 255, 255, 0.9);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
         }
 
         @keyframes gradientText {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         @keyframes titlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
         }
-        
+
         .controls-panel {
             width: 100%;
             background: rgba(255, 255, 255, 0.2);
@@ -145,7 +171,7 @@
             gap: 20px;
             justify-content: space-between;
         }
-        
+
         .control-group {
             display: flex;
             flex-direction: column;
@@ -153,13 +179,16 @@
             min-width: 200px;
             flex-grow: 1;
         }
-        
+
         label {
             font-weight: 600;
             font-size: 0.9rem;
         }
-        
-        input, select, button, textarea {
+
+        input,
+        select,
+        button,
+        textarea {
             padding: 10px 15px;
             border: none;
             border-radius: 8px;
@@ -167,13 +196,16 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
-        
-        input:focus, select:focus, button:focus, textarea:focus {
+
+        input:focus,
+        select:focus,
+        button:focus,
+        textarea:focus {
             outline: none;
             background: rgba(255, 255, 255, 1);
             box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
         }
-        
+
         button {
             background-color: var(--primary-color);
             color: white;
@@ -184,22 +216,22 @@
             justify-content: center;
             gap: 8px;
         }
-        
+
         button:hover {
             background-color: #5649c0;
             transform: translateY(-2px);
         }
-        
+
         button:disabled {
             background-color: #b2b2b2;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         button i {
             font-size: 1rem;
         }
-        
+
         .wheel-container {
             position: relative;
             width: 400px;
@@ -208,26 +240,27 @@
             cursor: pointer;
             transition: transform 0.2s;
             border-radius: 50%;
-            box-shadow: 
+            box-shadow:
                 0 10px 30px rgba(0, 0, 0, 0.3),
-                0 0 60px rgba(255, 255, 255, 0.1),
-                inset 0 0 0 8px rgba(255, 255, 255, 0.8);
-            background: white;
-            overflow: hidden;
-            animation: wheelGlow 3s ease-in-out infinite alternate;
-            transform-style: preserve-3d;
+                0 0 60px rgba(255, 255, 255, 0.1);
+            background: transparent;
+            z-index: 10;
             will-change: transform;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
         @keyframes wheelGlow {
             0% {
-                box-shadow: 
+                box-shadow:
                     0 10px 30px rgba(0, 0, 0, 0.3),
                     0 0 60px rgba(255, 255, 255, 0.1),
                     inset 0 0 0 8px rgba(255, 255, 255, 0.8);
             }
+
             100% {
-                box-shadow: 
+                box-shadow:
                     0 15px 40px rgba(0, 0, 0, 0.4),
                     0 0 80px rgba(255, 215, 0, 0.3),
                     inset 0 0 0 8px rgba(255, 215, 0, 0.6);
@@ -244,31 +277,36 @@
         }
 
         @keyframes spinningArrow {
-            0%, 100% {
-                filter: drop-shadow(0 8px 16px rgba(255,0,128,0.9)) brightness(1.5);
+
+            0%,
+            100% {
+                filter: drop-shadow(0 8px 16px rgba(255, 0, 128, 0.9)) brightness(1.5);
                 transform: translateX(-50%) scale(1.2);
             }
+
             50% {
-                filter: drop-shadow(0 12px 24px rgba(0,255,255,0.9)) brightness(1.8);
+                filter: drop-shadow(0 12px 24px rgba(0, 255, 255, 0.9)) brightness(1.8);
                 transform: translateX(-50%) scale(1.3);
             }
         }
 
         @keyframes spinningGlow {
             0% {
-                box-shadow: 
+                box-shadow:
                     0 15px 40px rgba(0, 0, 0, 0.4),
                     0 0 100px rgba(255, 0, 150, 0.6),
                     inset 0 0 0 8px rgba(255, 0, 150, 0.8);
             }
+
             50% {
-                box-shadow: 
+                box-shadow:
                     0 15px 40px rgba(0, 0, 0, 0.4),
                     0 0 100px rgba(0, 255, 255, 0.6),
                     inset 0 0 0 8px rgba(0, 255, 255, 0.8);
             }
+
             100% {
-                box-shadow: 
+                box-shadow:
                     0 15px 40px rgba(0, 0, 0, 0.4),
                     0 0 100px rgba(255, 255, 0, 0.6),
                     inset 0 0 0 8px rgba(255, 255, 0, 0.8);
@@ -287,7 +325,7 @@
             border-right: 20px solid transparent;
             border-top: 45px solid #ff6b35;
             z-index: 25;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
             animation: arrowPulse 2s ease-in-out infinite;
             transform-origin: center bottom;
         }
@@ -304,9 +342,9 @@
             border-right: 22px solid transparent;
             border-top: 48px solid #333;
             z-index: 24;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
-        
+
         .wheel-container:hover {
             transform: scale(1.03);
         }
@@ -316,15 +354,15 @@
             width: 100%;
             max-width: 500px;
             margin: 30px auto;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,248,255,0.9));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.9));
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.1),
-                0 5px 15px rgba(0,0,0,0.08),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.1),
+                0 5px 15px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             text-align: center;
             opacity: 0;
             transform: translateY(20px);
@@ -378,9 +416,9 @@
             color: #2c3e50;
             padding: 15px;
             border-radius: 12px;
-            background-color: rgba(255,255,255,0.6);
+            background-color: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             min-height: 60px;
             display: flex;
             align-items: center;
@@ -406,29 +444,91 @@
             animation: celebrationGlow 1s ease-in-out infinite alternate;
         }
 
+        .real-time-display {
+            margin-top: -10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .real-time-display.active {
+            opacity: 1;
+            transform: translateY(10px);
+            animation: pulse-glow 1.5s infinite;
+        }
+
+        #currentSliceText {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+        }
+
         @keyframes winnerPulse {
             0% {
-                box-shadow: 
-                    0 15px 35px rgba(0,0,0,0.1),
-                    0 5px 15px rgba(0,0,0,0.08),
+                box-shadow:
+                    0 15px 35px rgba(0, 0, 0, 0.1),
+                    0 5px 15px rgba(0, 0, 0, 0.08),
                     0 0 0 0 rgba(102, 126, 234, 0.4);
             }
+
             100% {
-                box-shadow: 
-                    0 20px 45px rgba(0,0,0,0.15),
-                    0 8px 25px rgba(0,0,0,0.12),
+                box-shadow:
+                    0 20px 45px rgba(0, 0, 0, 0.15),
+                    0 8px 25px rgba(0, 0, 0, 0.12),
                     0 0 0 10px rgba(102, 126, 234, 0.1);
             }
         }
 
         @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
         @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         @keyframes celebrationGlow {
@@ -436,12 +536,13 @@
                 text-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
                 transform: scale(1);
             }
+
             100% {
                 text-shadow: 0 0 15px rgba(231, 76, 60, 0.8), 0 0 25px rgba(255, 193, 7, 0.6);
                 transform: scale(1.05);
             }
         }
-        
+
         #wheel {
             width: 100%;
             height: 100%;
@@ -449,7 +550,11 @@
             border-radius: 50%;
             overflow: hidden;
             transition: transform 12s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            transform: rotate(0deg);
+            transform: rotate(0deg) translateZ(0);
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
         }
 
         .wheel-slice {
@@ -459,7 +564,7 @@
             transform-origin: 100% 100%;
             top: 50%;
             left: 50%;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .wheel-slice-text {
@@ -467,7 +572,7 @@
             color: white;
             font-weight: bold;
             font-size: 14px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
             transform-origin: center;
             white-space: nowrap;
         }
@@ -485,10 +590,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 
-                0 4px 15px rgba(0,0,0,0.4),
-                inset 0 2px 4px rgba(255,255,255,0.1),
-                inset 0 -2px 4px rgba(0,0,0,0.2);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
             border: 3px solid #ffffff;
             cursor: pointer;
             transition: all 0.1s ease;
@@ -498,35 +603,35 @@
 
         .wheel-center:hover {
             transform: translate(-50%, -50%) scale(1.05);
-            box-shadow: 
-                0 6px 20px rgba(0,0,0,0.5),
-                inset 0 2px 4px rgba(255,255,255,0.2),
-                inset 0 -2px 4px rgba(0,0,0,0.3);
+            box-shadow:
+                0 6px 20px rgba(0, 0, 0, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .wheel-center:active {
             transform: translate(-50%, -50%) scale(0.95);
-            box-shadow: 
-                0 2px 8px rgba(0,0,0,0.3),
-                inset 0 2px 4px rgba(0,0,0,0.2),
-                inset 0 -1px 2px rgba(255,255,255,0.1);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.1);
         }
 
         .wheel-center span {
             color: white;
             font-weight: bold;
             font-size: 16px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
             letter-spacing: 0.5px;
         }
-        
+
         .result-container {
             width: 100%;
             max-width: 600px;
             text-align: center;
             margin-top: 20px;
         }
-        
+
         #result {
             font-size: 2rem;
             font-weight: bold;
@@ -534,9 +639,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
             backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.4);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             border-radius: 15px;
             padding: 20px;
             margin-top: 20px;
@@ -544,18 +649,21 @@
             opacity: 0;
             transform: scale(0.5);
             transition: all 0.5s ease;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes resultPulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             }
+
             50% {
                 transform: scale(1.02);
-                text-shadow: 0 0 20px rgba(255,255,255,0.8), 2px 2px 4px rgba(0,0,0,0.5);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.5);
             }
         }
 
@@ -567,24 +675,46 @@
         }
 
         @keyframes winnerCelebration {
-            0% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.2) rotate(-5deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
-            75% { transform: scale(1.2) rotate(-5deg); }
-            100% { transform: scale(1.1) rotate(0deg); }
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            25% {
+                transform: scale(1.2) rotate(-5deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+
+            75% {
+                transform: scale(1.2) rotate(-5deg);
+            }
+
+            100% {
+                transform: scale(1.1) rotate(0deg);
+            }
         }
-        
+
         #result.show {
             opacity: 1;
             transform: scale(1);
         }
-        
+
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(253, 121, 168, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(253, 121, 168, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(253, 121, 168, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(253, 121, 168, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(253, 121, 168, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(253, 121, 168, 0);
+            }
         }
-        
+
         .slice-config {
             display: flex;
             flex-direction: column;
@@ -597,7 +727,7 @@
             border-radius: 10px;
             backdrop-filter: blur(5px);
         }
-        
+
         .slice-item {
             display: flex;
             gap: 15px;
@@ -611,7 +741,7 @@
         .slice-item:focus-within {
             background: rgba(255, 255, 255, 0.28);
             transform: translateY(-1px);
-            box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
         }
 
         .slice-item.edited {
@@ -619,48 +749,58 @@
         }
 
         @keyframes sliceEditedPop {
-            0% { transform: translateY(0) scale(1); }
-            40% { transform: translateY(-2px) scale(1.015); }
-            100% { transform: translateY(0) scale(1); }
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            40% {
+                transform: translateY(-2px) scale(1.015);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
             body {
                 animation: none !important;
             }
+
             .wheel-container,
             h1 {
                 animation: none !important;
                 transition: none !important;
             }
+
             .particle {
                 animation: none !important;
             }
         }
-        
+
         .slice-item label {
             min-width: 80px;
         }
-        
+
         .save-load-container {
             display: flex;
             gap: 15px;
             width: 100%;
         }
-        
+
         .save-load-container textarea {
             flex-grow: 1;
             min-height: 100px;
             resize: vertical;
         }
-        
+
         .save-load-buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
             min-width: 150px;
         }
-        
+
         .saved-wheels-container {
             width: 100%;
             background: rgba(255, 255, 255, 0.2);
@@ -669,14 +809,14 @@
             padding: 20px;
             margin-top: 20px;
         }
-        
+
         .saved-wheels-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
-        
+
         .saved-wheel-item {
             background: rgba(255, 255, 255, 0.3);
             padding: 15px;
@@ -685,22 +825,22 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        
+
         .saved-wheel-item:hover {
             background: rgba(255, 255, 255, 0.4);
             transform: translateY(-3px);
         }
-        
+
         .saved-wheel-name {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
+
         .saved-wheel-date {
             font-size: 0.8rem;
             opacity: 0.7;
         }
-        
+
         .saved-wheel-delete {
             position: absolute;
             top: 5px;
@@ -717,7 +857,7 @@
             cursor: pointer;
             font-size: 0.7rem;
         }
-        
+
         .confetti {
             position: absolute;
             width: 10px;
@@ -726,17 +866,17 @@
             opacity: 0;
             z-index: 0;
         }
-        
+
         .wheel-name-input {
             width: 100%;
             margin-bottom: 15px;
         }
-        
+
         .file-input-container {
             position: relative;
             width: 100%;
         }
-        
+
         .file-input-label {
             display: block;
             padding: 10px 15px;
@@ -746,11 +886,11 @@
             text-align: center;
             transition: all 0.3s ease;
         }
-        
+
         .file-input-label:hover {
             background: rgba(255, 255, 255, 1);
         }
-        
+
         .file-input {
             position: absolute;
             width: 0.1px;
@@ -759,27 +899,27 @@
             overflow: hidden;
             z-index: -1;
         }
-        
+
         .preset-wheels {
             width: 100%;
             margin-top: 20px;
             display: none;
         }
-        
+
         .preset-wheels.show {
             display: block;
         }
-        
+
         .preset-wheels h2 {
             margin-bottom: 15px;
         }
-        
+
         .preset-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-        
+
         .menu-button {
             position: fixed;
             top: 20px;
@@ -795,21 +935,21 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .menu-button:hover {
             transform: scale(1.1);
         }
-        
+
         .menu-panel {
             position: fixed;
             top: 0;
             left: 0;
             width: 300px;
             height: 100vh;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             padding: 20px;
             transform: translateX(-100%);
@@ -818,21 +958,21 @@
             overflow-y: auto;
             color: white;
         }
-        
+
         .menu-panel.show {
             transform: translateX(0);
         }
-        
+
         .menu-panel h2 {
             margin-bottom: 20px;
             color: var(--accent-color);
         }
-        
+
         .menu-panel button {
             width: 100%;
             margin-bottom: 10px;
-            background-color: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .menu-panel .menu-link {
@@ -848,8 +988,8 @@
             font-size: 0.9rem;
             font-weight: bold;
             color: white;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
 
@@ -857,7 +997,7 @@
             color: #ff0000;
             font-size: 1rem;
         }
-        
+
         .menu-panel button:hover {
             background-color: var(--primary-color);
         }
@@ -870,7 +1010,7 @@
         .menu-panel .menu-link:hover i {
             color: white;
         }
-        
+
         .audio-toggle {
             position: fixed;
             top: 20px;
@@ -886,40 +1026,40 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .audio-toggle:hover {
             transform: scale(1.1);
         }
-        
+
         .audio-toggle.muted {
             background-color: var(--negative-color);
         }
-        
+
         @media (max-width: 768px) {
             .controls-panel {
                 flex-direction: column;
             }
-            
+
             .wheel-container {
                 width: 300px;
                 height: 300px;
             }
-            
+
             .save-load-container {
                 flex-direction: column;
             }
-            
+
             .saved-wheels-list {
                 grid-template-columns: 1fr;
             }
-            
+
             .preset-buttons {
                 flex-direction: column;
             }
-            
+
             .menu-panel {
                 width: 250px;
             }
@@ -941,7 +1081,7 @@
             font-size: 18px;
             font-family: 'Arial', sans-serif;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             z-index: 15;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -961,16 +1101,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             z-index: 1000;
             max-width: 500px;
             width: 90%;
             transition: all 0.3s ease;
-            border: 3px solid rgba(100,100,100,0.3);
+            border: 3px solid rgba(100, 100, 100, 0.3);
             color: #2c3e50;
             font-weight: 500;
         }
@@ -1008,7 +1148,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 999;
             opacity: 0;
             visibility: hidden;
@@ -1048,7 +1188,7 @@
             border-radius: 15px;
             text-align: center;
             border: 2px solid rgba(102, 126, 234, 0.3);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .stat-value {
@@ -1056,7 +1196,7 @@
             font-weight: bold;
             color: #4a5bb8;
             margin-bottom: 8px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .stat-label {
@@ -1111,7 +1251,7 @@
         }
 
         .win-list {
-            background: rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
             border-radius: 10px;
             padding: 10px;
             transition: all 0.3s ease;
@@ -1138,11 +1278,15 @@
         }
 
         @media (max-width: 1100px) {
-            .wheel-info-panel.history-expanded .win-list.expanded { column-count: 2; }
+            .wheel-info-panel.history-expanded .win-list.expanded {
+                column-count: 2;
+            }
         }
 
         @media (max-width: 700px) {
-            .wheel-info-panel.history-expanded .win-list.expanded { column-count: 1; }
+            .wheel-info-panel.history-expanded .win-list.expanded {
+                column-count: 1;
+            }
         }
 
         .wheel-info-panel.history-expanded .win-list.expanded {
@@ -1177,17 +1321,17 @@
         }
 
         .win-list.collapsed::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
             border-radius: 4px;
         }
 
         .win-list.collapsed::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 4px;
         }
 
         .win-list.collapsed::-webkit-scrollbar-thumb:hover {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .delete-spin-btn {
@@ -1227,7 +1371,7 @@
             margin-bottom: 8px;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .win-text {
@@ -1269,40 +1413,72 @@
         #resetStatsBtn:hover {
             background: linear-gradient(135deg, #ff5252, #e53e3e) !important;
             transform: translateY(-2px) !important;
-            box-shadow: 0 6px 16px rgba(255,107,107,0.4) !important;
+            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4) !important;
         }
 
         /* Cool Animations */
         @keyframes arrowPulse {
-            0%, 100% { 
-                filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)) brightness(1);
+
+            0%,
+            100% {
+                filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6)) brightness(1);
                 transform: translateX(-50%) scale(1);
             }
-            50% { 
-                filter: drop-shadow(0 8px 16px rgba(255,107,53,0.9)) brightness(1.3);
+
+            50% {
+                filter: drop-shadow(0 8px 16px rgba(255, 107, 53, 0.9)) brightness(1.3);
                 transform: translateX(-50%) scale(1.1);
             }
         }
 
         @keyframes rainbow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
 
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 1), 0 0 60px rgba(118, 75, 162, 0.8); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(102, 126, 234, 1), 0 0 60px rgba(118, 75, 162, 0.8);
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* Rainbow Mode */
@@ -1321,19 +1497,19 @@
         }
 
         body.dark-mode .controls-panel {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             border: 2px solid #667eea;
         }
 
         body.dark-mode .wheel-info-panel {
-            background: linear-gradient(135deg, rgba(26,26,46,0.95), rgba(22,33,62,0.9));
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.9));
             color: #ffffff;
             border: 3px solid #667eea;
         }
 
         /* Neon Mode */
         .neon-mode .wheel-container {
-            box-shadow: 
+            box-shadow:
                 0 0 30px #00ffff,
                 0 0 60px #ff00ff,
                 0 0 90px #ffff00;
@@ -1356,11 +1532,25 @@
         }
 
         @keyframes rotate3d {
-            0% { transform: rotateY(0deg) rotateX(10deg); }
-            25% { transform: rotateY(90deg) rotateX(10deg); }
-            50% { transform: rotateY(180deg) rotateX(10deg); }
-            75% { transform: rotateY(270deg) rotateX(10deg); }
-            100% { transform: rotateY(360deg) rotateX(10deg); }
+            0% {
+                transform: rotateY(0deg) rotateX(10deg);
+            }
+
+            25% {
+                transform: rotateY(90deg) rotateX(10deg);
+            }
+
+            50% {
+                transform: rotateY(180deg) rotateX(10deg);
+            }
+
+            75% {
+                transform: rotateY(270deg) rotateX(10deg);
+            }
+
+            100% {
+                transform: rotateY(360deg) rotateX(10deg);
+            }
         }
 
         /* Disco Ball Effect */
@@ -1371,20 +1561,33 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255,0,255,0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(0,255,255,0.3) 0%, transparent 50%),
-                radial-gradient(circle at 60% 20%, rgba(255,255,0,0.3) 0%, transparent 50%);
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 0, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 255, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 60% 20%, rgba(255, 255, 0, 0.3) 0%, transparent 50%);
             animation: discoMove 4s ease-in-out infinite;
             pointer-events: none;
             z-index: 1;
         }
 
         @keyframes discoMove {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(20px, -20px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(-20px, -20px) rotate(270deg); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(20px, -20px) rotate(90deg);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) rotate(180deg);
+            }
+
+            75% {
+                transform: translate(-20px, -20px) rotate(270deg);
+            }
         }
 
         /* Cool UI Elements */
@@ -1393,10 +1596,10 @@
             top: 80px;
             left: 20px;
             z-index: 1001;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             padding: 15px;
             border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             transform: translateX(0);
@@ -1448,14 +1651,14 @@
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
 
         .theme-show-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .theme-show-btn.visible {
@@ -1478,12 +1681,29 @@
             transform: scale(1.2);
         }
 
-        .theme-normal { background: linear-gradient(45deg, #667eea, #764ba2); }
-        .theme-dark { background: linear-gradient(45deg, #1a1a2e, #16213e); }
-        .theme-rainbow { background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff); }
-        .theme-neon { background: linear-gradient(45deg, #000, #00ffff); }
-        .theme-3d { background: linear-gradient(45deg, #667eea, #764ba2); }
-        .theme-disco { background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00); }
+        .theme-normal {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .theme-dark {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+        }
+
+        .theme-rainbow {
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
+        }
+
+        .theme-neon {
+            background: linear-gradient(45deg, #000, #00ffff);
+        }
+
+        .theme-3d {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .theme-disco {
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+        }
 
         /* Screen Shake Effect */
         .screen-shake {
@@ -1505,7 +1725,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .battle-arena {
@@ -1540,14 +1760,21 @@
         }
 
         @keyframes battleWin {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
         }
 
         .vs-text {
             font-size: 2rem;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         /* Wheel Casino */
@@ -1558,7 +1785,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -1587,11 +1814,25 @@
             transform: scale(1.2);
         }
 
-        .chip-1 { background: #e74c3c; }
-        .chip-5 { background: #3498db; }
-        .chip-10 { background: #2ecc71; }
-        .chip-25 { background: #f39c12; }
-        .chip-100 { background: #9b59b6; }
+        .chip-1 {
+            background: #e74c3c;
+        }
+
+        .chip-5 {
+            background: #3498db;
+        }
+
+        .chip-10 {
+            background: #2ecc71;
+        }
+
+        .chip-25 {
+            background: #f39c12;
+        }
+
+        .chip-100 {
+            background: #9b59b6;
+        }
 
         .coins-display {
             font-size: 1.5rem;
@@ -1608,7 +1849,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .weather-info {
@@ -1631,7 +1872,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .player-list {
@@ -1642,7 +1883,7 @@
         }
 
         .player-card {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 15px;
             backdrop-filter: blur(10px);
@@ -1662,12 +1903,12 @@
 
         /* Social Features */
         .social-panel {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .share-buttons {
@@ -1693,10 +1934,25 @@
             transform: scale(1.1);
         }
 
-        .share-twitter { background: #1da1f2; color: white; }
-        .share-facebook { background: #4267B2; color: white; }
-        .share-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
-        .share-tiktok { background: #000; color: white; }
+        .share-twitter {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .share-facebook {
+            background: #4267B2;
+            color: white;
+        }
+
+        .share-instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        .share-tiktok {
+            background: #000;
+            color: white;
+        }
 
         /* Mini Games */
         .mini-games {
@@ -1706,7 +1962,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .game-grid {
@@ -1717,7 +1973,7 @@
         }
 
         .mini-game-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             border-radius: 15px;
             padding: 20px;
@@ -1728,7 +1984,7 @@
         }
 
         .mini-game-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
         }
 
@@ -1740,14 +1996,14 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .mic-button {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             font-size: 2rem;
@@ -1758,7 +2014,7 @@
         }
 
         .mic-button:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             transform: scale(1.1);
         }
 
@@ -1769,12 +2025,12 @@
 
         /* Custom Backgrounds */
         .background-selector {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .bg-grid {
@@ -1802,10 +2058,21 @@
             box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
         }
 
-        .bg-space { background: linear-gradient(135deg, #000428, #004e92); }
-        .bg-ocean { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .bg-sunset { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .bg-forest { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .bg-space {
+            background: linear-gradient(135deg, #000428, #004e92);
+        }
+
+        .bg-ocean {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .bg-sunset {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .bg-forest {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
 
         /* Leaderboard */
         .leaderboard {
@@ -1813,7 +2080,7 @@
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             color: #2c3e50;
         }
 
@@ -1823,7 +2090,7 @@
             align-items: center;
             padding: 15px;
             margin: 10px 0;
-            background: rgba(255,255,255,0.7);
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 10px;
             transition: all 0.3s ease;
         }
@@ -1849,12 +2116,12 @@
 
         /* Wheel Customizer */
         .wheel-customizer {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .customizer-section {
@@ -1883,7 +2150,7 @@
 
         .color-picker.selected {
             border-color: white;
-            box-shadow: 0 0 15px rgba(255,255,255,0.7);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         }
 
         /* Slot Machine Effect */
@@ -1894,7 +2161,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .slot-reels {
@@ -1921,8 +2188,13 @@
         }
 
         @keyframes slotSpin {
-            0% { transform: translateY(-500px); }
-            100% { transform: translateY(0); }
+            0% {
+                transform: translateY(-500px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
         }
 
         .slot-symbol {
@@ -1942,11 +2214,11 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .prediction-input {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             border: 2px solid #4a5bb8;
             padding: 12px;
             border-radius: 8px;
@@ -1957,23 +2229,23 @@
         }
 
         .prediction-input::placeholder {
-            color: rgba(44,62,80,0.7);
+            color: rgba(44, 62, 80, 0.7);
         }
 
         .prediction-input:focus {
             outline: none;
-            background: rgba(255,255,255,1);
+            background: rgba(255, 255, 255, 1);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
         }
 
         /* Wheel Designer */
         .wheel-designer {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .design-tools {
@@ -1984,7 +2256,7 @@
         }
 
         .design-tool {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             border-radius: 10px;
             padding: 15px;
@@ -1994,7 +2266,7 @@
         }
 
         .design-tool:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             transform: scale(1.05);
         }
 
@@ -2006,7 +2278,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .reality-timer {
@@ -2017,12 +2289,12 @@
 
         /* Tournament Mode */
         .tournament-bracket {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .bracket-round {
@@ -2032,7 +2304,7 @@
         }
 
         .bracket-match {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 15px;
             min-width: 150px;
@@ -2047,13 +2319,13 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .karma-bar {
             width: 200px;
             height: 20px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             margin: 15px auto;
             overflow: hidden;
@@ -2074,7 +2346,7 @@
             margin: 20px 0;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -2086,13 +2358,18 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             animation: secretSpin 3s linear infinite;
         }
 
         @keyframes secretSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .secret-content {
@@ -2110,10 +2387,12 @@
                 transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
                 opacity: 1;
             }
+
             50% {
                 transform: translate(-50%, -150px) scale(1.2) rotate(180deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translate(-50%, -250px) scale(0.3) rotate(360deg);
                 opacity: 0;
@@ -2126,11 +2405,13 @@
                 opacity: 1;
                 filter: brightness(1);
             }
+
             50% {
                 transform: scale(1.5) rotate(180deg);
                 opacity: 1;
                 filter: brightness(2) drop-shadow(0 0 20px gold);
             }
+
             100% {
                 transform: scale(0.2) rotate(360deg);
                 opacity: 0;
@@ -2143,14 +2424,17 @@
                 transform: translateY(0) scale(0.5) rotate(0deg);
                 opacity: 1;
             }
+
             25% {
                 transform: translateY(-50px) scale(1.2) rotate(90deg);
                 opacity: 1;
             }
+
             75% {
                 transform: translateY(-150px) scale(1) rotate(270deg);
                 opacity: 0.8;
             }
+
             100% {
                 transform: translateY(-300px) scale(0.3) rotate(360deg);
                 opacity: 0;
@@ -2158,26 +2442,51 @@
         }
 
         @keyframes levelUpGlow {
-            0%, 100% {
+
+            0%,
+            100% {
                 filter: brightness(1);
             }
+
             50% {
                 filter: brightness(1.5) saturate(1.5);
             }
         }
 
         @keyframes rainbow {
-            0% { filter: hue-rotate(0deg); }
-            25% { filter: hue-rotate(90deg); }
-            50% { filter: hue-rotate(180deg); }
-            75% { filter: hue-rotate(270deg); }
-            100% { filter: hue-rotate(360deg); }
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            25% {
+                filter: hue-rotate(90deg);
+            }
+
+            50% {
+                filter: hue-rotate(180deg);
+            }
+
+            75% {
+                filter: hue-rotate(270deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
         }
 
         @keyframes powerUpPulse {
-            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 215, 0, 0.5); }
-            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            0% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 215, 0, 0.5);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
         }
 
         /* Enhanced Notification Styles */
@@ -2194,7 +2503,7 @@
             transform: translateX(400px);
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .notification.show {
@@ -2256,8 +2565,8 @@
         }
 
         .shop-item {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 15px;
             padding: 15px;
             display: flex;
@@ -2268,8 +2577,8 @@
 
         .shop-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-color: rgba(255,255,255,0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .shop-icon {
@@ -2383,7 +2692,7 @@
         .progress-bar {
             flex: 1;
             height: 8px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 4px;
             overflow: hidden;
         }
@@ -2436,18 +2745,19 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <!-- Floating Particles Background -->
     <div class="particles" id="particles"></div>
-    
+
     <!-- Notification System -->
     <div class="notification" id="notification">
         <div id="notificationContent"></div>
     </div>
-    
+
     <button class="menu-button" id="menuButton"><i class="fas fa-bars"></i></button>
     <button class="audio-toggle" id="audioToggle"><i class="fas fa-volume-up"></i></button>
-    
+
     <!-- Theme Selector -->
     <div class="theme-selector" id="themeSelector">
         <button class="theme-close-btn" id="themeCloseBtn" title="Hide theme panel">&times;</button>
@@ -2458,19 +2768,20 @@
         <button class="theme-button theme-3d" id="3dTheme" title="3D Mode">🎲</button>
         <button class="theme-button theme-disco" id="discoTheme" title="Disco">🕺</button>
     </div>
-    
+
     <!-- Theme Show Button (appears when theme selector is hidden) -->
     <button class="theme-show-btn" id="themeShowBtn" title="Show theme panel">🎨</button>
-    
+
     <div class="menu-panel" id="menuPanel">
         <h2>Menu</h2>
-        <a class="menu-link" href="https://youtube.com/@yourluckyspin?si=-ye6oqAIu8ZpW1o-" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel (opens in a new tab)">
+        <a class="menu-link" href="https://youtube.com/@yourluckyspin?si=-ye6oqAIu8ZpW1o-" target="_blank"
+            rel="noopener noreferrer" aria-label="Visit our YouTube channel (opens in a new tab)">
             <i class="fab fa-youtube"></i> Subscribe on YouTube
         </a>
         <button id="presetWheelsBtn"><i class="fas fa-star"></i> Preset Wheels</button>
         <button id="customWheelBtn"><i class="fas fa-cog"></i> Custom Wheel</button>
         <button id="savedWheelsBtn"><i class="fas fa-history"></i> Saved Wheels</button>
-        
+
         <h2>Quick Presets</h2>
         <button id="dollarsBtn"><i class="fas fa-money-bill-wave"></i> You Get __ Dollars!</button>
         <button id="countriesBtn"><i class="fas fa-globe"></i> Which Country Will Win</button>
@@ -2488,17 +2799,17 @@
         <button id="superheroBtn"><i class="fas fa-mask"></i> Superhero Powers</button>
         <button id="fortuneBtn"><i class="fas fa-crystal-ball"></i> Fortune Teller</button>
     </div>
-    
+
     <div class="container">
         <h1><i class="fas fa-redo"></i> Ultimate Spin Wheel</h1>
         <p class="subtitle">Make it yours — ideas, dares, prizes, anything.</p>
-        
+
         <div class="controls-panel">
             <div class="control-group">
                 <label for="sliceCount"><i class="fas fa-pizza-slice"></i> Number of Slices:</label>
                 <input type="number" id="sliceCount" min="2" max="20" value="6">
             </div>
-            
+
             <div class="control-group">
                 <label for="spinSpeed"><i class="fas fa-tachometer-alt"></i> Spin Speed:</label>
                 <select id="spinSpeed">
@@ -2508,28 +2819,32 @@
                     <option value="custom">Custom Duration</option>
                 </select>
             </div>
-            
+
             <div class="control-group" id="customDurationGroup" style="display: none;">
                 <label for="customDuration"><i class="fas fa-clock"></i> Custom Duration (ms):</label>
                 <input type="number" id="customDuration" min="1000" max="20000" value="10000">
             </div>
-            
+
             <div class="control-group wheel-name-input">
                 <label for="wheelName"><i class="fas fa-tag"></i> Wheel Name:</label>
                 <input type="text" id="wheelName" placeholder="Movie Night Roulette">
             </div>
-            
+
             <button id="generateBtn"><i class="fas fa-cog"></i> Generate Wheel</button>
             <button id="spinBtn"><i class="fas fa-sync-alt"></i> Spin the Wheel!</button>
         </div>
-        
+
         <div class="wheel-container" id="wheelContainer">
             <div id="wheel"></div>
             <button class="wheel-info-button" id="wheelInfoBtn">
                 WHEEL STATISTICS
             </button>
         </div>
-        
+
+        <div id="realTimeDisplay" class="real-time-display">
+            <span id="currentSliceText">Spin to see!</span>
+        </div>
+
         <!-- Enhanced Result Display -->
         <div class="result-display" id="resultDisplay">
             <div class="result-header">
@@ -2543,7 +2858,7 @@
                 <div class="celebration-text">🎉 Congratulations! 🎉</div>
             </div>
         </div>
-        
+
         <div class="preset-wheels" id="presetWheels">
             <h2><i class="fas fa-star"></i> Preset Wheels</h2>
             <div class="preset-buttons">
@@ -2564,11 +2879,11 @@
                 <button id="presetFortuneBtn"><i class="fas fa-crystal-ball"></i> Fortune Teller</button>
             </div>
         </div>
-        
+
         <div class="slice-config" id="sliceConfig">
             <!-- Slice configuration will be added here -->
         </div>
-        
+
         <div class="save-load-container">
             <textarea id="wheelData" placeholder="Wheel configuration will appear here when generated..."></textarea>
             <div class="save-load-buttons">
@@ -2583,7 +2898,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Wheel Info Panel -->
         <div class="wheel-info-overlay" id="wheelInfoOverlay"></div>
         <div class="wheel-info-panel" id="wheelInfoPanel">
@@ -2592,7 +2907,7 @@
                 <h2 id="wheelInfoTitle">Wheel Statistics</h2>
                 <p id="wheelInfoName">Current Wheel</p>
             </div>
-            
+
             <div class="wheel-stats">
                 <div class="stat-card">
                     <div class="stat-value" id="totalSpins">0</div>
@@ -2603,11 +2918,13 @@
                     <div class="stat-label">Total Slices</div>
                 </div>
             </div>
-            
+
             <div class="win-history">
                 <div class="win-history-header">
-                    <h3>Winning History <span id="historyCount" style="font-size: 14px; font-weight: normal; color: #666;"></span></h3>
-                    <button class="win-history-toggle" id="toggleWinHistoryBtn" type="button" title="Show all history" aria-label="Toggle winning history">
+                    <h3>Winning History <span id="historyCount"
+                            style="font-size: 14px; font-weight: normal; color: #666;"></span></h3>
+                    <button class="win-history-toggle" id="toggleWinHistoryBtn" type="button" title="Show all history"
+                        aria-label="Toggle winning history">
                         <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -2615,8 +2932,9 @@
                     <p style="text-align: center; color: #999;">No spins yet!</p>
                 </div>
             </div>
-            
-            <div style="text-align: center; margin-top: 20px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px;">
+
+            <div
+                style="text-align: center; margin-top: 20px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px;">
                 <button id="resetStatsBtn" style="
                     background: linear-gradient(135deg, #ff6b6b, #ee5a52);
                     color: white;
@@ -2635,7 +2953,7 @@
                 </button>
             </div>
         </div>
-        
+
         <div class="saved-wheels-container">
             <h2><i class="fas fa-history"></i> Saved Wheels</h2>
             <div class="saved-wheels-list" id="savedWheelsList">
@@ -2654,7 +2972,8 @@
                 <div class="vs-text">VS</div>
                 <div class="battle-wheel" id="battleWheel2">Player 2</div>
             </div>
-            <button id="startBattleBtn" style="background: #e74c3c; border: none; padding: 15px 30px; border-radius: 25px; color: white; font-weight: bold; cursor: pointer;">
+            <button id="startBattleBtn"
+                style="background: #e74c3c; border: none; padding: 15px 30px; border-radius: 25px; color: white; font-weight: bold; cursor: pointer;">
                 <i class="fas fa-play"></i> Start Battle!
             </button>
         </div>
@@ -2674,7 +2993,8 @@
             <div style="margin: 20px 0;">
                 <span>Current Bet: </span><span id="currentBet" style="font-weight: bold; color: #f1c40f;">0</span>
             </div>
-            <button id="casinoSpinBtn" style="background: #27ae60; border: none; padding: 15px 30px; border-radius: 25px; color: white; font-weight: bold; cursor: pointer;">
+            <button id="casinoSpinBtn"
+                style="background: #27ae60; border: none; padding: 15px 30px; border-radius: 25px; color: white; font-weight: bold; cursor: pointer;">
                 <i class="fas fa-dice"></i> Spin & Win!
             </button>
         </div>
@@ -2693,7 +3013,8 @@
                     <div>Temperature</div>
                 </div>
             </div>
-            <button id="updateWeatherBtn" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer;">
+            <button id="updateWeatherBtn"
+                style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer;">
                 <i class="fas fa-sync-alt"></i> Update Weather
             </button>
         </div>
@@ -2715,10 +3036,12 @@
                 </div>
             </div>
             <div style="display: flex; gap: 15px; justify-content: center;">
-                <button id="createRoomBtn" style="background: #27ae60; border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer;">
+                <button id="createRoomBtn"
+                    style="background: #27ae60; border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer;">
                     <i class="fas fa-plus"></i> Create Room
                 </button>
-                <button id="joinRoomBtn" style="background: #3498db; border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer;">
+                <button id="joinRoomBtn"
+                    style="background: #3498db; border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer;">
                     <i class="fas fa-sign-in-alt"></i> Join Room
                 </button>
             </div>
@@ -2744,7 +3067,9 @@
             </div>
             <div style="margin-top: 20px;">
                 <label style="display: block; margin-bottom: 10px;">Share Message:</label>
-                <textarea id="shareMessage" style="width: 100%; padding: 10px; border: none; border-radius: 8px; background: rgba(255,255,255,0.8);" placeholder="Just spun the wheel and got...">🎯 Just spun the Ultimate Wheel and got something amazing! 🎊</textarea>
+                <textarea id="shareMessage"
+                    style="width: 100%; padding: 10px; border: none; border-radius: 8px; background: rgba(255,255,255,0.8);"
+                    placeholder="Just spun the wheel and got...">🎯 Just spun the Ultimate Wheel and got something amazing! 🎊</textarea>
             </div>
         </div>
 
@@ -2881,7 +3206,8 @@
                     </div>
                 </div>
             </div>
-            <button id="slotSpinBtn" style="background: #f1c40f; border: none; padding: 15px 30px; border-radius: 25px; color: #2c3e50; font-weight: bold; cursor: pointer;">
+            <button id="slotSpinBtn"
+                style="background: #f1c40f; border: none; padding: 15px 30px; border-radius: 25px; color: #2c3e50; font-weight: bold; cursor: pointer;">
                 <i class="fas fa-coins"></i> Spin Slots!
             </button>
             <div id="slotResult" style="margin-top: 15px; font-weight: bold;"></div>
@@ -2895,10 +3221,12 @@
             <div id="predictionFeedback" class="prediction-feedback" style="display: none;"></div>
             <div style="margin: 15px 0;">
                 <span>Correct Predictions: </span><span id="correctPredictions" style="font-weight: bold;">0</span>
-                <span style="margin-left: 20px;">Total Attempts: </span><span id="totalPredictions" style="font-weight: bold;">0</span>
+                <span style="margin-left: 20px;">Total Attempts: </span><span id="totalPredictions"
+                    style="font-weight: bold;">0</span>
             </div>
             <div style="margin: 10px 0;">
-                <span>Accuracy: </span><span id="predictionAccuracy" style="font-weight: bold; color: #f1c40f;">0%</span>
+                <span>Accuracy: </span><span id="predictionAccuracy"
+                    style="font-weight: bold; color: #f1c40f;">0%</span>
             </div>
         </div>
 
@@ -2908,10 +3236,12 @@
             <p>You've been spinning for a while! Consider taking a break.</p>
             <div class="reality-timer" id="sessionTimer">00:00:00</div>
             <div style="margin: 15px 0;">
-                <button id="continueBtn" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer; margin: 0 10px;">
+                <button id="continueBtn"
+                    style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer; margin: 0 10px;">
                     Continue Playing
                 </button>
-                <button id="takeBreakBtn" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer; margin: 0 10px;">
+                <button id="takeBreakBtn"
+                    style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer; margin: 0 10px;">
                     Take a Break
                 </button>
             </div>
@@ -2923,11 +3253,13 @@
             <div class="bracket-round">
                 <div class="bracket-match">
                     <div>Option A vs Option B</div>
-                    <button style="background: #27ae60; border: none; padding: 5px 10px; border-radius: 15px; color: white; margin-top: 10px; cursor: pointer;">Spin</button>
+                    <button
+                        style="background: #27ae60; border: none; padding: 5px 10px; border-radius: 15px; color: white; margin-top: 10px; cursor: pointer;">Spin</button>
                 </div>
                 <div class="bracket-match">
                     <div>Option C vs Option D</div>
-                    <button style="background: #27ae60; border: none; padding: 5px 10px; border-radius: 15px; color: white; margin-top: 10px; cursor: pointer;">Spin</button>
+                    <button
+                        style="background: #27ae60; border: none; padding: 5px 10px; border-radius: 15px; color: white; margin-top: 10px; cursor: pointer;">Spin</button>
                 </div>
             </div>
         </div>
@@ -2954,7 +3286,8 @@
                 <p>You've unlocked a hidden feature!</p>
                 <div style="font-size: 2rem; margin: 20px 0;">🎭</div>
                 <div style="margin: 15px 0;">
-                    <button id="secretBtn" style="background: rgba(255,255,255,0.2); border: none; padding: 12px 25px; border-radius: 25px; color: white; cursor: pointer; font-weight: bold;">
+                    <button id="secretBtn"
+                        style="background: rgba(255,255,255,0.2); border: none; padding: 12px 25px; border-radius: 25px; color: white; cursor: pointer; font-weight: bold;">
                         Activate Secret Mode
                     </button>
                 </div>
@@ -3055,16 +3388,10 @@
             <button onclick="hidePanel('dailyChallenges')" class="close-btn">Close</button>
         </div>
     </div>
-    
+
     <!-- Sound effects with reliable sources -->
-    <audio id="spinSound" preload="auto">
-        <source src="wheelspin.mp3" type="audio/mpeg">
-    </audio>
     <audio id="winSound" preload="auto">
         <source src="winsound.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="tickSound" preload="auto">
-        <source src="ticksound.mp3" type="audio/mpeg">
     </audio>
     <audio id="confettiSound" preload="auto">
         <source src="confettisound.mp3" type="audio/mpeg">
@@ -3074,28 +3401,28 @@
         // Particle System
         function createParticles() {
             const particles = document.getElementById('particles');
-            
+
             function createParticle() {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                
+
                 // Random size
                 const size = Math.random() * 4 + 2;
                 particle.style.width = size + 'px';
                 particle.style.height = size + 'px';
-                
+
                 // Random position
                 particle.style.left = Math.random() * 100 + '%';
-                
+
                 // Random animation duration
                 const duration = Math.random() * 15 + 10;
                 particle.style.animationDuration = duration + 's';
-                
+
                 // Random delay
                 particle.style.animationDelay = Math.random() * 2 + 's';
-                
+
                 particles.appendChild(particle);
-                
+
                 // Remove particle after animation
                 setTimeout(() => {
                     if (particle.parentNode) {
@@ -3103,20 +3430,20 @@
                     }
                 }, (duration + 2) * 1000);
             }
-            
+
             // Create initial particles
             for (let i = 0; i < 20; i++) {
                 setTimeout(createParticle, i * 200);
             }
-            
+
             // Continuously create particles
             setInterval(createParticle, 500);
         }
-        
+
         // Fireworks effect
         function createFireworks(x, y) {
             const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
-            
+
             for (let i = 0; i < 12; i++) {
                 const firework = document.createElement('div');
                 firework.style.position = 'absolute';
@@ -3128,18 +3455,18 @@
                 firework.style.borderRadius = '50%';
                 firework.style.pointerEvents = 'none';
                 firework.style.zIndex = '1000';
-                
+
                 const angle = (i * 30) * Math.PI / 180;
                 const velocity = Math.random() * 100 + 50;
                 const vx = Math.cos(angle) * velocity;
                 const vy = Math.sin(angle) * velocity;
-                
+
                 firework.style.animation = `fireworkFly 1s ease-out forwards`;
                 firework.style.setProperty('--vx', vx + 'px');
                 firework.style.setProperty('--vy', vy + 'px');
-                
+
                 document.body.appendChild(firework);
-                
+
                 setTimeout(() => {
                     if (firework.parentNode) {
                         firework.parentNode.removeChild(firework);
@@ -3147,7 +3474,7 @@
                 }, 1000);
             }
         }
-        
+
         // Add firework animation CSS
         const style = document.createElement('style');
         style.textContent = `
@@ -3160,7 +3487,7 @@
         `;
         document.head.appendChild(style);
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM Content Loaded - Initializing wheel...');
             // Initialize particle system
             createParticles();
@@ -3174,9 +3501,7 @@
             const resultDisplay = document.getElementById('resultDisplay');
             const resultContent = document.getElementById('resultContent');
             const resultCelebration = document.getElementById('resultCelebration');
-            const spinSound = document.getElementById('spinSound');
             const winSound = document.getElementById('winSound');
-            const tickSound = document.getElementById('tickSound');
             const confettiSound = document.getElementById('confettiSound');
             const spinSpeedSelect = document.getElementById('spinSpeed');
             const customDurationGroup = document.getElementById('customDurationGroup');
@@ -3192,14 +3517,18 @@
             const menuPanel = document.getElementById('menuPanel');
             const audioToggle = document.getElementById('audioToggle');
             const presetWheelsSection = document.getElementById('presetWheels');
-            
+
             // Wheel info panel elements
             const wheelInfoBtn = document.getElementById('wheelInfoBtn');
             const wheelInfoPanel = document.getElementById('wheelInfoPanel');
             const wheelInfoOverlay = document.getElementById('wheelInfoOverlay');
             const closeInfoBtn = document.getElementById('closeInfoBtn');
             const resetStatsBtn = document.getElementById('resetStatsBtn');
-            
+
+            // Real-time result elements
+            const realTimeDisplay = document.getElementById('realTimeDisplay');
+            const currentSliceText = document.getElementById('currentSliceText');
+
             // Theme elements
             const themeSelector = document.getElementById('themeSelector');
             const themeCloseBtn = document.getElementById('themeCloseBtn');
@@ -3210,12 +3539,12 @@
             const neonTheme = document.getElementById('neonTheme');
             const theme3d = document.getElementById('3dTheme');
             const discoTheme = document.getElementById('discoTheme');
-            
+
             // Menu buttons
             const presetWheelsBtn = document.getElementById('presetWheelsBtn');
             const customWheelBtn = document.getElementById('customWheelBtn');
             const savedWheelsBtn = document.getElementById('savedWheelsBtn');
-            
+
             // Preset wheel buttons (menu)
             const dollarsBtn = document.getElementById('dollarsBtn');
             const countriesBtn = document.getElementById('countriesBtn');
@@ -3232,7 +3561,7 @@
             const drinkBtn = document.getElementById('drinkBtn');
             const superheroBtn = document.getElementById('superheroBtn');
             const fortuneBtn = document.getElementById('fortuneBtn');
-            
+
             // Preset wheel buttons (main section)
             const presetDollarsBtn = document.getElementById('presetDollarsBtn');
             const presetCountriesBtn = document.getElementById('presetCountriesBtn');
@@ -3249,17 +3578,54 @@
             const presetDrinkBtn = document.getElementById('presetDrinkBtn');
             const presetSuperheroBtn = document.getElementById('presetSuperheroBtn');
             const presetFortuneBtn = document.getElementById('presetFortuneBtn');
-            
+
             // Wheel state
             let slices = [];
             let isSpinning = false;
             let currentRotation = 0;
             let tickInterval;
+
+            // Optimized Web Audio API for zero-latency ticking
+            let tickAudioCtx = null;
+            let tickBuffer = null;
+            const TICK_SOUND_BASE64 = "//uQBAAAAqIe1XUEQAJWQ+quoJQATSFdcbh2gAGRq62nDtACJKMAM1EAAAAbec4AZjGO2mQnU5znznP+c5z84cAAAAAAAAQYAAAAZ/wAAQ///AAABH/8AAAw//8PDz+AYeHh7/+AAAYeP+OAAAAI//Dx4AAAAABjyRSADKBAAAAHHZzMAEox7HdNCXqc5zvOc/5znfnD4cAAAAADgcFGwAAAR/8AABX//MAAAD//wAADw9/5h7/gB4eHh//AAAAPD39DAAAAHf//oAAAAAD+BwOBwOBwOBwOBwOBwBMjdhP4ID/jjDjtmxmdf4zEIqKX+RRiCAmomf/gQEmBVx4DwHVX/xsHoN48CcMUYH//NAvRcJQZY4DQeQl3//5dLhvGGNy8SxIpFH///yamylLLpOKRkYol0yNsMMMMMMMMMMMBERq2E/gxa44w47NNi+Vv8ZiEZEt/k0fA2VCT/+CMk4OeUB6Dqr/px0HYPMuKHCOX//QC9HC4bFw4Sww3//5iYG6h7F8vEsXVGv///ki1SlmI7i04iiamRl//1piCmooA//uSBAAAAvpe524I4ARfK+vgwqAAC8Vtc7wxgAF9ra33hjAAEEgEEgcEgkEgkEgkEgwFtzhk8OuYzFufBMUDfsefml38xo0qYOqGfuYNCA3JnlhkWmF/3Ghme43cdMFJY7/6nmX2kUNNM//q5AzPR3jpGrf/3MMYwzzOePZqtU02ZHWY4Ajt5k8TWyVis+8Bsg8hmp3tRzD/9KxSXNFZDXDcWiIe48TC5pQ9muYa0rl7PckYINNzP+le78+talLUf+3/7vaJu7XfKLNR////f6JX6e+HUqi41xVbHdFf///C4rV82wQEilErFd3GI1enmGGOsa1Y6bhW+ZPnCUWiP+endDR8vj1/ZTlJ4UT0Z3JiJexEz17k8L/0r5f/dC9Cd2SmRpTQn93QjIuyU586Zbncv0AEoGwGaQwUJKAZTTlGNU0AACEUTGru6kdenTBDHWNbY4SGAzvEfdiIXEefondDEOQ2SPXJ4pxSeFEuR08y/sRM/3hPC8uJXyy++hehO8SmhpThP7vPQvkpzP6ab9Ms8IACK+L0nBASUXEGnEiYgv/7kgQAAALQWdpIJRgAWss7SQSjAAxRZWVBjTfpbazrWJMM+E5HQACCSQU8HOGGjGFLYTeq3sZlDpG02PZjh/GUjRmb2bu3swx/+x7eValVIuVSq5e38qtqs5f22OgMUqQEZfrD12zXa52E19SOl5rP/ZqIAgIDHsSySjzfkkaJAAGDRIKeGcoFGMKXr9Vo8MynRjP2aMfD1jKRo0Y9m/h7Chj/2Y419WqqqlGqlVy9v5VbVYff22NQGKVICMvqw9c812tOwmCr0vLzVuT2ZwACAhx7EuEj37RNECBIDKUgMRwwlY0LiYvgivHdAZLw/qWmhxyP7zRC3bf0B3JxDCrnH8/ycFYTJHHIzP5/LmufUI0dGEhwSnx/I15HeTChQHdvVhTqtZTVe3//5kcxCWExoKqFJuu/V/+K5UCAATckHxykm1LqyCLlFYF6cEGpsmmUWrMOunLKLujR5C7gjiJuZPNKToqBhSme5w/1oIjG0gcyY/OJ//59Qjjxhg8z2P915781Cru3qwo1Wj01L7t/lz/UEKJaYgpqKBgASEAAIAD/+5IEAAAC9lfYzRhgDl6nqrqhjABLPUkyOSmAAWorJoslIACblRQUQdxSf3YJPVVKOU/qlSgbPM36zHONS1+ZBmbNDpHlkfHT4YUZf/wJoGOefz5nPOQwv3P7GNY6z/zIKJyZlImPjMpfZ5mD7ftPjJr2wMKhq2QwRTXhAylxXKITkBgAAAEpO+hhcMyasGZRJNYFARIUgQaj3FPqGAjkZgq68bUE3nBRkbE2fDjGzBRJXvlG2Nv/hn/7f6/+TbMZbiZc30LKIqpvwoV795T9y2t/RR9lkvHVGifDkX/lf3VASCAY0GhItlU08c4Tz5ZDyL4GuRcFlVeTQnkLDRsf5Ok0TRkbf+RpNJqUbf/lEmjYmkTI///pHSAool10Sl//+xeOk0VjEydFFX///prNSaY8VBUFhL//xCRAAAgQQAxoN6RbJYu+bCkfHSH88DWiYFlVeQIV0NUkU/yZZRDiJf+MamaCtiwM1/+M6bF0pKLyX//MSKmJqZKLxe///WTJFTIvOtFSP///1rNSa2WijmQK//+lMQU1FAwAJCAAEAAA//uSBAAP8AAAaQcAAAgAAA0g4AABAAABpAAAACAAADSAAAAETEFNRQMACQgABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
+
+            async function initTickAudio() {
+                try {
+                    if (tickBuffer) return; // Already initialized
+                    if (!window.AudioContext && !window.webkitAudioContext) return;
+                    tickAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+                    const binaryString = window.atob(TICK_SOUND_BASE64);
+                    const len = binaryString.length;
+                    const bytes = new Uint8Array(len);
+                    for (let i = 0; i < len; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    tickBuffer = await tickAudioCtx.decodeAudioData(bytes.buffer);
+                } catch (e) {
+                    console.error('Failed to initialize tick audio:', e);
+                }
+            }
+
+            function playTick() {
+                if (!audioEnabled || audioMuted || !tickBuffer || !tickAudioCtx) return;
+
+                if (tickAudioCtx.state === 'suspended') {
+                    tickAudioCtx.resume();
+                }
+
+                const source = tickAudioCtx.createBufferSource();
+                source.buffer = tickBuffer;
+                source.connect(tickAudioCtx.destination);
+                source.start(0);
+            }
             let confettiInterval;
             let slowDownInterval;
             let audioEnabled = false;
             let audioMuted = false;
-            let wheelStats = {totalSpins: 0, winHistory: [], wheelName: 'Custom Wheel'};
+            let wheelStats = { totalSpins: 0, winHistory: [], wheelName: 'Custom Wheel' };
             let winHistoryExpanded = false;
 
             // Subtle 3D tilt on the wheel to feel more playful/creative.
@@ -3292,10 +3658,10 @@
                 wheelContainer.addEventListener('mouseleave', resetTilt);
                 wheelContainer.addEventListener('blur', resetTilt);
             }
-            
+
             // Enhanced color palette with better contrast between adjacent colors
             const colorPalette = [
-                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
                 '#FF9F40', '#8AC24A', '#F06292', '#7986CB', '#E57373',
                 '#64B5F6', '#BA68C8', '#4DB6AC', '#81C784', '#FFD54F',
                 '#FF8A65', '#A1887F', '#90A4AE', '#9575CD', '#4FC3F7',
@@ -3308,21 +3674,21 @@
                 '#D500F9', '#2979FF', '#FF3D00', '#1DE9B6', '#6200EA',
                 '#FF80AB', '#80D8FF', '#FF9E80', '#B9F6CA', '#B388FF'
             ];
-            
+
             // Function to get distinct colors for adjacent slices
             function getDistinctColor(index, previousColor) {
                 let attempts = 0;
                 let color;
-                
+
                 do {
                     color = colorPalette[(index + attempts) % colorPalette.length];
                     attempts++;
-                    
+
                     // Ensure we don't get stuck in infinite loop
                     if (attempts > colorPalette.length) {
                         return colorPalette[index % colorPalette.length];
                     }
-                    
+
                     // Convert colors to RGB for comparison
                     const hexToRgb = (hex) => {
                         const r = parseInt(hex.slice(1, 3), 16);
@@ -3330,27 +3696,27 @@
                         const b = parseInt(hex.slice(5, 7), 16);
                         return [r, g, b];
                     };
-                    
+
                     if (!previousColor) break;
-                    
+
                     const [r1, g1, b1] = hexToRgb(color);
                     const [r2, g2, b2] = hexToRgb(previousColor);
-                    
+
                     // Calculate color difference (simple Euclidean distance)
                     const diff = Math.sqrt(
-                        Math.pow(r1 - r2, 2) + 
-                        Math.pow(g1 - g2, 2) + 
+                        Math.pow(r1 - r2, 2) +
+                        Math.pow(g1 - g2, 2) +
                         Math.pow(b1 - b2, 2)
                     );
-                    
+
                     // If colors are sufficiently different, use this color
                     if (diff > 150) break;
-                    
+
                 } while (true);
-                
+
                 return color;
             }
-            
+
             // Preset wheel data
             const presetWheels = {
                 dollars: {
@@ -3359,7 +3725,7 @@
                         "$1,000,000", "$500,000", "$250,000", "$100,000", "$50,000",
                         "$25,000", "$10,000", "$5,000", "$2,500", "$1,000",
                         "$500", "$250", "$100", "$50", "$25",
-                        "$10", "$5", "$1","-$1", "-$5", "-$10", "-$25", "-$50",
+                        "$10", "$5", "$1", "-$1", "-$5", "-$10", "-$25", "-$50",
                         "-$100", "-$250", "-$500", "-$1,000", "-$2,500",
                         "-$5,000", "-$10,000", "-$25,000", "-$50,000", "-$100,000",
                         "-$250,000", "-$500,000", "-$1,000,000"
@@ -3368,7 +3734,7 @@
                         "#00b894", "#00b894", "#00b894", "#00b894", "#00b894",
                         "#00b894", "#00b894", "#00b894", "#00b894", "#00b894",
                         "#00b894", "#00b894", "#00b894", "#00b894", "#00b894",
-                        "#00b894", "#00b894", "#00b894", 
+                        "#00b894", "#00b894", "#00b894",
                         "#d63031", "#d63031", "#d63031", "#d63031", "#d63031",
                         "#d63031", "#d63031", "#d63031", "#d63031", "#d63031",
                         "#d63031", "#d63031", "#d63031", "#d63031", "#d63031",
@@ -3379,44 +3745,44 @@
                     name: "Which Country Will Win",
                     items: [
                         "Afghanistan 🇦🇫", "Albania 🇦🇱", "Algeria 🇩🇿", "Andorra 🇦🇩", "Angola 🇦🇴",
-                        "Antigua and Barbuda 🇦🇬", "Argentina 🇦🇷", "Armenia 🇦🇲", "Australia 🇦🇺", "Austria 🇦🇹",
-                        "Azerbaijan 🇦🇿", "Bahamas 🇧🇸", "Bahrain 🇧🇭", "Bangladesh 🇧🇩", "Barbados 🇧🇧",
-                        "Belarus 🇧🇾", "Belgium 🇧🇪", "Belize 🇧🇿", "Benin 🇧🇯", "Bhutan 🇧🇹",
-                        "Bolivia 🇧🇴", "Bosnia and Herzegovina 🇧🇦", "Botswana 🇧🇼", "Brazil 🇧🇷", "Brunei 🇧🇳",
-                        "Bulgaria 🇧🇬", "Burkina Faso 🇧🇫", "Burundi 🇧🇮", "Cambodia 🇰🇭", "Cameroon 🇨🇲",
-                        "Canada 🇨🇦", "Cape Verde 🇨🇻", "Central African Republic 🇨🇫", "Chad 🇹🇩", "Chile 🇨🇱",
-                        "China 🇨🇳", "Colombia 🇨🇴", "Comoros 🇰🇲", "Republic of the Congo 🇨🇬", "DR Congo 🇨🇩",
-                        "Costa Rica 🇨🇷", "Côte d'Ivoire 🇨🇮", "Croatia 🇭🇷", "Cuba 🇨🇺", "Cyprus 🇨🇾",
-                        "Czechia 🇨🇿", "Denmark 🇩🇰", "Djibouti 🇩🇯", "Dominica 🇩🇲", "Dominican Republic 🇩🇴",
-                        "Ecuador 🇪🇨", "Egypt 🇪🇬", "El Salvador 🇸🇻", "Equatorial Guinea 🇬🇶", "Eritrea 🇪🇷",
-                        "Estonia 🇪🇪", "Eswatini 🇸🇿", "Ethiopia 🇪🇹", "Fiji 🇫🇯", "Finland 🇫🇮",
-                        "France 🇫🇷", "Gabon 🇬🇦", "Gambia 🇬🇲", "Georgia 🇬🇪", "Germany 🇩🇪",
-                        "Ghana 🇬🇭", "Greece 🇬🇷", "Grenada 🇬🇩", "Guatemala 🇬🇹", "Guinea 🇬🇳",
-                        "Guinea-Bissau 🇬🇼", "Guyana 🇬🇾", "Haiti 🇭🇹", "Honduras 🇭🇳", "Hungary 🇭🇺",
-                        "Iceland 🇮🇸", "India 🇮🇳", "Indonesia 🇮🇩", "Iran 🇮🇷", "Iraq 🇮🇶",
-                        "Ireland 🇮🇪", "Israel 🇮🇱", "Italy 🇮🇹", "Jamaica 🇯🇲", "Japan 🇯🇵",
-                        "Jordan 🇯🇴", "Kazakhstan 🇰🇿", "Kenya 🇰🇪", "Kiribati 🇰🇮", "North Korea 🇰🇵",
-                        "South Korea 🇰🇷", "Kosovo 🇽🇰", "Kuwait 🇰🇼", "Kyrgyzstan 🇰🇬", "Laos 🇱🇦",
-                        "Latvia 🇱🇻", "Lebanon 🇱🇧", "Lesotho 🇱🇸", "Liberia 🇱🇷", "Libya 🇱🇾",
-                        "Liechtenstein 🇱🇮", "Lithuania 🇱🇹", "Luxembourg 🇱🇺", "Madagascar 🇲🇬", "Malawi 🇲🇼",
-                        "Malaysia 🇲🇾", "Maldives 🇲🇻", "Mali 🇲🇱", "Malta 🇲🇹", "Marshall Islands 🇲🇭",
-                        "Mauritania 🇲🇷", "Mauritius 🇲🇺", "Mexico 🇲🇽", "Micronesia 🇫🇲", "Moldova 🇲🇩",
-                        "Monaco 🇲🇨", "Mongolia 🇲🇳", "Montenegro 🇲🇪", "Morocco 🇲🇦", "Mozambique 🇲🇿",
-                        "Myanmar 🇲🇲", "Namibia 🇳🇦", "Nauru 🇳🇷", "Nepal 🇳🇵", "Netherlands 🇳🇱",
-                        "New Zealand 🇳🇿", "Nicaragua 🇳🇮", "Niger 🇳🇪", "Nigeria 🇳🇬", "North Macedonia 🇲🇰",
-                        "Norway 🇳🇴", "Oman 🇴🇲", "Pakistan 🇵🇰", "Palau 🇵🇼", "Palestine 🇵🇸",
-                        "Panama 🇵🇦", "Papua New Guinea 🇵🇬", "Paraguay 🇵🇾", "Peru 🇵🇪", "Philippines 🇵🇭",
-                        "Poland 🇵🇱", "Portugal 🇵🇹", "Qatar 🇶🇦", "Romania 🇷🇴", "Russia 🇷🇺",
-                        "Rwanda 🇷🇼", "Saint Kitts and Nevis 🇰🇳", "Saint Lucia 🇱🇨", "Samoa 🇼🇸", "San Marino 🇸🇲",
-                        "Sao Tome and Principe 🇸🇹", "Saudi Arabia 🇸🇦", "Senegal 🇸🇳", "Serbia 🇷🇸", "Seychelles 🇸🇨",
-                        "Sierra Leone 🇸🇱", "Singapore 🇸🇬", "Slovakia 🇸🇰", "Slovenia 🇸🇮", "Solomon Islands 🇸🇧",
-                        "Somalia 🇸🇴", "South Africa 🇿🇦", "South Sudan 🇸🇸", "Spain 🇪🇸", "Sri Lanka 🇱🇰",
-                        "Sudan 🇸🇩", "Suriname 🇸🇷", "Sweden 🇸🇪", "Switzerland 🇨🇭", "Syria 🇸🇾",
-                        "Taiwan 🇹🇼", "Tajikistan 🇹🇯", "Tanzania 🇹🇿", "Thailand 🇹🇭", "Timor-Leste 🇹🇱",
-                        "Togo 🇹🇬", "Tonga 🇹🇴", "Trinidad and Tobago 🇹🇹", "Tunisia 🇹🇳", "Turkey 🇹🇷",
-                        "Turkmenistan 🇹🇲", "Tuvalu 🇹🇻", "Uganda 🇺🇬", "Ukraine 🇺🇦", "United Arab Emirates 🇦🇪",
-                        "United Kingdom 🇬🇧", "United States 🇺🇸", "Uruguay 🇺🇾", "Uzbekistan 🇺🇿", "Vanuatu 🇻🇺",
-                        "Vatican City 🇻🇦", "Venezuela 🇻🇪", "Vietnam 🇻🇳", "Yemen 🇾🇪", "Zambia 🇿🇲", "Zimbabwe 🇿🇼"               ]
+                        "Antigua and Barbuda 🇦🇬", "Argentina 🇦🇷", "Armenia 🇦🇲", "Australia 🇦🇺", "Austria 🇦🇹",
+                        "Azerbaijan 🇦🇿", "Bahamas 🇧🇸", "Bahrain 🇧🇭", "Bangladesh 🇧🇩", "Barbados 🇧🇧",
+                        "Belarus 🇧🇾", "Belgium 🇧🇪", "Belize 🇧🇿", "Benin 🇧🇯", "Bhutan 🇧🇹",
+                        "Bolivia 🇧🇴", "Bosnia and Herzegovina 🇧🇦", "Botswana 🇧🇼", "Brazil 🇧🇷", "Brunei 🇧🇳",
+                        "Bulgaria 🇧🇬", "Burkina Faso 🇧🇫", "Burundi 🇧🇮", "Cambodia 🇰🇭", "Cameroon 🇨🇲",
+                        "Canada 🇨🇦", "Cape Verde 🇨🇻", "Central African Republic 🇨🇫", "Chad 🇹🇩", "Chile 🇨🇱",
+                        "China 🇨🇳", "Colombia 🇨🇴", "Comoros 🇰🇲", "Republic of the Congo 🇨🇬", "DR Congo 🇨🇩",
+                        "Costa Rica 🇨🇷", "Côte d'Ivoire 🇨🇮", "Croatia 🇭🇷", "Cuba 🇨🇺", "Cyprus 🇨🇾",
+                        "Czechia 🇨🇿", "Denmark 🇩🇰", "Djibouti 🇩🇯", "Dominica 🇩🇲", "Dominican Republic 🇩🇴",
+                        "Ecuador 🇪🇨", "Egypt 🇪🇬", "El Salvador 🇸🇻", "Equatorial Guinea 🇬🇶", "Eritrea 🇪🇷",
+                        "Estonia 🇪🇪", "Eswatini 🇸🇿", "Ethiopia 🇪🇹", "Fiji 🇫🇯", "Finland 🇫🇮",
+                        "France 🇫🇷", "Gabon 🇬🇦", "Gambia 🇬🇲", "Georgia 🇬🇪", "Germany 🇩🇪",
+                        "Ghana 🇬🇭", "Greece 🇬🇷", "Grenada 🇬🇩", "Guatemala 🇬🇹", "Guinea 🇬🇳",
+                        "Guinea-Bissau 🇬🇼", "Guyana 🇬🇾", "Haiti 🇭🇹", "Honduras 🇭🇳", "Hungary 🇭🇺",
+                        "Iceland 🇮🇸", "India 🇮🇳", "Indonesia 🇮🇩", "Iran 🇮🇷", "Iraq 🇮🇶",
+                        "Ireland 🇮🇪", "Israel 🇮🇱", "Italy 🇮🇹", "Jamaica 🇯🇲", "Japan 🇯🇵",
+                        "Jordan 🇯🇴", "Kazakhstan 🇰🇿", "Kenya 🇰🇪", "Kiribati 🇰🇮", "North Korea 🇰🇵",
+                        "South Korea 🇰🇷", "Kosovo 🇽🇰", "Kuwait 🇰🇼", "Kyrgyzstan 🇰🇬", "Laos 🇱🇦",
+                        "Latvia 🇱🇻", "Lebanon 🇱🇧", "Lesotho 🇱🇸", "Liberia 🇱🇷", "Libya 🇱🇾",
+                        "Liechtenstein 🇱🇮", "Lithuania 🇱🇹", "Luxembourg 🇱🇺", "Madagascar 🇲🇬", "Malawi 🇲🇼",
+                        "Malaysia 🇲🇾", "Maldives 🇲🇻", "Mali 🇲🇱", "Malta 🇲🇹", "Marshall Islands 🇲🇭",
+                        "Mauritania 🇲🇷", "Mauritius 🇲🇺", "Mexico 🇲🇽", "Micronesia 🇫🇲", "Moldova 🇲🇩",
+                        "Monaco 🇲🇨", "Mongolia 🇲🇳", "Montenegro 🇲🇪", "Morocco 🇲🇦", "Mozambique 🇲🇿",
+                        "Myanmar 🇲🇲", "Namibia 🇳🇦", "Nauru 🇳🇷", "Nepal 🇳🇵", "Netherlands 🇳🇱",
+                        "New Zealand 🇳🇿", "Nicaragua 🇳🇮", "Niger 🇳🇪", "Nigeria 🇳🇬", "North Macedonia 🇲🇰",
+                        "Norway 🇳🇴", "Oman 🇴🇲", "Pakistan 🇵🇰", "Palau 🇵🇼", "Palestine 🇵🇸",
+                        "Panama 🇵🇦", "Papua New Guinea 🇵🇬", "Paraguay 🇵🇾", "Peru 🇵🇪", "Philippines 🇵🇭",
+                        "Poland 🇵🇱", "Portugal 🇵🇹", "Qatar 🇶🇦", "Romania 🇷🇴", "Russia 🇷🇺",
+                        "Rwanda 🇷🇼", "Saint Kitts and Nevis 🇰🇳", "Saint Lucia 🇱🇨", "Samoa 🇼🇸", "San Marino 🇸🇲",
+                        "Sao Tome and Principe 🇸🇹", "Saudi Arabia 🇸🇦", "Senegal 🇸🇳", "Serbia 🇷🇸", "Seychelles 🇸🇨",
+                        "Sierra Leone 🇸🇱", "Singapore 🇸🇬", "Slovakia 🇸🇰", "Slovenia 🇸🇮", "Solomon Islands 🇸🇧",
+                        "Somalia 🇸🇴", "South Africa 🇿🇦", "South Sudan 🇸🇸", "Spain 🇪🇸", "Sri Lanka 🇱🇰",
+                        "Sudan 🇸🇩", "Suriname 🇸🇷", "Sweden 🇸🇪", "Switzerland 🇨🇭", "Syria 🇸🇾",
+                        "Taiwan 🇹🇼", "Tajikistan 🇹🇯", "Tanzania 🇹🇿", "Thailand 🇹🇭", "Timor-Leste 🇹🇱",
+                        "Togo 🇹🇬", "Tonga 🇹🇴", "Trinidad and Tobago 🇹🇹", "Tunisia 🇹🇳", "Turkey 🇹🇷",
+                        "Turkmenistan 🇹🇲", "Tuvalu 🇹🇻", "Uganda 🇺🇬", "Ukraine 🇺🇦", "United Arab Emirates 🇦🇪",
+                        "United Kingdom 🇬🇧", "United States 🇺🇸", "Uruguay 🇺🇾", "Uzbekistan 🇺🇿", "Vanuatu 🇻🇺",
+                        "Vatican City 🇻🇦", "Venezuela 🇻🇪", "Vietnam 🇻🇳", "Yemen 🇾🇪", "Zambia 🇿🇲", "Zimbabwe 🇿🇼"]
                 },
                 birthday: {
                     name: "Your Birthday Comes You Win",
@@ -3533,40 +3899,40 @@
                     ]
                 }
             };
-            
+
             // Initialize the wheel
             function init() {
                 // Check if audio is supported and can be enabled
                 checkAudioSupport();
-                
+
                 // Generate the initial wheel
                 generateWheel();
-                
+
                 // Set up event listeners
                 setupEventListeners();
-                
+
                 // Load saved wheels
                 loadSavedWheels();
-                
+
                 // Load saved theme
                 loadSavedTheme();
             }
-            
+
             // Check if audio is supported
             function checkAudioSupport() {
                 audioEnabled = !!(window.AudioContext || window.webkitAudioContext);
-                
+
                 if (!audioEnabled) {
                     audioToggle.style.display = 'none';
                 } else {
                     audioToggle.addEventListener('click', toggleAudio);
                 }
             }
-            
+
             // Toggle audio on/off
             function toggleAudio() {
                 audioMuted = !audioMuted;
-                
+
                 if (audioMuted) {
                     audioToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
                     audioToggle.classList.add('muted');
@@ -3575,250 +3941,250 @@
                     audioToggle.classList.remove('muted');
                 }
             }
-            
+
             // Set up event listeners
             function setupEventListeners() {
                 generateBtn.addEventListener('click', generateWheel);
                 spinBtn.addEventListener('click', spinWheel);
                 wheelContainer.addEventListener('click', spinWheel);
-                
-                spinSpeedSelect.addEventListener('change', function() {
+
+                spinSpeedSelect.addEventListener('change', function () {
                     if (this.value === 'custom') {
                         customDurationGroup.style.display = 'flex';
                     } else {
                         customDurationGroup.style.display = 'none';
                     }
                 });
-                
+
                 saveBtn.addEventListener('click', saveWheel);
                 loadBtn.addEventListener('click', loadWheel);
                 copyBtn.addEventListener('click', copyWheelData);
                 fileInput.addEventListener('change', handleFileUpload);
-                
+
                 if (menuButton) {
                     menuButton.addEventListener('click', toggleMenu);
                 } else {
                     console.error('menuButton not found');
                 }
-                
+
                 // Menu navigation
-                presetWheelsBtn.addEventListener('click', function() {
+                presetWheelsBtn.addEventListener('click', function () {
                     presetWheelsSection.style.display = 'block';
                     menuPanel.classList.remove('show');
                 });
-                
-                customWheelBtn.addEventListener('click', function() {
+
+                customWheelBtn.addEventListener('click', function () {
                     presetWheelsSection.style.display = 'none';
                     menuPanel.classList.remove('show');
                 });
-                
-                savedWheelsBtn.addEventListener('click', function() {
+
+                savedWheelsBtn.addEventListener('click', function () {
                     loadSavedWheels();
                     menuPanel.classList.remove('show');
                 });
-                
+
                 // Preset wheel buttons (menu)
-                dollarsBtn.addEventListener('click', function() { loadPresetWheel('dollars'); });
-                countriesBtn.addEventListener('click', function() { loadPresetWheel('countries'); });
-                birthdayBtn.addEventListener('click', function() { loadPresetWheel('birthday'); });
-                foodBtn.addEventListener('click', function() { loadPresetWheel('food'); });
-                movieBtn.addEventListener('click', function() { loadPresetWheel('movie'); });
-                colorBtn.addEventListener('click', function() { loadPresetWheel('color'); });
-                exerciseBtn.addEventListener('click', function() { loadPresetWheel('exercise'); });
-                bookBtn.addEventListener('click', function() { loadPresetWheel('book'); });
-                travelBtn.addEventListener('click', function() { loadPresetWheel('travel'); });
-                gameBtn.addEventListener('click', function() { loadPresetWheel('game'); });
-                choreBtn.addEventListener('click', function() { loadPresetWheel('chore'); });
-                songBtn.addEventListener('click', function() { loadPresetWheel('song'); });
-                drinkBtn.addEventListener('click', function() { loadPresetWheel('drink'); });
-                superheroBtn.addEventListener('click', function() { loadPresetWheel('superhero'); });
-                fortuneBtn.addEventListener('click', function() { loadPresetWheel('fortune'); });
-                
+                dollarsBtn.addEventListener('click', function () { loadPresetWheel('dollars'); });
+                countriesBtn.addEventListener('click', function () { loadPresetWheel('countries'); });
+                birthdayBtn.addEventListener('click', function () { loadPresetWheel('birthday'); });
+                foodBtn.addEventListener('click', function () { loadPresetWheel('food'); });
+                movieBtn.addEventListener('click', function () { loadPresetWheel('movie'); });
+                colorBtn.addEventListener('click', function () { loadPresetWheel('color'); });
+                exerciseBtn.addEventListener('click', function () { loadPresetWheel('exercise'); });
+                bookBtn.addEventListener('click', function () { loadPresetWheel('book'); });
+                travelBtn.addEventListener('click', function () { loadPresetWheel('travel'); });
+                gameBtn.addEventListener('click', function () { loadPresetWheel('game'); });
+                choreBtn.addEventListener('click', function () { loadPresetWheel('chore'); });
+                songBtn.addEventListener('click', function () { loadPresetWheel('song'); });
+                drinkBtn.addEventListener('click', function () { loadPresetWheel('drink'); });
+                superheroBtn.addEventListener('click', function () { loadPresetWheel('superhero'); });
+                fortuneBtn.addEventListener('click', function () { loadPresetWheel('fortune'); });
+
                 // Preset wheel buttons (main section)
-                presetDollarsBtn.addEventListener('click', function() { loadPresetWheel('dollars'); });
-                presetCountriesBtn.addEventListener('click', function() { loadPresetWheel('countries'); });
-                presetBirthdayBtn.addEventListener('click', function() { loadPresetWheel('birthday'); });
-                presetFoodBtn.addEventListener('click', function() { loadPresetWheel('food'); });
-                presetMovieBtn.addEventListener('click', function() { loadPresetWheel('movie'); });
-                presetColorBtn.addEventListener('click', function() { loadPresetWheel('color'); });
-                presetExerciseBtn.addEventListener('click', function() { loadPresetWheel('exercise'); });
-                presetBookBtn.addEventListener('click', function() { loadPresetWheel('book'); });
-                presetTravelBtn.addEventListener('click', function() { loadPresetWheel('travel'); });
-                presetGameBtn.addEventListener('click', function() { loadPresetWheel('game'); });
-                presetChoreBtn.addEventListener('click', function() { loadPresetWheel('chore'); });
-                presetSongBtn.addEventListener('click', function() { loadPresetWheel('song'); });
-                presetDrinkBtn.addEventListener('click', function() { loadPresetWheel('drink'); });
-                presetSuperheroBtn.addEventListener('click', function() { loadPresetWheel('superhero'); });
-                presetFortuneBtn.addEventListener('click', function() { loadPresetWheel('fortune'); });
-                
-            // Wheel info panel event listeners
-            if (wheelInfoBtn) {
-                wheelInfoBtn.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Prevent wheel spin
-                    showWheelInfo();
-                });
-            } else {
-                console.error('wheelInfoBtn not found');
-            }
-            
-            if (closeInfoBtn) {
-                closeInfoBtn.addEventListener('click', hideWheelInfo);
-            }
-            if (wheelInfoOverlay) {
-                wheelInfoOverlay.addEventListener('click', hideWheelInfo);
-            }
-            if (resetStatsBtn) {
-                resetStatsBtn.addEventListener('click', resetWheelStats);
-            }
-            
-            // Theme event listeners
-            if (normalTheme) normalTheme.addEventListener('click', () => setTheme('normal'));
-            if (darkTheme) darkTheme.addEventListener('click', () => setTheme('dark'));
-            if (rainbowTheme) rainbowTheme.addEventListener('click', () => setTheme('rainbow'));
-            
-            // Theme panel toggle functionality
-            if (themeCloseBtn) {
-                themeCloseBtn.addEventListener('click', hideThemePanel);
-            }
-            if (themeShowBtn) {
-                themeShowBtn.addEventListener('click', showThemePanel);
-            }
-            
-            function hideThemePanel() {
-                if (themeSelector) {
-                    themeSelector.classList.add('hidden');
+                presetDollarsBtn.addEventListener('click', function () { loadPresetWheel('dollars'); });
+                presetCountriesBtn.addEventListener('click', function () { loadPresetWheel('countries'); });
+                presetBirthdayBtn.addEventListener('click', function () { loadPresetWheel('birthday'); });
+                presetFoodBtn.addEventListener('click', function () { loadPresetWheel('food'); });
+                presetMovieBtn.addEventListener('click', function () { loadPresetWheel('movie'); });
+                presetColorBtn.addEventListener('click', function () { loadPresetWheel('color'); });
+                presetExerciseBtn.addEventListener('click', function () { loadPresetWheel('exercise'); });
+                presetBookBtn.addEventListener('click', function () { loadPresetWheel('book'); });
+                presetTravelBtn.addEventListener('click', function () { loadPresetWheel('travel'); });
+                presetGameBtn.addEventListener('click', function () { loadPresetWheel('game'); });
+                presetChoreBtn.addEventListener('click', function () { loadPresetWheel('chore'); });
+                presetSongBtn.addEventListener('click', function () { loadPresetWheel('song'); });
+                presetDrinkBtn.addEventListener('click', function () { loadPresetWheel('drink'); });
+                presetSuperheroBtn.addEventListener('click', function () { loadPresetWheel('superhero'); });
+                presetFortuneBtn.addEventListener('click', function () { loadPresetWheel('fortune'); });
+
+                // Wheel info panel event listeners
+                if (wheelInfoBtn) {
+                    wheelInfoBtn.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent wheel spin
+                        showWheelInfo();
+                    });
+                } else {
+                    console.error('wheelInfoBtn not found');
+                }
+
+                if (closeInfoBtn) {
+                    closeInfoBtn.addEventListener('click', hideWheelInfo);
+                }
+                if (wheelInfoOverlay) {
+                    wheelInfoOverlay.addEventListener('click', hideWheelInfo);
+                }
+                if (resetStatsBtn) {
+                    resetStatsBtn.addEventListener('click', resetWheelStats);
+                }
+
+                // Theme event listeners
+                if (normalTheme) normalTheme.addEventListener('click', () => setTheme('normal'));
+                if (darkTheme) darkTheme.addEventListener('click', () => setTheme('dark'));
+                if (rainbowTheme) rainbowTheme.addEventListener('click', () => setTheme('rainbow'));
+
+                // Theme panel toggle functionality
+                if (themeCloseBtn) {
+                    themeCloseBtn.addEventListener('click', hideThemePanel);
                 }
                 if (themeShowBtn) {
-                    themeShowBtn.classList.add('visible');
+                    themeShowBtn.addEventListener('click', showThemePanel);
                 }
-            }
-            
-            function showThemePanel() {
-                if (themeSelector) {
-                    themeSelector.classList.remove('hidden');
+
+                function hideThemePanel() {
+                    if (themeSelector) {
+                        themeSelector.classList.add('hidden');
+                    }
+                    if (themeShowBtn) {
+                        themeShowBtn.classList.add('visible');
+                    }
                 }
-                if (themeShowBtn) {
-                    themeShowBtn.classList.remove('visible');
+
+                function showThemePanel() {
+                    if (themeSelector) {
+                        themeSelector.classList.remove('hidden');
+                    }
+                    if (themeShowBtn) {
+                        themeShowBtn.classList.remove('visible');
+                    }
                 }
-            }
 
-            // NEW FEATURE EVENT LISTENERS
+                // NEW FEATURE EVENT LISTENERS
 
-            // Wheel Battles
-            const startBattleBtn = document.getElementById('startBattleBtn');
-            if (startBattleBtn) {
-                startBattleBtn.addEventListener('click', startWheelBattle);
-            }
+                // Wheel Battles
+                const startBattleBtn = document.getElementById('startBattleBtn');
+                if (startBattleBtn) {
+                    startBattleBtn.addEventListener('click', startWheelBattle);
+                }
 
-            // Casino
-            const casinoSpinBtn = document.getElementById('casinoSpinBtn');
-            const chips = document.querySelectorAll('.chip');
-            if (casinoSpinBtn) {
-                casinoSpinBtn.addEventListener('click', casinoSpin);
-            }
-            chips.forEach(chip => {
-                chip.addEventListener('click', function() {
-                    placeBet(parseInt(this.dataset.value));
+                // Casino
+                const casinoSpinBtn = document.getElementById('casinoSpinBtn');
+                const chips = document.querySelectorAll('.chip');
+                if (casinoSpinBtn) {
+                    casinoSpinBtn.addEventListener('click', casinoSpin);
+                }
+                chips.forEach(chip => {
+                    chip.addEventListener('click', function () {
+                        placeBet(parseInt(this.dataset.value));
+                    });
                 });
-            });
 
-            // Weather
-            const updateWeatherBtn = document.getElementById('updateWeatherBtn');
-            if (updateWeatherBtn) {
-                updateWeatherBtn.addEventListener('click', updateWeather);
-            }
+                // Weather
+                const updateWeatherBtn = document.getElementById('updateWeatherBtn');
+                if (updateWeatherBtn) {
+                    updateWeatherBtn.addEventListener('click', updateWeather);
+                }
 
-            // Voice Control
-            const micButton = document.getElementById('micButton');
-            if (micButton) {
-                micButton.addEventListener('click', toggleVoiceControl);
-            }
+                // Voice Control
+                const micButton = document.getElementById('micButton');
+                if (micButton) {
+                    micButton.addEventListener('click', toggleVoiceControl);
+                }
 
-            // Background Selector
-            const bgOptions = document.querySelectorAll('.bg-option');
-            bgOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    changeBackground(this.dataset.bg);
+                // Background Selector
+                const bgOptions = document.querySelectorAll('.bg-option');
+                bgOptions.forEach(option => {
+                    option.addEventListener('click', function () {
+                        changeBackground(this.dataset.bg);
+                    });
                 });
-            });
 
-            // Color Picker
-            const colorPickers = document.querySelectorAll('.color-picker');
-            colorPickers.forEach(picker => {
-                picker.addEventListener('click', function() {
-                    selectColor(this.dataset.color);
+                // Color Picker
+                const colorPickers = document.querySelectorAll('.color-picker');
+                colorPickers.forEach(picker => {
+                    picker.addEventListener('click', function () {
+                        selectColor(this.dataset.color);
+                    });
                 });
-            });
 
-            // Slot Machine
-            const slotSpinBtn = document.getElementById('slotSpinBtn');
-            if (slotSpinBtn) {
-                slotSpinBtn.addEventListener('click', spinSlots);
-            }
+                // Slot Machine
+                const slotSpinBtn = document.getElementById('slotSpinBtn');
+                if (slotSpinBtn) {
+                    slotSpinBtn.addEventListener('click', spinSlots);
+                }
 
-            // Social Sharing
-            const shareTwitter = document.getElementById('shareTwitter');
-            const shareFacebook = document.getElementById('shareFacebook');
-            const shareInstagram = document.getElementById('shareInstagram');
-            const shareTiktok = document.getElementById('shareTiktok');
-            
-            if (shareTwitter) shareTwitter.addEventListener('click', () => shareToSocial('twitter'));
-            if (shareFacebook) shareFacebook.addEventListener('click', () => shareToSocial('facebook'));
-            if (shareInstagram) shareInstagram.addEventListener('click', () => shareToSocial('instagram'));
-            if (shareTiktok) shareTiktok.addEventListener('click', () => shareToSocial('tiktok'));
+                // Social Sharing
+                const shareTwitter = document.getElementById('shareTwitter');
+                const shareFacebook = document.getElementById('shareFacebook');
+                const shareInstagram = document.getElementById('shareInstagram');
+                const shareTiktok = document.getElementById('shareTiktok');
 
-            // Mini Games
-            const guessNumberGame = document.getElementById('guessNumberGame');
-            const memoryGame = document.getElementById('memoryGame');
-            const reactionGame = document.getElementById('reactionGame');
-            const mathQuizGame = document.getElementById('mathQuizGame');
-            const colorMatchGame = document.getElementById('colorMatchGame');
-            
-            if (guessNumberGame) guessNumberGame.addEventListener('click', () => playMiniGame('guess'));
-            if (memoryGame) memoryGame.addEventListener('click', () => playMiniGame('memory'));
-            if (reactionGame) reactionGame.addEventListener('click', () => playMiniGame('reaction'));
-            if (mathQuizGame) mathQuizGame.addEventListener('click', () => playMiniGame('math'));
-            if (colorMatchGame) colorMatchGame.addEventListener('click', () => playMiniGame('color'));
+                if (shareTwitter) shareTwitter.addEventListener('click', () => shareToSocial('twitter'));
+                if (shareFacebook) shareFacebook.addEventListener('click', () => shareToSocial('facebook'));
+                if (shareInstagram) shareInstagram.addEventListener('click', () => shareToSocial('instagram'));
+                if (shareTiktok) shareTiktok.addEventListener('click', () => shareToSocial('tiktok'));
 
-            // Reality Check
-            const continueBtn = document.getElementById('continueBtn');
-            const takeBreakBtn = document.getElementById('takeBreakBtn');
-            if (continueBtn) continueBtn.addEventListener('click', () => hidePanel('realityCheck'));
-            if (takeBreakBtn) takeBreakBtn.addEventListener('click', takeBreak);
+                // Mini Games
+                const guessNumberGame = document.getElementById('guessNumberGame');
+                const memoryGame = document.getElementById('memoryGame');
+                const reactionGame = document.getElementById('reactionGame');
+                const mathQuizGame = document.getElementById('mathQuizGame');
+                const colorMatchGame = document.getElementById('colorMatchGame');
 
-            // Secret Achievement
-            const secretBtn = document.getElementById('secretBtn');
-            if (secretBtn) secretBtn.addEventListener('click', activateSecretMode);
+                if (guessNumberGame) guessNumberGame.addEventListener('click', () => playMiniGame('guess'));
+                if (memoryGame) memoryGame.addEventListener('click', () => playMiniGame('memory'));
+                if (reactionGame) reactionGame.addEventListener('click', () => playMiniGame('reaction'));
+                if (mathQuizGame) mathQuizGame.addEventListener('click', () => playMiniGame('math'));
+                if (colorMatchGame) colorMatchGame.addEventListener('click', () => playMiniGame('color'));
 
-            // Initialize new features
-            updateWeather();
-            startSessionTimer();
-            initializeGameState();
-            if (neonTheme) neonTheme.addEventListener('click', () => setTheme('neon'));
-            if (theme3d) theme3d.addEventListener('click', () => setTheme('3d'));
-            if (discoTheme) discoTheme.addEventListener('click', () => setTheme('disco'));
-            
-            // Load saved wheel statistics
-            loadWheelStats();
+                // Reality Check
+                const continueBtn = document.getElementById('continueBtn');
+                const takeBreakBtn = document.getElementById('takeBreakBtn');
+                if (continueBtn) continueBtn.addEventListener('click', () => hidePanel('realityCheck'));
+                if (takeBreakBtn) takeBreakBtn.addEventListener('click', takeBreak);
 
-            // Winning history expand/collapse
-            const toggleWinHistoryBtn = document.getElementById('toggleWinHistoryBtn');
-            if (toggleWinHistoryBtn) {
-                toggleWinHistoryBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    winHistoryExpanded = !winHistoryExpanded;
-                    loadWheelStats();
-                    updateWheelStatsDisplay();
-                });
-            }
-        };
-            
+                // Secret Achievement
+                const secretBtn = document.getElementById('secretBtn');
+                if (secretBtn) secretBtn.addEventListener('click', activateSecretMode);
+
+                // Initialize new features
+                updateWeather();
+                startSessionTimer();
+                initializeGameState();
+                if (neonTheme) neonTheme.addEventListener('click', () => setTheme('neon'));
+                if (theme3d) theme3d.addEventListener('click', () => setTheme('3d'));
+                if (discoTheme) discoTheme.addEventListener('click', () => setTheme('disco'));
+
+                // Load saved wheel statistics
+                loadWheelStats();
+
+                // Winning history expand/collapse
+                const toggleWinHistoryBtn = document.getElementById('toggleWinHistoryBtn');
+                if (toggleWinHistoryBtn) {
+                    toggleWinHistoryBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        winHistoryExpanded = !winHistoryExpanded;
+                        loadWheelStats();
+                        updateWheelStatsDisplay();
+                    });
+                }
+            };
+
             // Toggle menu panel
             function toggleMenu() {
                 menuPanel.classList.toggle('show');
             }
-            
+
             // Show wheel info panel
             function showWheelInfo() {
                 if (!wheelInfoPanel || !wheelInfoOverlay) {
@@ -3830,26 +4196,26 @@
                 wheelInfoPanel.classList.add('show');
                 wheelInfoOverlay.classList.add('show');
             }
-            
+
             // Hide wheel info panel
             function hideWheelInfo() {
                 wheelInfoPanel.classList.remove('show');
                 wheelInfoOverlay.classList.remove('show');
             }
-            
+
             // Update wheel stats display
             function updateWheelStatsDisplay() {
                 const stats = getWheelStats();
                 document.getElementById('totalSpins').textContent = stats.totalSpins;
                 document.getElementById('totalSlices').textContent = slices.length;
                 document.getElementById('wheelInfoName').textContent = wheelNameInput.value || 'Custom Wheel';
-                
+
                 // Update win history
                 const winList = document.getElementById('winList');
                 const toggleBtn = document.getElementById('toggleWinHistoryBtn');
                 const historyCount = document.getElementById('historyCount');
                 const wheelInfoPanelEl = document.getElementById('wheelInfoPanel');
-                
+
                 if (stats.winHistory.length === 0) {
                     winHistoryExpanded = false;
                     winList.innerHTML = '<p style="text-align: center; color: #999;">No spins yet!</p>';
@@ -3921,58 +4287,58 @@
                     }
                 }
             }
-            
+
             // Render win history items efficiently
             function renderWinHistory(winList, indicesToRender, stats) {
                 // Use DocumentFragment for better performance with large lists
                 const fragment = document.createDocumentFragment();
-                
+
                 indicesToRender.forEach((actualIndex) => {
                     const win = stats.winHistory[actualIndex];
                     const winItem = document.createElement('div');
                     winItem.className = 'win-item';
-                    
+
                     const winText = document.createElement('span');
                     winText.className = 'win-text';
                     winText.style.flex = '1';
                     winText.textContent = win.result;
-                    
+
                     const winDate = document.createElement('span');
                     winDate.className = 'win-date';
                     winDate.textContent = new Date(win.timestamp).toLocaleDateString();
-                    
+
                     const deleteBtn = document.createElement('button');
                     deleteBtn.className = 'delete-spin-btn';
                     deleteBtn.setAttribute('data-index', actualIndex);
                     deleteBtn.title = 'Delete this result';
                     deleteBtn.textContent = '×';
-                    deleteBtn.addEventListener('click', function(e) {
+                    deleteBtn.addEventListener('click', function (e) {
                         e.stopPropagation();
                         const index = parseInt(this.getAttribute('data-index'));
                         deleteSingleSpin(index);
                     });
-                    
+
                     winItem.appendChild(winText);
                     winItem.appendChild(winDate);
                     winItem.appendChild(deleteBtn);
                     fragment.appendChild(winItem);
                 });
-                
+
                 winList.innerHTML = '';
                 winList.appendChild(fragment);
             }
-            
+
             // Load wheel statistics from localStorage
             function loadWheelStats() {
                 const wheelName = wheelNameInput.value || 'Custom Wheel';
                 const allWheelStats = JSON.parse(localStorage.getItem('allWheelStats') || '{}');
                 wheelStats = allWheelStats[wheelName] || {
-                    totalSpins: 0, 
-                    winHistory: [], 
+                    totalSpins: 0,
+                    winHistory: [],
                     wheelName: wheelName
                 };
             }
-            
+
             // Save wheel statistics to localStorage
             function saveWheelStats() {
                 const wheelName = wheelNameInput.value || 'Custom Wheel';
@@ -3981,12 +4347,12 @@
                 allWheelStats[wheelName] = wheelStats;
                 localStorage.setItem('allWheelStats', JSON.stringify(allWheelStats));
             }
-            
+
             // Get wheel statistics
             function getWheelStats() {
                 return wheelStats;
             }
-            
+
             // Add win to statistics
             function addWinToStats(result) {
                 // Load current wheel's stats first
@@ -3999,31 +4365,31 @@
                 });
                 saveWheelStats();
             }
-            
+
             // Delete a single spin from history
             function deleteSingleSpin(index) {
                 const wheelName = wheelNameInput.value || 'Custom Wheel';
                 const spinResult = wheelStats.winHistory[index].result;
                 const spinDate = new Date(wheelStats.winHistory[index].timestamp).toLocaleString();
-                
+
                 if (confirm(`Are you sure you want to delete this spin result?\n\nResult: ${spinResult}\nDate: ${spinDate}\n\nThis action cannot be undone.`)) {
                     // Load current stats
                     loadWheelStats();
-                    
+
                     // Remove the specific spin
                     wheelStats.winHistory.splice(index, 1);
-                    
+
                     // Update total spins count
                     wheelStats.totalSpins = Math.max(0, wheelStats.totalSpins - 1);
-                    
+
                     // Save updated stats
                     saveWheelStats();
-                    
+
                     // Refresh the display
                     updateWheelStatsDisplay();
                 }
             }
-            
+
             // Reset wheel statistics
             function resetWheelStats() {
                 const wheelName = wheelNameInput.value || 'Custom Wheel';
@@ -4038,15 +4404,15 @@
                     alert(`Statistics for "${wheelName}" have been reset!`);
                 }
             }
-            
+
             // Theme Functions
             function setTheme(theme) {
                 // Remove all theme classes
                 document.body.classList.remove('dark-mode', 'rainbow-mode', 'neon-mode', 'mode-3d', 'disco-mode');
                 document.documentElement.classList.remove('dark-mode', 'rainbow-mode', 'neon-mode', 'mode-3d', 'disco-mode');
-                
+
                 // Add new theme class
-                switch(theme) {
+                switch (theme) {
                     case 'dark':
                         document.body.classList.add('dark-mode');
                         createStars();
@@ -4069,20 +4435,20 @@
                         // Normal theme
                         break;
                 }
-                
+
                 // Save theme preference
                 localStorage.setItem('wheelTheme', theme);
-                
+
                 // Add screen shake effect
                 document.body.classList.add('screen-shake');
                 setTimeout(() => document.body.classList.remove('screen-shake'), 500);
             }
-            
+
             // Create stars for dark mode
             function createStars() {
                 const existingStars = document.querySelector('.stars');
                 if (existingStars) existingStars.remove();
-                
+
                 const stars = document.createElement('div');
                 stars.className = 'stars';
                 stars.style.position = 'fixed';
@@ -4092,7 +4458,7 @@
                 stars.style.height = '100%';
                 stars.style.pointerEvents = 'none';
                 stars.style.zIndex = '0';
-                
+
                 for (let i = 0; i < 100; i++) {
                     const star = document.createElement('div');
                     star.style.position = 'absolute';
@@ -4105,9 +4471,9 @@
                     star.style.animation = `twinkle ${Math.random() * 3 + 1}s infinite`;
                     stars.appendChild(star);
                 }
-                
+
                 document.body.appendChild(stars);
-                
+
                 // Add twinkle animation
                 const style = document.createElement('style');
                 style.textContent = `
@@ -4118,7 +4484,7 @@
                 `;
                 document.head.appendChild(style);
             }
-            
+
             // Create neon effects
             function createNeonEffects() {
                 // Add pulsing neon border to wheel
@@ -4128,7 +4494,7 @@
                     wheel.style.boxShadow = '0 0 30px #00ffff, inset 0 0 30px #ff00ff';
                 }
             }
-            
+
             // Create disco effects
             function createDiscoEffects() {
                 const audio = new Audio();
@@ -4137,22 +4503,22 @@
                 // audio.src = 'disco-music.mp3';
                 // audio.play();
             }
-            
+
             // Enhanced winner celebration
             function megaCelebration() {
                 // Screen shake
                 document.body.classList.add('screen-shake');
                 setTimeout(() => document.body.classList.remove('screen-shake'), 1000);
-                
+
                 // Rainbow winner text
                 resultDisplay.classList.add('mega-winner');
                 setTimeout(() => resultDisplay.classList.remove('mega-winner'), 5000);
-                
+
                 // Create extra confetti burst
                 for (let i = 0; i < 100; i++) {
                     setTimeout(() => createConfetti(), i * 50);
                 }
-                
+
                 // Create fireworks
                 for (let i = 0; i < 20; i++) {
                     setTimeout(() => {
@@ -4162,22 +4528,22 @@
                     }, i * 200);
                 }
             }
-            
+
             // Load saved theme
             function loadSavedTheme() {
                 const savedTheme = localStorage.getItem('wheelTheme') || 'normal';
                 setTheme(savedTheme);
             }
-            
+
             // Generate the wheel
             function generateWheel() {
                 const sliceCount = parseInt(sliceCountInput.value);
-                
+
                 // Clear the wheel
                 wheel.innerHTML = '';
                 sliceConfig.innerHTML = '';
                 slices = [];
-                
+
                 // Create SVG wheel
                 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                 svg.setAttribute('width', '100%');
@@ -4186,31 +4552,31 @@
                 svg.style.position = 'absolute';
                 svg.style.top = '0';
                 svg.style.left = '0';
-                
+
                 const radius = 180;
                 const centerX = 200;
                 const centerY = 200;
-                
+
                 // Calculate angle for each slice
                 const anglePerSlice = 360 / sliceCount;
-                
+
                 // Generate slices
                 let previousColor = null;
                 for (let i = 0; i < sliceCount; i++) {
                     const color = getDistinctColor(i, previousColor);
                     previousColor = color;
-                    
+
                     // Calculate slice path
                     const startAngle = (i * anglePerSlice - 90) * Math.PI / 180; // Start from top
                     const endAngle = ((i + 1) * anglePerSlice - 90) * Math.PI / 180;
-                    
+
                     const x1 = centerX + radius * Math.cos(startAngle);
                     const y1 = centerY + radius * Math.sin(startAngle);
                     const x2 = centerX + radius * Math.cos(endAngle);
                     const y2 = centerY + radius * Math.sin(endAngle);
-                    
+
                     const largeArcFlag = anglePerSlice > 180 ? 1 : 0;
-                    
+
                     // Create SVG path for pie slice
                     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                     const pathData = `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
@@ -4218,9 +4584,9 @@
                     path.setAttribute('fill', color);
                     path.setAttribute('stroke', '#ffffff');
                     path.setAttribute('stroke-width', '2');
-                    
+
                     svg.appendChild(path);
-                    
+
                     // Create text element
                     // Only add text if 20 or fewer slices
                     let text = null;
@@ -4229,7 +4595,7 @@
                         const textRadius = radius * 0.7;
                         const textX = centerX + textRadius * Math.cos(textAngle);
                         const textY = centerY + textRadius * Math.sin(textAngle);
-                        
+
                         text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                         text.setAttribute('x', textX);
                         text.setAttribute('y', textY);
@@ -4241,10 +4607,10 @@
                         text.setAttribute('font-family', 'Arial, sans-serif');
                         text.style.filter = 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))';
                         text.textContent = `IDEA ${i + 1}`;
-                        
+
                         svg.appendChild(text);
                     }
-                    
+
                     // Store slice data
                     slices.push({
                         text: `IDEA ${i + 1}`,
@@ -4252,23 +4618,23 @@
                         path: path,
                         textElement: text
                     });
-                    
+
                     // Create slice configuration input
                     const sliceItem = document.createElement('div');
                     sliceItem.className = 'slice-item';
-                    
+
                     const colorInput = document.createElement('input');
                     colorInput.type = 'color';
                     colorInput.value = color;
-                    colorInput.addEventListener('change', function() {
+                    colorInput.addEventListener('change', function () {
                         slices[i].color = this.value;
                         path.setAttribute('fill', this.value);
                     });
-                    
+
                     const textInput = document.createElement('input');
                     textInput.type = 'text';
                     textInput.value = `IDEA ${i + 1}`;
-                    textInput.addEventListener('input', function() {
+                    textInput.addEventListener('input', function () {
                         slices[i].text = this.value;
                         if (text) { // Only update text if it exists (20 or fewer slices)
                             text.textContent = this.value;
@@ -4280,27 +4646,27 @@
                         void sliceItem.offsetWidth;
                         sliceItem.classList.add('edited');
                     });
-                    
+
                     sliceItem.appendChild(colorInput);
                     sliceItem.appendChild(textInput);
                     sliceConfig.appendChild(sliceItem);
                 }
-                
+
                 wheel.appendChild(svg);
-                
+
                 // Add center spin button
                 const center = document.createElement('div');
                 center.className = 'wheel-center';
                 center.innerHTML = '<span>Spin</span>';
                 center.addEventListener('click', spinWheel);
                 wheel.appendChild(center);
-                
+
                 // Update wheel data
                 updateWheelData();
-                
+
                 // Load stats for this specific wheel
                 loadWheelStats();
-                
+
                 // Reset result display
                 if (resultDisplay) {
                     resultDisplay.classList.remove('show', 'winner');
@@ -4311,37 +4677,46 @@
                     resultCelebration.classList.remove('show');
                 }
             }
-            
+
             // Update wheel data in textarea
             function updateWheelData() {
                 const wheelData = {
                     name: wheelNameInput.value,
                     slices: slices
                 };
-                
+
                 wheelDataTextarea.value = JSON.stringify(wheelData, null, 2);
             }
-            
+
             // Spin the wheel
             function spinWheel() {
                 if (isSpinning) return;
-                
+
+                // Initialize/resume audio context on user interaction
+                initTickAudio();
+
                 isSpinning = true;
                 resultDisplay.classList.remove('show');
                 resultDisplay.classList.remove('winner');
-                
+
                 // Add spinning glow effect
                 wheelContainer.classList.add('spinning');
-                
+
+                // Show real-time display
+                if (realTimeDisplay) {
+                    realTimeDisplay.classList.add('active');
+                    currentSliceText.textContent = 'Selecting...';
+                }
+
                 // Create fireworks at wheel center during spin
                 const wheelRect = wheelContainer.getBoundingClientRect();
                 const centerX = wheelRect.left + wheelRect.width / 2;
                 const centerY = wheelRect.top + wheelRect.height / 2;
-                
+
                 const fireworkInterval = setInterval(() => {
                     createFireworks(centerX + (Math.random() - 0.5) * 100, centerY + (Math.random() - 0.5) * 100);
                 }, 200);
-                
+
                 // Determine spin duration
                 let duration;
                 switch (spinSpeedSelect.value) {
@@ -4357,60 +4732,104 @@
                     default: // medium
                         duration = 12000;
                 }
-                
-                // Calculate random rotation (at least 8 full rotations)
+
                 const rotations = 8 + Math.floor(Math.random() * 6);
-                const targetRotation = currentRotation + (rotations * 360) + (Math.random() * 360);
-                currentRotation = targetRotation;
-                
-                // Play spin sound if audio is enabled and not muted
+                const startRotation = currentRotation;
+                const totalRotationDelta = (rotations * 360) + (Math.random() * 360);
+                currentRotation = startRotation + totalRotationDelta;
+                const targetRotation = currentRotation;
+
+
+                // Start ticking logic
                 if (audioEnabled && !audioMuted) {
-                    spinSound.currentTime = 0;
-                    spinSound.loop = true; // Enable looping
-                    spinSound.play();
-                    
-                    // Play tick sound during spinning
-                    let tickCount = 0;
-                    tickInterval = setInterval(() => {
-                        tickSound.currentTime = 0;
-                        tickSound.play();
-                        tickCount++;
-                        
-                        if (tickCount > 20) {
-                            clearInterval(tickInterval);
+                    const sliceAngle = 360 / slices.length;
+                    const startTime = performance.now();
+
+                    function getBezierValue(t, p1, p2) {
+                        return 3 * Math.pow(1 - t, 2) * t * p1 + 3 * (1 - t) * Math.pow(t, 2) * p2 + Math.pow(t, 3);
+                    }
+
+                    function solveBezier(x, x1, x2) {
+                        let low = 0, high = 1;
+                        for (let i = 0; i < 15; i++) {
+                            let t = (low + high) / 2;
+                            if (getBezierValue(t, x1, x2) < x) low = t;
+                            else high = t;
                         }
-                    }, duration / 20);
+                        return (low + high) / 2;
+                    }
+
+                    let lastTickCount = 0;
+                    const checkTick = () => {
+                        const now = performance.now();
+                        const timeProgress = Math.min((now - startTime) / duration, 1);
+
+                        // Exact cubic bezier sync
+                        const t = solveBezier(timeProgress, 0.17, 0.12);
+                        const rotationProgress = getBezierValue(t, 0.67, 0.99);
+
+                        const currentDegreesCovered = totalRotationDelta * rotationProgress;
+                        const expectedTickCount = Math.floor(currentDegreesCovered / sliceAngle);
+
+                        // Update real-time text
+                        if (currentSliceText) {
+                            const currentTotalRotation = (startRotation + currentDegreesCovered) % 360;
+                            let currentIndex = Math.floor((360 - (currentTotalRotation % 360)) / sliceAngle) % slices.length;
+                            if (currentIndex < 0) currentIndex += slices.length;
+
+                            const currentSlice = slices[currentIndex];
+                            if (currentSlice && currentSlice.text !== currentSliceText.textContent) {
+                                currentSliceText.textContent = currentSlice.text;
+                                // Subtle visual feedback on change
+                                currentSliceText.style.display = 'inline-block';
+                                currentSliceText.animate([
+                                    { transform: 'scale(1)' },
+                                    { transform: 'scale(1.2)', color: '#fd79a8' },
+                                    { transform: 'scale(1)' }
+                                ], { duration: 100 });
+                            }
+                        }
+                        // Handle all missed ticks since last frame
+                        while (expectedTickCount > lastTickCount) {
+                            playTick();
+                            lastTickCount++;
+                        }
+
+                        if (timeProgress < 1) {
+                            requestAnimationFrame(checkTick);
+                        }
+                    };
+                    requestAnimationFrame(checkTick);
                 }
-                
+
                 // Apply rotation with CSS transition
                 wheel.style.transition = `transform ${duration}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
                 wheel.style.transform = `rotate(${targetRotation}deg)`;
-                
+
                 // Calculate which slice will be selected
                 const normalizedRotation = targetRotation % 360;
                 const sliceAngle = 360 / slices.length;
                 let selectedIndex = Math.floor((360 - normalizedRotation) / sliceAngle) % slices.length;
-                
+
                 // Handle edge case where normalizedRotation is exactly 360
                 if (selectedIndex < 0) selectedIndex += slices.length;
-                
+
                 // Stop spinning after duration and show result
                 setTimeout(() => {
                     isSpinning = false;
-                    
+
                     // Remove spinning effects
                     wheelContainer.classList.remove('spinning');
                     clearInterval(fireworkInterval);
-                    
-                    // Stop spin sound and tick sound
-                    spinSound.pause();
-                    spinSound.loop = false; // Disable looping
-                    spinSound.currentTime = 0; // Reset to beginning
-                    if (tickInterval) clearInterval(tickInterval);
-                    
+
+                    // Remove real-time display
+                    if (realTimeDisplay) {
+                        realTimeDisplay.classList.remove('active');
+                    }
+
                     // Add winner celebration effects
                     resultDisplay.classList.add('winner');
-                    
+
                     // Create massive fireworks celebration
                     for (let i = 0; i < 50; i++) {
                         setTimeout(() => {
@@ -4419,19 +4838,19 @@
                             createFireworks(x, y);
                         }, i * 50);
                     }
-                    
+
                     // Play win sound and confetti sound
                     if (audioEnabled && !audioMuted) {
                         winSound.currentTime = 0;
                         winSound.play();
-                        
+
                         confettiSound.currentTime = 0;
                         confettiSound.play();
                     }
-                    
+
                     // Display result
                     const selectedSlice = slices[selectedIndex];
-                    
+
                     // Update enhanced result display
                     if (resultDisplay && resultContent) {
                         const resultText = resultContent.querySelector('.result-text');
@@ -4441,12 +4860,12 @@
                             resultText.style.fontWeight = 'bold';
                             resultText.style.textShadow = `0 0 10px ${selectedSlice.color}`;
                         }
-                        
+
                         // Show the result display with animation
                         setTimeout(() => {
                             resultDisplay.classList.add('show');
                         }, 500);
-                        
+
                         // Add winner effect
                         setTimeout(() => {
                             resultDisplay.classList.add('winner');
@@ -4457,58 +4876,58 @@
                     } else {
                         console.error('Result display elements not found');
                     }
-                    
+
                     // Add to statistics
                     addWinToStats(selectedSlice.text);
-                    
+
                     // Process enhanced features
                     if (typeof processSpinResult === 'function') {
                         processSpinResult(selectedSlice.text);
                     }
-                    
+
                     // Create confetti effect and mega celebration
                     createConfetti();
                     megaCelebration();
                 }, duration);
             }
-            
+
             // Create confetti effect
             function createConfetti() {
                 const confettiCount = 200;
                 const container = document.querySelector('.container');
-                
+
                 // Clear any existing confetti
                 document.querySelectorAll('.confetti').forEach(el => el.remove());
-                
+
                 // Create new confetti
                 for (let i = 0; i < confettiCount; i++) {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
-                    
+
                     // Random position, color, size, and shape
                     const left = Math.random() * 100;
                     const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
                     const size = Math.floor(Math.random() * 10) + 5;
                     const shape = Math.random() > 0.5 ? 'square' : 'circle';
-                    
+
                     confetti.style.left = `${left}%`;
                     confetti.style.top = '-20px';
                     confetti.style.backgroundColor = color;
                     confetti.style.width = `${size}px`;
                     confetti.style.height = `${size}px`;
                     confetti.style.borderRadius = shape === 'circle' ? '50%' : '0';
-                    
+
                     document.body.appendChild(confetti);
-                    
+
                     // Animate confetti falling
                     const animationDuration = Math.random() * 3000 + 2000;
                     const animationDelay = Math.random() * 500;
-                    
+
                     confetti.style.animation = `
                         fall ${animationDuration}ms ease-in ${animationDelay}ms forwards,
-                        sway ${animationDuration/1000}s ease-in-out ${animationDelay}ms alternate infinite
+                        sway ${animationDuration / 1000}s ease-in-out ${animationDelay}ms alternate infinite
                     `;
-                    
+
                     // Define keyframes for falling and swaying
                     const style = document.createElement('style');
                     style.textContent = `
@@ -4521,14 +4940,14 @@
                         }
                     `;
                     document.head.appendChild(style);
-                    
+
                     // Remove confetti after animation
                     setTimeout(() => {
                         confetti.remove();
                     }, animationDuration + animationDelay);
                 }
             }
-            
+
             // Save wheel to localStorage
             function saveWheel() {
                 const wheelData = {
@@ -4536,43 +4955,43 @@
                     slices: slices,
                     timestamp: new Date().toISOString()
                 };
-                
+
                 const savedWheels = JSON.parse(localStorage.getItem('savedWheels') || '[]');
                 savedWheels.push(wheelData);
                 localStorage.setItem('savedWheels', JSON.stringify(savedWheels));
-                
+
                 alert('Wheel saved successfully!');
                 loadSavedWheels();
             }
-            
+
             // Load saved wheels from localStorage
             function loadSavedWheels() {
                 const savedWheels = JSON.parse(localStorage.getItem('savedWheels') || '[]');
                 savedWheelsList.innerHTML = '';
-                
+
                 if (savedWheels.length === 0) {
                     savedWheelsList.innerHTML = '<p>No saved wheels yet.</p>';
                     return;
                 }
-                
+
                 savedWheels.forEach((wheelData, index) => {
                     const wheelItem = document.createElement('div');
                     wheelItem.className = 'saved-wheel-item';
-                    
+
                     const wheelName = document.createElement('div');
                     wheelName.className = 'saved-wheel-name';
                     wheelName.textContent = wheelData.name;
-                    
+
                     const wheelDate = document.createElement('div');
                     wheelDate.className = 'saved-wheel-date';
                     wheelDate.textContent = new Date(wheelData.timestamp).toLocaleDateString();
-                    
+
                     const loadButton = document.createElement('button');
                     loadButton.textContent = 'Load';
                     loadButton.addEventListener('click', () => {
                         loadWheelFromData(wheelData);
                     });
-                    
+
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'saved-wheel-delete';
                     deleteButton.innerHTML = '<i class="fas fa-times"></i>';
@@ -4580,7 +4999,7 @@
                         e.stopPropagation();
                         deleteWheel(index);
                     });
-                    
+
                     wheelItem.appendChild(wheelName);
                     wheelItem.appendChild(wheelDate);
                     wheelItem.appendChild(loadButton);
@@ -4588,7 +5007,7 @@
                     savedWheelsList.appendChild(wheelItem);
                 });
             }
-            
+
             // Delete a saved wheel
             function deleteWheel(index) {
                 const savedWheels = JSON.parse(localStorage.getItem('savedWheels') || '[]');
@@ -4596,43 +5015,43 @@
                 localStorage.setItem('savedWheels', JSON.stringify(savedWheels));
                 loadSavedWheels();
             }
-            
+
             // Load wheel from data
             function loadWheelFromData(wheelData) {
                 wheelNameInput.value = wheelData.name;
                 sliceCountInput.value = wheelData.slices.length;
                 generateWheel();
-                
+
                 // Update slice data
                 wheelData.slices.forEach((slice, index) => {
                     slices[index].text = slice.text;
                     slices[index].color = slice.color;
-                    
+
                     // Update slice elements
                     const sliceElements = document.querySelectorAll('.wheel-slice');
                     const sliceTextElements = document.querySelectorAll('.wheel-slice-text');
                     const configInputs = document.querySelectorAll('.slice-item input');
-                    
+
                     if (sliceElements[index]) {
                         sliceElements[index].style.background = slice.color;
                     }
-                    
+
                     if (sliceTextElements[index]) {
                         sliceTextElements[index].textContent = slice.text;
                     }
-                    
+
                     if (configInputs[index * 2]) {
                         configInputs[index * 2].value = slice.color;
                     }
-                    
+
                     if (configInputs[index * 2 + 1]) {
                         configInputs[index * 2 + 1].value = slice.text;
                     }
                 });
-                
+
                 updateWheelData();
             }
-            
+
             // Load wheel from textarea
             function loadWheel() {
                 try {
@@ -4643,21 +5062,21 @@
                     console.error(e);
                 }
             }
-            
+
             // Copy wheel data to clipboard
             function copyWheelData() {
                 wheelDataTextarea.select();
                 document.execCommand('copy');
                 alert('Wheel data copied to clipboard!');
             }
-            
+
             // Handle file upload
             function handleFileUpload(event) {
                 const file = event.target.files[0];
                 if (!file) return;
-                
+
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     try {
                         const wheelData = JSON.parse(e.target.result);
                         wheelDataTextarea.value = JSON.stringify(wheelData, null, 2);
@@ -4668,57 +5087,57 @@
                     }
                 };
                 reader.readAsText(file);
-                
+
                 // Reset file input
                 event.target.value = '';
             }
-            
+
             // Load a preset wheel
             function loadPresetWheel(presetKey) {
                 const preset = presetWheels[presetKey];
                 if (!preset) return;
-                
+
                 wheelNameInput.value = preset.name;
                 sliceCountInput.value = preset.items.length;
                 generateWheel();
-                
+
                 // Update slice data
                 preset.items.forEach((item, index) => {
                     slices[index].text = item;
                     if (preset.colors && preset.colors[index]) {
                         slices[index].color = preset.colors[index];
                     }
-                    
+
                     // Update slice elements
                     const sliceElements = document.querySelectorAll('.wheel-slice');
                     const sliceTextElements = document.querySelectorAll('.wheel-slice-text');
                     const configInputs = document.querySelectorAll('.slice-item input');
-                    
+
                     if (sliceElements[index]) {
                         sliceElements[index].style.background = slices[index].color;
                     }
-                    
+
                     if (sliceTextElements[index]) {
                         sliceTextElements[index].textContent = item;
                     }
-                    
+
                     if (configInputs[index * 2]) {
                         configInputs[index * 2].value = slices[index].color;
                     }
-                    
+
                     if (configInputs[index * 2 + 1]) {
                         configInputs[index * 2 + 1].value = item;
                     }
                 });
-                
+
                 updateWheelData();
                 loadWheelStats(); // Load stats for this preset wheel
                 presetWheelsSection.style.display = 'none';
             }
-            
+
             // Initialize the app
             init();
-            
+
             // Initialize enhanced features after a short delay
             setTimeout(() => {
                 if (typeof initializeEnhancedFeatures === 'function') {
@@ -4808,17 +5227,17 @@
         // Initialize login system
         function initializeLogin() {
             const savedUser = localStorage.getItem('wheelUser');
-        // Initialize the application without login system
-        function initializeApp() {
-            // Initialize game without login
-            generateWheel();
-            initializeGameState();
-        }
+            // Initialize the application without login system
+            function initializeApp() {
+                // Initialize game without login
+                generateWheel();
+                initializeGameState();
+            }
 
-        function initializeGameState() {
-            // Simple game state initialization
-            updateDisplays();
-        }
+            function initializeGameState() {
+                // Simple game state initialization
+                updateDisplays();
+            }
         }
 
         function resetGameState() {
@@ -4859,7 +5278,7 @@
             const gemsDisplay = document.getElementById('gemsDisplay');
             const streakDisplay = document.getElementById('streakDisplay');
             const currentBetDisplay = document.getElementById('currentBet');
-            
+
             if (coinsDisplay) coinsDisplay.textContent = `💰 ${currentUser.coins}`;
             if (gemsDisplay) gemsDisplay.textContent = `💎 ${currentUser.gems}`;
             if (streakDisplay) streakDisplay.textContent = `🔥 ${gameState.streak}`;
@@ -4883,11 +5302,11 @@
             const totalPredictions = document.getElementById('totalPredictions');
             const predictionAccuracy = document.getElementById('predictionAccuracy');
             const predictionStreak = document.getElementById('predictionStreak');
-            
+
             if (correctPredictions) correctPredictions.textContent = gameState.predictions.correct;
             if (totalPredictions) totalPredictions.textContent = gameState.predictions.total;
             if (predictionAccuracy) {
-                const accuracy = gameState.predictions.total > 0 ? 
+                const accuracy = gameState.predictions.total > 0 ?
                     Math.round((gameState.predictions.correct / gameState.predictions.total) * 100) : 0;
                 predictionAccuracy.textContent = `${accuracy}%`;
             }
@@ -4934,7 +5353,7 @@
 
             // Daily reset check
             checkDailyReset();
-            
+
             // Power-up timers
             updatePowerUpTimers();
         }
@@ -4992,12 +5411,12 @@
             gameState.spinCount++;
             gameState.dailySpins++;
             currentUser.totalSpins++;
-            
+
             // Calculate base rewards
             let coinReward = 5 + Math.floor(Math.random() * 5); // 5-9 coins
             let xpReward = 10 + gameState.streak;
             let gemChance = 0.05; // 5% base chance for gems
-            
+
             // Apply power-ups
             if (gameState.powerUps.coinBoost > Date.now()) {
                 coinReward = Math.floor(coinReward * 1.5);
@@ -5019,7 +5438,7 @@
                 if (gameState.streak > currentUser.longestStreak) {
                     currentUser.longestStreak = gameState.streak;
                 }
-                
+
                 // Streak bonuses
                 if (gameState.streak >= 5) {
                     coinReward += gameState.streak * 2;
@@ -5133,7 +5552,7 @@
                         transform: translate(-50%, -50%);
                     `;
                     document.body.appendChild(gem);
-                    
+
                     setTimeout(() => gem.remove(), 2000);
                 }, i * 100);
             }
@@ -5145,7 +5564,7 @@
             setTimeout(() => {
                 document.body.style.animation = '';
             }, 2000);
-            
+
             // Create extra fireworks
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
@@ -5159,7 +5578,7 @@
         function checkPrediction(result) {
             const feedback = document.getElementById('predictionFeedback');
             gameState.predictions.total++;
-            
+
             if (gameState.activePrediction === result.toLowerCase()) {
                 gameState.predictions.correct++;
                 if (feedback) {
@@ -5179,7 +5598,7 @@
                 }
                 gameState.karma -= 1;
             }
-            
+
             // Clear prediction input
             const predictionInput = document.getElementById('predictionInput');
             if (predictionInput) predictionInput.value = '';
@@ -5188,7 +5607,7 @@
         function processCasinoBet(result) {
             const winChance = 0.3 + (gameState.karma / 200); // Karma affects win chance
             const isWin = Math.random() < winChance;
-            
+
             if (isWin) {
                 const multiplier = Math.random() > 0.8 ? 3 : 2;
                 const winnings = gameState.currentBet * multiplier;
@@ -5307,7 +5726,7 @@
         function unlockAchievement(achievement) {
             gameState.achievements[achievement.id] = true;
             currentUser.achievements.push(achievement.id);
-            
+
             // Apply rewards
             if (achievement.reward.coins) {
                 currentUser.coins += achievement.reward.coins;
@@ -5328,7 +5747,7 @@
             // Show achievement notification
             showNotification(`🏆 Achievement Unlocked: ${achievement.name}!`, 'achievement');
             createAchievementEffect();
-            
+
             saveGameState();
         }
 
@@ -5339,7 +5758,7 @@
                 coinBoost: 300000,   // 5 minutes
                 gemFinder: 600000    // 10 minutes
             };
-            
+
             gameState.powerUps[powerUpName] = Date.now() + duration[powerUpName];
             showNotification(`⚡ ${powerUpName} activated!`, 'powerup');
         }
@@ -5349,15 +5768,15 @@
             if (gameState.powerUps.doubleXP > Date.now()) {
                 amount *= 2;
             }
-            
+
             // VIP bonus
             if (currentUser.vipLevel > 0) {
                 amount *= (1 + currentUser.vipLevel * 0.1);
             }
-            
+
             currentUser.xp += Math.floor(amount);
             const xpForNext = currentUser.level * 100;
-            
+
             if (currentUser.xp >= xpForNext) {
                 levelUp();
             }
@@ -5368,14 +5787,14 @@
             const oldXP = currentUser.xp;
             const xpForPrevious = (currentUser.level - 1) * 100;
             currentUser.xp = oldXP - xpForPrevious;
-            
+
             // Level up rewards
             const coinReward = currentUser.level * 20;
             const gemReward = Math.floor(currentUser.level / 5) + 1;
-            
+
             currentUser.coins += coinReward;
             currentUser.gems += gemReward;
-            
+
             // Special level milestones
             if (currentUser.level % 5 === 0) {
                 activatePowerUp('coinBoost');
@@ -5384,7 +5803,7 @@
                 currentUser.vipLevel++;
                 currentUser.badges.push(`Level ${currentUser.level}`);
             }
-            
+
             showNotification(`🎉 Level ${currentUser.level}! +${coinReward} coins, +${gemReward} gems!`, 'level-up');
             createLevelUpEffect();
         }
@@ -5393,12 +5812,12 @@
             // Create spectacular level up effect
             document.body.style.background = 'linear-gradient(45deg, gold, orange, gold)';
             document.body.style.animation = 'levelUpGlow 2s ease-in-out';
-            
+
             setTimeout(() => {
                 document.body.style.background = '';
                 document.body.style.animation = '';
             }, 2000);
-            
+
             // Create level up particles
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
@@ -5414,7 +5833,7 @@
                         animation: levelUpFloat 3s ease-out forwards;
                     `;
                     document.body.appendChild(particle);
-                    
+
                     setTimeout(() => particle.remove(), 3000);
                 }, i * 30);
             }
@@ -5425,11 +5844,11 @@
             if (gameState.spinCount % 10 === 0) {
                 gameState.karma += 2; // Reward consistent playing
             }
-            
+
             if (gameState.streak > 5) {
                 gameState.karma += 1; // Reward streaks
             }
-            
+
             // Keep karma in bounds
             gameState.karma = Math.max(0, Math.min(100, gameState.karma));
         }
@@ -5470,7 +5889,7 @@
                 showNotification('Activate casino mode first!', 'error');
                 return;
             }
-            
+
             if (amount <= currentUser.coins) {
                 gameState.currentBet = amount;
                 showNotification(`Bet placed: ${amount} coins`, 'info');
@@ -5484,12 +5903,12 @@
             if (!gameState.features.casino) {
                 toggleCasinoMode();
             }
-            
+
             if (gameState.currentBet === 0) {
                 showNotification('Place a bet first!', 'error');
                 return;
             }
-            
+
             enhancedSpinWheel();
         }
 
@@ -5499,19 +5918,19 @@
                 showNotification('Login required for battles!', 'error');
                 return;
             }
-            
+
             const wheel1 = document.getElementById('battleWheel1');
             const wheel2 = document.getElementById('battleWheel2');
-            
+
             wheel1.classList.remove('winner');
             wheel2.classList.remove('winner');
-            
+
             showNotification('Battle starting...', 'info');
-            
+
             setTimeout(() => {
                 const winner = Math.random() > 0.5 ? wheel1 : wheel2;
                 winner.classList.add('winner');
-                
+
                 if (winner === wheel1) {
                     showNotification('You win the battle! +50 XP', 'achievement');
                     addXP(50);
@@ -5520,7 +5939,7 @@
                     showNotification('You lost the battle! +10 XP for trying', 'info');
                     addXP(10);
                 }
-                
+
                 gameState.karma += 3;
                 updateDisplays();
                 saveGameState();
@@ -5537,13 +5956,13 @@
                 { icon: '⛈️', desc: 'Stormy', temp: '16°C' },
                 { icon: '🌈', desc: 'Rainbow Weather', temp: '20°C' }
             ];
-            
+
             const weather = weatherDescriptions[Math.floor(Math.random() * weatherDescriptions.length)];
-            
+
             const weatherIcon = document.getElementById('weatherIcon');
             const weatherDesc = document.getElementById('weatherDesc');
             const temperature = document.getElementById('temperature');
-            
+
             if (weatherIcon) weatherIcon.textContent = weather.icon;
             if (weatherDesc) weatherDesc.textContent = weather.desc;
             if (temperature) temperature.textContent = weather.temp;
@@ -5567,24 +5986,24 @@
                 recognition.interimResults = false;
                 recognition.lang = 'en-US';
 
-                recognition.onstart = function() {
+                recognition.onstart = function () {
                     gameState.features.voice = true;
                     document.getElementById('micButton').classList.add('listening');
                     document.getElementById('voiceStatus').textContent = 'Listening...';
                 };
 
-                recognition.onresult = function(event) {
+                recognition.onresult = function (event) {
                     const command = event.results[0][0].transcript.toLowerCase();
                     handleVoiceCommand(command);
                 };
 
-                recognition.onerror = function() {
+                recognition.onerror = function () {
                     gameState.features.voice = false;
                     document.getElementById('micButton').classList.remove('listening');
                     document.getElementById('voiceStatus').textContent = 'Voice recognition error';
                 };
 
-                recognition.onend = function() {
+                recognition.onend = function () {
                     gameState.features.voice = false;
                     document.getElementById('micButton').classList.remove('listening');
                     document.getElementById('voiceStatus').textContent = 'Click to start listening';
@@ -5604,7 +6023,7 @@
 
         function handleVoiceCommand(command) {
             document.getElementById('voiceStatus').textContent = `Command: "${command}"`;
-            
+
             if (command.includes('spin')) {
                 enhancedSpinWheel();
                 showNotification('Voice command: Spin!', 'achievement');
@@ -5626,14 +6045,14 @@
         function changeBackground(bgType) {
             document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             const backgrounds = {
                 space: 'linear-gradient(135deg, #000428, #004e92)',
                 ocean: 'linear-gradient(135deg, #667eea, #764ba2)',
                 sunset: 'linear-gradient(135deg, #f093fb, #f5576c)',
                 forest: 'linear-gradient(135deg, #4facfe, #00f2fe)'
             };
-            
+
             document.body.style.background = backgrounds[bgType];
             document.body.style.backgroundSize = '400% 400%';
             document.body.style.animation = 'gradientBG 15s ease infinite';
@@ -5642,17 +6061,17 @@
         function spinSlots() {
             const symbols = ['🍒', '🍋', '⭐', '💎', '🍇', '🔔', '7️⃣'];
             const results = [];
-            
+
             for (let i = 0; i < 3; i++) {
                 results.push(symbols[Math.floor(Math.random() * symbols.length)]);
             }
-            
+
             const slots = [
                 document.getElementById('slot1'),
                 document.getElementById('slot2'),
                 document.getElementById('slot3')
             ];
-            
+
             slots.forEach((slot, index) => {
                 if (slot) {
                     slot.style.animation = 'slotSpin 2s ease-out';
@@ -5662,7 +6081,7 @@
                     }, 2000);
                 }
             });
-            
+
             setTimeout(() => {
                 const resultDiv = document.getElementById('slotResult');
                 if (results[0] === results[1] && results[1] === results[2]) {
@@ -5688,10 +6107,10 @@
                 showNotification('Login to unlock sharing features!', 'error');
                 return;
             }
-            
+
             const message = document.getElementById('shareMessage').value || `I just spun the Ultimate Wheel and got "${gameState.lastSpinResult}"! 🎯`;
             const url = window.location.href;
-            
+
             navigator.clipboard.writeText(message + ' ' + url).then(() => {
                 showNotification(`Result copied! Share on ${platform}!`, 'achievement');
                 addXP(5);
@@ -5726,10 +6145,10 @@
             const spinPercent = (spinProgress / 20) * 100;
             const spinProgressBar = document.getElementById('spinProgress');
             const spinProgressText = document.getElementById('spinProgressText');
-            
+
             if (spinProgressBar) spinProgressBar.style.width = `${spinPercent}%`;
             if (spinProgressText) spinProgressText.textContent = `${spinProgress}/20`;
-            
+
             if (spinProgress >= 20 && !gameState.dailyChallenges?.spinMaster) {
                 completeDailyChallenge('spinMaster', { coins: 100, gems: 5 });
             }
@@ -5739,10 +6158,10 @@
             const predictionPercent = (predictionProgress / 5) * 100;
             const predictionProgressBar = document.getElementById('predictionProgress');
             const predictionProgressText = document.getElementById('predictionProgressText');
-            
+
             if (predictionProgressBar) predictionProgressBar.style.width = `${predictionPercent}%`;
             if (predictionProgressText) predictionProgressText.textContent = `${predictionProgress}/5`;
-            
+
             if (predictionProgress >= 5 && !gameState.dailyChallenges?.perfectPredictor) {
                 completeDailyChallenge('perfectPredictor', { coins: 150, powerup: 'doubleXP' });
             }
@@ -5752,10 +6171,10 @@
             const casinoPercent = (casinoProgress / 500) * 100;
             const casinoProgressBar = document.getElementById('casinoProgress');
             const casinoProgressText = document.getElementById('casinoProgressText');
-            
+
             if (casinoProgressBar) casinoProgressBar.style.width = `${casinoPercent}%`;
             if (casinoProgressText) casinoProgressText.textContent = `${casinoProgress}/500`;
-            
+
             if (casinoProgress >= 500 && !gameState.dailyChallenges?.highRoller) {
                 completeDailyChallenge('highRoller', { gems: 20, powerup: 'luckyCharm' });
             }
@@ -5765,9 +6184,9 @@
             if (!gameState.dailyChallenges) {
                 gameState.dailyChallenges = {};
             }
-            
+
             gameState.dailyChallenges[challengeId] = true;
-            
+
             // Apply rewards
             if (reward.coins) {
                 currentUser.coins += reward.coins;
@@ -5778,7 +6197,7 @@
             if (reward.powerup) {
                 activatePowerUp(reward.powerup);
             }
-            
+
             showNotification(`🏆 Daily Challenge Complete: ${challengeId}!`, 'achievement');
             createAchievementEffect();
             updateDisplays();
@@ -5839,7 +6258,7 @@
                 const hours = Math.floor(elapsed / 3600000);
                 const minutes = Math.floor((elapsed % 3600000) / 60000);
                 const seconds = Math.floor((elapsed % 60000) / 1000);
-                
+
                 const timerDisplay = document.getElementById('sessionTimer');
                 if (timerDisplay) {
                     timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -5869,22 +6288,22 @@
 
         function showPanel(panelId) {
             const panels = [
-                'powerUpShop', 'dailyChallenges', 'wheelBattles', 'wheelCasino', 
-                'weatherWheel', 'multiplayerLobby', 'socialPanel', 'miniGames', 
-                'voiceControl', 'backgroundSelector', 'leaderboard', 'wheelCustomizer', 
-                'slotMachine', 'predictionMode', 'realityCheck', 'tournamentBracket', 
+                'powerUpShop', 'dailyChallenges', 'wheelBattles', 'wheelCasino',
+                'weatherWheel', 'multiplayerLobby', 'socialPanel', 'miniGames',
+                'voiceControl', 'backgroundSelector', 'leaderboard', 'wheelCustomizer',
+                'slotMachine', 'predictionMode', 'realityCheck', 'tournamentBracket',
                 'karmaDisplay', 'secretAchievement'
             ];
-            
+
             panels.forEach(id => {
                 const panel = document.getElementById(id);
                 if (panel) panel.style.display = 'none';
             });
-            
+
             const panel = document.getElementById(panelId);
             if (panel) {
                 panel.style.display = 'block';
-                
+
                 // Special activation logic
                 if (panelId === 'predictionMode') {
                     gameState.features.prediction = true;
@@ -5904,7 +6323,7 @@
                 panel.style.display = 'none';
                 panel.classList.remove('feature-active');
             }
-            
+
             // Deactivate features when panels are hidden
             if (panelId === 'predictionMode') {
                 gameState.features.prediction = false;
@@ -5918,10 +6337,10 @@
         function initializeEnhancedFeatures() {
             // Initialize login system
             initializeLogin();
-            
+
             // Initialize the application without login
             initializeApp();
-            
+
             // Start session timer
             startSessionTimer();
             updateWeather();
@@ -5931,10 +6350,10 @@
         setTimeout(() => {
             initializeEnhancedFeatures();
             enhanceMenuSystem();
-            
+
             // Update challenge progress every 30 seconds
             setInterval(updateChallengeProgress, 30000);
-            
+
             // Check for secret achievement trigger
             let clickCount = 0;
             document.addEventListener('click', () => {
@@ -5946,4 +6365,5 @@
         }, 500);
     </script>
 </body>
+
 </html>
