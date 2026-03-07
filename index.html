@@ -442,20 +442,22 @@
         }
 
         .real-time-display {
-            margin-top: -10px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 10px 25px;
-            border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translate(-50%, 20px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(15px);
+            padding: 12px 30px;
+            border-radius: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             white-space: nowrap;
             z-index: 100;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             opacity: 0;
             pointer-events: none;
-            min-height: 48px;
+            min-height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -463,7 +465,7 @@
 
         .real-time-display.active {
             opacity: 1;
-            transform: translateY(10px);
+            transform: translate(-50%, 0);
             animation: pulse-glow 1.5s infinite;
         }
 
@@ -1060,21 +1062,20 @@
 
         /* Wheel Info Panel Styles */
         .wheel-info-button {
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ffffff;
+            position: relative;
+            margin: 20px auto 30px;
+            display: block;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
             color: #2c3e50;
             border: 3px solid #667eea;
-            padding: 18px 30px;
-            border-radius: 35px;
+            padding: 18px 35px;
+            border-radius: 40px;
             cursor: pointer;
             font-weight: 900;
             font-size: 18px;
             font-family: 'Arial', sans-serif;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             z-index: 15;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1082,10 +1083,10 @@
         }
 
         .wheel-info-button:hover {
-            transform: translateX(-50%) translateY(-3px) scale(1.05);
-            background: #667eea;
+            transform: translateY(-5px) scale(1.05);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
             border-color: #ffffff;
         }
 
@@ -2829,14 +2830,14 @@
 
         <div class="wheel-container" id="wheelContainer">
             <div id="wheel"></div>
-            <button class="wheel-info-button" id="wheelInfoBtn">
-                WHEEL STATISTICS
-            </button>
+            <div id="realTimeDisplay" class="real-time-display">
+                <span id="currentSliceText">Spin to see!</span>
+            </div>
         </div>
 
-        <div id="realTimeDisplay" class="real-time-display">
-            <span id="currentSliceText">Spin to see!</span>
-        </div>
+        <button class="wheel-info-button" id="wheelInfoBtn">
+            WHEEL STATISTICS
+        </button>
 
         <!-- Enhanced Result Display -->
         <div class="result-display" id="resultDisplay">
