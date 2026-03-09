@@ -2766,6 +2766,13 @@
 </head>
 
 <body>
+    <!-- Secret Mode Trigger -->
+    <div id="secretModeTrigger"
+        style="position: fixed; top: 10px; right: 10px; background-color: rgba(255, 255, 255, 0.8); color: black; border-radius: 5px; cursor: pointer; z-index: 1000; font-size: 24px; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+        title="Secret Mode">
+        <i class="fas fa-keyboard"></i>
+    </div>
+
     <!-- Floating Particles Background -->
     <div class="particles" id="particles"></div>
 
@@ -2847,6 +2854,16 @@
             <div class="control-group wheel-name-input">
                 <label for="wheelName"><i class="fas fa-tag"></i> Wheel Name:</label>
                 <input type="text" id="wheelName" placeholder="Movie Night Roulette">
+            </div>
+
+            <div class="control-group" id="secretModeGroup"
+                style="display: none; border: 1px dashed #ff0080; padding: 5px; border-radius: 5px;">
+                <label for="secretSliceSelect" style="color: #ff0080;"><i class="fas fa-user-secret"></i> Force
+                    Slice:</label>
+                <select id="secretSliceSelect"
+                    style="background: rgba(255, 0, 128, 0.1); border: 1px solid #ff0080; color: white;">
+                    <option value="-1">None (Random)</option>
+                </select>
             </div>
 
             <button id="generateBtn"><i class="fas fa-cog"></i> Generate Wheel</button>
@@ -3530,6 +3547,9 @@
             const loadBtn = document.getElementById('loadBtn');
             const copyBtn = document.getElementById('copyBtn');
             const wheelNameInput = document.getElementById('wheelName');
+            const secretModeTrigger = document.getElementById('secretModeTrigger');
+            const secretModeGroup = document.getElementById('secretModeGroup');
+            const secretSliceSelect = document.getElementById('secretSliceSelect');
             const savedWheelsList = document.getElementById('savedWheelsList');
             const fileInput = document.getElementById('fileInput');
             const menuButton = document.getElementById('menuButton');
@@ -3601,6 +3621,7 @@
             // Wheel state
             let slices = [];
             let isSpinning = false;
+            let secretModeActive = false;
             let currentRotation = 0;
             let tickInterval;
 
@@ -3984,6 +4005,22 @@
                 loadBtn.addEventListener('click', loadWheel);
                 copyBtn.addEventListener('click', copyWheelData);
                 fileInput.addEventListener('change', handleFileUpload);
+
+                if (secretModeTrigger) {
+                    secretModeTrigger.addEventListener('click', function () {
+                        const input = prompt("Enter command:");
+                        if (input === "#secretmodeactivate") {
+                            secretModeActive = true;
+                            if (secretModeGroup) secretModeGroup.style.display = 'flex';
+                            alert("Secret mode activated.");
+                        } else if (input === "#secretmodedeactivate") {
+                            secretModeActive = false;
+                            if (secretModeGroup) secretModeGroup.style.display = 'none';
+                            if (secretSliceSelect) secretSliceSelect.value = "-1";
+                            alert("Secret mode deactivated.");
+                        }
+                    });
+                }
 
                 if (menuButton) {
                     menuButton.addEventListener('click', toggleMenu);
@@ -4710,6 +4747,16 @@
                 };
 
                 wheelDataTextarea.value = JSON.stringify(wheelData, null, 2);
+
+                if (secretSliceSelect) {
+                    secretSliceSelect.innerHTML = '<option value="-1">None (Random)</option>';
+                    slices.forEach((slice, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.textContent = slice.text;
+                        secretSliceSelect.appendChild(option);
+                    });
+                }
             }
 
             // Spin the wheel
@@ -4759,7 +4806,17 @@
 
                 const rotations = 8 + Math.floor(Math.random() * 6);
                 const startRotation = currentRotation;
-                const totalRotationDelta = (rotations * 360) + (Math.random() * 360);
+                let totalRotationDelta = (rotations * 360) + (Math.random() * 360);
+
+                if (secretModeActive && secretSliceSelect && secretSliceSelect.value !== "-1") {
+                    const selectedIndex = parseInt(secretSliceSelect.value);
+                    const sliceAngle = 360 / slices.length;
+                    const desiredModulo = (360 - (selectedIndex * sliceAngle + sliceAngle / 2)) % 360;
+                    const baseRotations = rotations * 360;
+                    const remainderNeeded = (desiredModulo - (startRotation % 360) + 360) % 360;
+                    totalRotationDelta = baseRotations + remainderNeeded;
+                }
+
                 currentRotation = startRotation + totalRotationDelta;
                 const targetRotation = currentRotation;
 
