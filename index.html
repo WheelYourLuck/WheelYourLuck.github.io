@@ -234,8 +234,8 @@
 
         .wheel-container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: min(550px, 90vw);
+            height: min(550px, 90vw);
             margin: 20px 0 60px 0;
             cursor: pointer;
             transition: transform 0.2s;
@@ -348,29 +348,32 @@
 
         /* Enhanced Result Display */
         .result-display {
-            width: 100%;
-            max-width: 500px;
-            margin: 30px auto;
+            width: 95%;
+            max-width: 450px;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.9));
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             box-shadow:
-                0 15px 35px rgba(0, 0, 0, 0.1),
-                0 5px 15px rgba(0, 0, 0, 0.08),
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 5px 15px rgba(0, 0, 0, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.3);
             text-align: center;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            transform: translate(-50%, 30px) scale(0.9);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            z-index: 1000;
+            pointer-events: none;
         }
 
         .result-display.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate(-50%, 0) scale(1);
+            pointer-events: auto;
         }
 
         .result-display.winner {
@@ -1039,8 +1042,8 @@
             }
 
             .wheel-container {
-                width: 300px;
-                height: 300px;
+                width: min(350px, 90vw);
+                height: min(350px, 90vw);
                 margin-bottom: 50px;
             }
 
@@ -2875,25 +2878,25 @@
             <div id="realTimeDisplay" class="real-time-display">
                 <span id="currentSliceText">Spin to see!</span>
             </div>
+
+            <!-- Enhanced Result Display Inside Wheel Container -->
+            <div class="result-display" id="resultDisplay">
+                <div class="result-header">
+                    <i class="fas fa-trophy result-icon"></i>
+                    <h3>🎯 Winner</h3>
+                </div>
+                <div class="result-content" id="resultContent">
+                    <div class="result-text">Spin the wheel to see the result!</div>
+                </div>
+                <div class="result-celebration" id="resultCelebration">
+                    <div class="celebration-text">🎉 Congratulations! 🎉</div>
+                </div>
+            </div>
         </div>
 
         <button class="wheel-info-button" id="wheelInfoBtn">
             WHEEL STATISTICS
         </button>
-
-        <!-- Enhanced Result Display -->
-        <div class="result-display" id="resultDisplay">
-            <div class="result-header">
-                <i class="fas fa-trophy result-icon"></i>
-                <h3>🎯 Winner</h3>
-            </div>
-            <div class="result-content" id="resultContent">
-                <div class="result-text">Spin the wheel to see the result!</div>
-            </div>
-            <div class="result-celebration" id="resultCelebration">
-                <div class="celebration-text">🎉 Congratulations! 🎉</div>
-            </div>
-        </div>
 
         <div class="preset-wheels" id="presetWheels">
             <h2><i class="fas fa-star"></i> Preset Wheels</h2>
@@ -3776,14 +3779,14 @@
                         "-$250,000", "-$500,000", "-$1,000,000"
                     ],
                     colors: [
-                        "#00b894", "#00b894", "#00b894", "#00b894", "#00b894",
-                        "#00b894", "#00b894", "#00b894", "#00b894", "#00b894",
-                        "#00b894", "#00b894", "#00b894", "#00b894", "#00b894",
-                        "#00b894", "#00b894", "#00b894",
-                        "#d63031", "#d63031", "#d63031", "#d63031", "#d63031",
-                        "#d63031", "#d63031", "#d63031", "#d63031", "#d63031",
-                        "#d63031", "#d63031", "#d63031", "#d63031", "#d63031",
-                        "#d63031", "#d63031", "#d63031"
+                        "#27ae60", "#27ae60", "#27ae60", "#27ae60", "#27ae60",
+                        "#27ae60", "#27ae60", "#27ae60", "#27ae60", "#27ae60",
+                        "#27ae60", "#27ae60", "#27ae60", "#27ae60", "#27ae60",
+                        "#27ae60", "#27ae60", "#27ae60",
+                        "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c",
+                        "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c",
+                        "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c",
+                        "#e74c3c", "#e74c3c", "#e74c3c"
                     ]
                 },
                 countries: {
@@ -4649,28 +4652,28 @@
                     svg.appendChild(path);
 
                     // Create text element
-                    // Only add text if 20 or fewer slices
-                    let text = null;
-                    if (sliceCount <= 20) {
-                        const textAngle = (i * anglePerSlice + anglePerSlice / 2 - 90) * Math.PI / 180;
-                        const textRadius = radius * 0.7;
-                        const textX = centerX + textRadius * Math.cos(textAngle);
-                        const textY = centerY + textRadius * Math.sin(textAngle);
+                    let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    const textAngleDeg = (i * anglePerSlice + anglePerSlice / 2 - 90);
+                    const textAngleRad = textAngleDeg * Math.PI / 180;
+                    const textRadius = radius * 0.85; // Align text towards the outer edge
+                    const textX = centerX + textRadius * Math.cos(textAngleRad);
+                    const textY = centerY + textRadius * Math.sin(textAngleRad);
 
-                        text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                        text.setAttribute('x', textX);
-                        text.setAttribute('y', textY);
-                        text.setAttribute('text-anchor', 'middle');
-                        text.setAttribute('dominant-baseline', 'middle');
-                        text.setAttribute('fill', 'white');
-                        text.setAttribute('font-weight', 'bold');
-                        text.setAttribute('font-size', '16');
-                        text.setAttribute('font-family', 'Arial, sans-serif');
-                        text.style.filter = 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))';
-                        text.textContent = `IDEA ${i + 1}`;
+                    text.setAttribute('transform', `translate(${textX}, ${textY}) rotate(${textAngleDeg})`);
+                    text.setAttribute('text-anchor', 'end'); // Reads outwards towards the edge
+                    text.setAttribute('dominant-baseline', 'middle');
+                    text.setAttribute('fill', 'white');
+                    text.setAttribute('font-weight', 'bold');
 
-                        svg.appendChild(text);
-                    }
+                    // Dynamic font size based on slice count to prevent overlap
+                    const arcLength = radius * (2 * Math.PI / sliceCount);
+                    const calculatedFontSize = Math.max(4, Math.min(18, arcLength * 0.6));
+                    text.setAttribute('font-size', calculatedFontSize.toString());
+                    text.setAttribute('font-family', 'Arial, sans-serif');
+                    text.style.filter = 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))';
+                    text.textContent = `IDEA ${i + 1}`;
+
+                    svg.appendChild(text);
 
                     // Store slice data
                     slices.push({
@@ -4697,7 +4700,7 @@
                     textInput.value = `IDEA ${i + 1}`;
                     textInput.addEventListener('input', function () {
                         slices[i].text = this.value;
-                        if (text) { // Only update text if it exists (20 or fewer slices)
+                        if (text) {
                             text.textContent = this.value;
                         }
 
@@ -5108,18 +5111,15 @@
                     slices[index].text = slice.text;
                     slices[index].color = slice.color;
 
-                    // Update slice elements
-                    const sliceElements = document.querySelectorAll('.wheel-slice');
-                    const sliceTextElements = document.querySelectorAll('.wheel-slice-text');
+                    // Update SVG elements
+                    if (slices[index].path) {
+                        slices[index].path.setAttribute('fill', slice.color);
+                    }
+                    if (slices[index].textElement) {
+                        slices[index].textElement.textContent = slice.text;
+                    }
+
                     const configInputs = document.querySelectorAll('.slice-item input');
-
-                    if (sliceElements[index]) {
-                        sliceElements[index].style.background = slice.color;
-                    }
-
-                    if (sliceTextElements[index]) {
-                        sliceTextElements[index].textContent = slice.text;
-                    }
 
                     if (configInputs[index * 2]) {
                         configInputs[index * 2].value = slice.color;
@@ -5189,18 +5189,17 @@
                         slices[index].color = preset.colors[index];
                     }
 
-                    // Update slice elements
-                    const sliceElements = document.querySelectorAll('.wheel-slice');
-                    const sliceTextElements = document.querySelectorAll('.wheel-slice-text');
+                    // Update slice elements (SVG paths and text)
+                    if (slices[index].path) {
+                        slices[index].path.setAttribute('fill', slices[index].color);
+                    }
+
+                    if (slices[index].textElement) {
+                        slices[index].textElement.textContent = item;
+                    }
+
+                    // Update config panel inputs
                     const configInputs = document.querySelectorAll('.slice-item input');
-
-                    if (sliceElements[index]) {
-                        sliceElements[index].style.background = slices[index].color;
-                    }
-
-                    if (sliceTextElements[index]) {
-                        sliceTextElements[index].textContent = item;
-                    }
 
                     if (configInputs[index * 2]) {
                         configInputs[index * 2].value = slices[index].color;
