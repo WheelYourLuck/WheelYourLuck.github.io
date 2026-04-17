@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<body>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+try {
+  let pie = d3.layout.pie().sort(null).value(1);
+  let data = pie([{text: 'a'}]);
+  console.log("Success", data);
+} catch(e) {
+  console.error("Error:", e.message);
+}
+</script>
+</body>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheel Your Luck - Neon Tournament Bracket</title>
+    <!-- Include the d3 libraries which the wheel uses -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff2a85;
+            --neon-blue: #00f3ff;
+            --neon-purple: #b026ff;
+            --bg-color: #0b0c10;
+            --container-bg: rgba(25, 25, 30, 0.9);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 42, 133, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.15) 0%, transparent 50%);
+            color: #ffffff;
+            font-family: 'Teko', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            margin-bottom: 5px;
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-purple);
+        }
+        
+        #subtitle {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+
+        .round-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--neon-blue);
+            border-bottom: 1px solid var(--neon-blue);
+            padding-bottom: 5px;
+        }
+
+        /* Bracket Layout */
+        .bracket-container {
+            display: grid;
+            grid-template-columns: 200px 150px 300px 150px 200px; /* QF-L, SF-L, Center Wheel, SF-R, QF-R */
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height: 650px;
+        }
+
+        .match {
+            background: rgba(20, 20, 30, 0.8);
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .match.active {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 10px rgba(0,243,255,0.2);
+        }
+
+        .match.winner {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink), inset 0 0 10px rgba(255,42,133,0.2);
+        }
+
+        .player {
+            padding: 5px;
+            font-size: 1.2rem;
+            min-height: 25px;
+            border-bottom: 1px solid #444444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .player:last-child {
+            border-bottom: none;
+        }
+
+        .player.empty {
+            color: #555555;
+            font-style: italic;
+        }
+
+        /* Center Column / Wheel */
+        .center-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        #wheel-container {
+            width: 250px;
+            height: 250px;
+            position: relative;
+            background: var(--container-bg);
+            border-radius: 50%;
+            border: 3px solid var(--neon-purple);
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.4);
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        #wheel {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Wheel Pointer */
+        #wheel-container::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--neon-pink);
+            filter: drop-shadow(0 0 5px var(--neon-pink));
+            z-index: 10;
+        }
+
+        .final-match {
+            width: 100%;
+            background: rgba(20, 20, 30, 0.8);
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .final-match.active {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        #action-btn {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: #ffffff;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1.5rem;
+            font-family: 'Teko', sans-serif;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+        }
+        
+        #action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
+        }
+
+        #action-btn:disabled {
+            background: #555555;
+            box-shadow: none;
+            cursor: not-allowed;
+            color: #888888;
+        }
+
+        #winner-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .trophy {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite ease-in-out;
+            text-shadow: 0 0 20px gold;
+        }
+
+        .winner-name {
+            font-size: 4rem;
+            color: gold;
+            text-shadow: 0 0 20px gold;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Neon Tournament Bracket</h1>
+    <div id="subtitle">Phase 1: Spin to Select 8 Players</div>
+
+    <div class="bracket-container">
+        <!-- Quarter Finals Left -->
+        <div class="column" id="qf-left">
+            <div class="round-title">Quarter Finals</div>
+            <div class="match" id="match-qf-1">
+                <div class="player empty" id="p-qf-1-1">?</div>
+                <div class="player empty" id="p-qf-1-2">?</div>
+            </div>
+            <div class="match" id="match-qf-2">
+                <div class="player empty" id="p-qf-2-1">?</div>
+                <div class="player empty" id="p-qf-2-2">?</div>
+            </div>
+        </div>
+
+        <!-- Semi Finals Left -->
+        <div class="column" id="sf-left">
+            <div class="round-title">Semi Finals</div>
+            <div class="match" id="match-sf-1">
+                <div class="player empty" id="p-sf-1-1">?</div>
+                <div class="player empty" id="p-sf-1-2">?</div>
+            </div>
+        </div>
+
+        <!-- Center Wheel -->
+        <div class="center-column">
+            <div id="wheel-container" onclick="handleWheelClick()">
+                <div id="wheel"></div>
+            </div>
+            
+            <div class="round-title" style="color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-purple); border-color: var(--neon-purple);">Finals</div>
+            <div class="final-match match" id="match-f-1">
+                <div class="player empty" id="p-f-1-1">?</div>
+                <div class="player empty" id="p-f-1-2">?</div>
+            </div>
+
+            <button id="action-btn" onclick="handleWheelClick()">Select Player 1</button>
+        </div>
+
+        <!-- Semi Finals Right -->
+        <div class="column" id="sf-right">
+            <div class="round-title">Semi Finals</div>
+            <div class="match" id="match-sf-2">
+                <div class="player empty" id="p-sf-2-1">?</div>
+                <div class="player empty" id="p-sf-2-2">?</div>
+            </div>
+        </div>
+
+        <!-- Quarter Finals Right -->
+        <div class="column" id="qf-right">
+            <div class="round-title">Quarter Finals</div>
+            <div class="match" id="match-qf-3">
+                <div class="player empty" id="p-qf-3-1">?</div>
+                <div class="player empty" id="p-qf-3-2">?</div>
+            </div>
+            <div class="match" id="match-qf-4">
+                <div class="player empty" id="p-qf-4-1">?</div>
+                <div class="player empty" id="p-qf-4-2">?</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Winner Overlay -->
+    <div id="winner-overlay">
+        <div class="trophy">🏆</div>
+        <div class="winner-name" id="final-winner-name">Winner Name</div>
+        <button id="action-btn" style="margin-top: 40px; background: #ffffff; color: #000000;" onclick="window.close()">Close Bracket</button>
+    </div>
+
+    <script>
+        // Data sources
+        let fullPool = [];
+        let activeSlices = []; 
+
+        // State Machine
+        let phase = 'SELECTION'; 
+        let selectionIndex = 0; 
+        let selectedPlayers = []; 
+        let remainingPool = []; 
+
+        const matches = [
+            { id: 'match-qf-1', p1Id: 'p-qf-1-1', p2Id: 'p-qf-1-2', p1Index: 0, p2Index: 1, nextMatch: 'match-sf-1', nextPlayer: 'p-sf-1-1', winner: null },
+            { id: 'match-qf-2', p1Id: 'p-qf-2-1', p2Id: 'p-qf-2-2', p1Index: 2, p2Index: 3, nextMatch: 'match-sf-1', nextPlayer: 'p-sf-1-2', winner: null },
+            { id: 'match-qf-3', p1Id: 'p-qf-3-1', p2Id: 'p-qf-3-2', p1Index: 4, p2Index: 5, nextMatch: 'match-sf-2', nextPlayer: 'p-sf-2-1', winner: null },
+            { id: 'match-qf-4', p1Id: 'p-qf-4-1', p2Id: 'p-qf-4-2', p1Index: 6, p2Index: 7, nextMatch: 'match-sf-2', nextPlayer: 'p-sf-2-2', winner: null },
+            { id: 'match-sf-1', p1Id: 'p-sf-1-1', p2Id: 'p-sf-1-2', p1Index: null, p2Index: null, nextMatch: 'match-f-1', nextPlayer: 'p-f-1-1', winner: null },
+            { id: 'match-sf-2', p1Id: 'p-sf-2-1', p2Id: 'p-sf-2-2', p1Index: null, p2Index: null, nextMatch: 'match-f-1', nextPlayer: 'p-f-1-2', winner: null },
+            { id: 'match-f-1', p1Id: 'p-f-1-1', p2Id: 'p-f-1-2', p1Index: null, p2Index: null, nextMatch: null, nextPlayer: null, winner: null },
+        ];
+        
+        let currentMatchIndex = 0; 
+        let isSpinning = false;
+        
+        window.onload = () => {
+            const rawPool = localStorage.getItem('tournamentPool');
+            if(rawPool) {
+                fullPool = JSON.parse(rawPool);
+            } else {
+                fullPool = Array.from({length: 16}).map((_, i) => ({ text: "Player " + (i+1), color: `hsl(${Math.random() * 360}, 100%, 50%)` }));
+            }
+            
+            remainingPool = [...fullPool];
+            activeSlices = [...remainingPool];
+            
+            drawWheel();
+        };
+
+        // ------------- CONTINUOUS SPIN LOGIC -------------
+        let keepSpinning = false;
+        let continuousRot = 0;
+        let animFrameId = null;
+
+        function startContinuousSpin() {
+            if (isSpinning) return;
+            keepSpinning = true;
+            const wheelG = d3.select(".vis-wheel");
+            if(wheelG.empty()) return;
+            
+            continuousRot = wheelG.attr('data-rot') ? parseFloat(wheelG.attr('data-rot')) : 0;
+            
+            function loop() {
+                if(!keepSpinning) return;
+                continuousRot = (continuousRot + 1.5) % 360;
+                wheelG.attr("transform", `translate(125,125) rotate(${continuousRot})`);
+                wheelG.attr('data-rot', continuousRot);
+                animFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function stopContinuousSpin() {
+            keepSpinning = false;
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+        }
+
+        // ------------- CONTROLLER -------------
+
+        function handleWheelClick() {
+            if(isSpinning) return;
+            
+            if(phase === 'SELECTION') {
+                spinToSelect();
+            } else if(phase === 'MATCH') {
+                spinForMatch();
+            }
+        }
+
+        function spinToSelect() {
+            if(remainingPool.length === 0 || selectionIndex >= 8) return;
+            isSpinning = true;
+            stopContinuousSpin();
+            document.getElementById('action-btn').disabled = true;
+            
+            const r = Math.floor(Math.random() * activeSlices.length);
+            const picked = activeSlices[r];
+            
+            spinVisualWheelTargeted(r, activeSlices.length, () => {
+                selectedPlayers.push(picked);
+                remainingPool = remainingPool.filter(p => p.text !== picked.text);
+                activeSlices = [...remainingPool];
+                
+                placeInBracket(selectionIndex, picked);
+                selectionIndex++;
+                
+                if(selectionIndex >= 8) {
+                    phase = 'MATCH';
+                    document.getElementById('subtitle').innerText = "Match Phase: Spin for the win!";
+                    document.getElementById('action-btn').innerText = "Spin Match!";
+                    setupMatch(0);
+                } else {
+                    document.getElementById('action-btn').innerText = "Select Player " + (selectionIndex + 1);
+                    drawWheel();
+                }
+                
+                isSpinning = false;
+                document.getElementById('action-btn').disabled = false;
+            });
+        }
+
+        function placeInBracket(index, player) {
+            const maps = [
+                'p-qf-1-1', 'p-qf-1-2',
+                'p-qf-2-1', 'p-qf-2-2',
+                'p-qf-3-1', 'p-qf-3-2',
+                'p-qf-4-1', 'p-qf-4-2'
+            ];
+            const div = document.getElementById(maps[index]);
+            div.innerText = player.text;
+            div.classList.remove('empty');
+            div.style.color = player.color;
+        }
+
+        function setupMatch(mIndex) {
+            if(mIndex >= matches.length) return;
+            
+            currentMatchIndex = mIndex;
+            const match = matches[mIndex];
+            
+            document.querySelectorAll('.match').forEach(el => el.classList.remove('active'));
+            document.getElementById(match.id).classList.add('active');
+            
+            const p1Text = document.getElementById(match.p1Id).innerText;
+            const p1Color = document.getElementById(match.p1Id).style.color || '#ffffff';
+            
+            const p2Text = document.getElementById(match.p2Id).innerText;
+            const p2Color = document.getElementById(match.p2Id).style.color || '#ffffff';
+            
+            activeSlices = [
+                {text: p1Text, color: p1Color},
+                {text: p2Text, color: p2Color}
+            ];
+            
+            drawWheel();
+            document.getElementById(match.id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function spinForMatch() {
+            const match = matches[currentMatchIndex];
+            isSpinning = true;
+            stopContinuousSpin();
+            document.getElementById('action-btn').disabled = true;
+            document.getElementById('subtitle').innerText = "Battling: " + document.getElementById(match.p1Id).innerText + " VS " + document.getElementById(match.p2Id).innerText;
+            
+            const r = Math.floor(Math.random() * 2);
+            const winner = activeSlices[r];
+            
+            spinVisualWheelTargeted(r, activeSlices.length, () => {
+                match.winner = winner;
+                const winnerId = (r === 0 ? match.p1Id : match.p2Id);
+                document.getElementById(winnerId).style.fontWeight = 'bold';
+                
+                document.getElementById(match.id).classList.remove('active');
+                document.getElementById(match.id).classList.add('winner');
+                
+                if(match.nextMatch) {
+                    const nextDiv = document.getElementById(match.nextPlayer);
+                    nextDiv.innerText = winner.text;
+                    nextDiv.style.color = winner.color;
+                    nextDiv.classList.remove('empty');
+                    
+                    setupMatch(currentMatchIndex + 1);
+                    document.getElementById('subtitle').innerText = "Winner: " + winner.text + "! Onto next match.";
+                } else {
+                    document.getElementById('subtitle').innerText = "TOURNAMENT COMPLETE!";
+                    showWinner(winner);
+                }
+                
+                isSpinning = false;
+                document.getElementById('action-btn').disabled = false;
+            });
+        }
+        
+        function showWinner(player) {
+            document.getElementById('winner-overlay').style.display = 'flex';
+            const nameEl = document.getElementById('final-winner-name');
+            nameEl.innerText = player.text;
+            nameEl.style.color = player.color;
+            nameEl.style.textShadow = `0 0 20px ${player.color}`;
+        }
+
+        function drawWheel() {
+            const container = d3.select("#wheel");
+            container.selectAll("*").remove(); 
+            
+            if(activeSlices.length === 0) return;
+
+            const w = 250, h = 250, r = Math.min(w, h)/2;
+            const svg = container.append("svg")
+                .attr("width", w)
+                .attr("height", h);
+                
+            const g = svg.append("g")
+                .attr("transform", `translate(${w/2},${h/2})`)
+                .attr("class", "vis-wheel");
+
+            const pie = d3.layout.pie().sort(null).value(() => 1);
+            const arc = d3.svg.arc().outerRadius(r).innerRadius(0); 
+            
+            const arcs = g.selectAll(".arc")
+                .data(pie(activeSlices))
+                .enter().append("g")
+                .attr("class", "arc");
+
+            arcs.append("path")
+                .attr("d", arc)
+                .style("fill", (d) => d.data.color)
+                .style("stroke", "rgba(255,255,255,0.4)")
+                .style("stroke-width", "1px");
+
+            arcs.append("text")
+                .attr("transform", d => {
+                    const c = arc.centroid(d);
+                    const angle = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+                    const rotate = angle > 90 ? angle - 180 : angle;
+                    return `translate(${c[0]},${c[1]}) rotate(${rotate})`;
+                })
+                .attr("dy", ".35em")
+                .style("text-anchor", "middle")
+                .style("fill", "#ffffff")
+                .style("font-size", "14px")
+                .style("font-family", "'Teko', sans-serif")
+                .style("text-shadow", "1px 1px 2px #000000")
+                .style("pointer-events", "none")
+                .text(d => {
+                    const txt = d.data.text;
+                    return txt.length > 10 ? txt.substring(0,8) + '..' : txt;
+                });
+                
+            if(!isSpinning) {
+                setTimeout(startContinuousSpin, 100);
+            }
+        }
+
+        function spinVisualWheelTargeted(targetIndex, totalSlices, callback) {
+            const spinDuration = 3000;
+            const wheelG = d3.select(".vis-wheel");
+            
+            if(wheelG.empty()) {
+                setTimeout(callback, 500); 
+                return;
+            }
+            stopContinuousSpin();
+
+            const sliceAngle = 360 / totalSlices;
+            const stopAngle = 360 - (targetIndex * sliceAngle + sliceAngle/2);
+            const currentRot = wheelG.attr('data-rot') ? parseFloat(wheelG.attr('data-rot')) : 0;
+            const spins = 5 * 360; 
+            const newRot = currentRot + spins + stopAngle - (currentRot % 360);
+            
+            wheelG.attr('data-rot', newRot);
+            
+            wheelG.transition()
+                .duration(spinDuration)
+                .ease("cubic-out")
+                .attrTween("transform", function() {
+                    const i = d3.interpolate(currentRot, newRot);
+                    return function(t) {
+                        return `translate(125,125) rotate(${i(t)})`;
+                    };
+                })
+                .each("end", () => {
+                    setTimeout(() => {
+                        callback();
+                        setTimeout(() => {
+                            if (!isSpinning) startContinuousSpin();
+                        }, 100);
+                    }, 800);
+                });
+        }
+    </script>
+</body>
+</html>

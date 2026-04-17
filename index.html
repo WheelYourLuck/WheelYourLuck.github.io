@@ -583,7 +583,7 @@
             border-radius: 50%;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -10%);
             z-index: 10;
             display: flex;
             justify-content: center;
@@ -2764,6 +2764,181 @@
         .feature-active {
             background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.1));
         }
+    
+        /* --- Tournament Bracket Mode --- */
+        .tournament-container {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, #0B0B1A 0%, #000000 100%),
+                        url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="1" fill="white" opacity="0.3"/></svg>');
+            background-size: cover;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+        
+        .tournament-header {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-style: italic;
+            margin-top: 15px;
+            background: linear-gradient(90deg, #ff9a9e, #fecfef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
+            z-index: 10;
+        }
+
+        .tournament-body {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: relative;
+        }
+
+        .bracket-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height: 90%;
+            width: 25%;
+            z-index: 10;
+            position: relative;
+        }
+
+        .bracket-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height: 100%;
+        }
+
+        .match-box {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            border: 3px solid;
+            box-shadow: inset 0 0 15px currentColor, 0 0 15px currentColor;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 60px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .match-box.neon-blue { color: #00d2ff; }
+        .match-box.neon-red { color: #ff0055; }
+        .match-box.neon-green { color: #00ff88; }
+        .match-box.neon-purple { color: #b700ff; }
+        .match-box.neon-orange { color: #ff8800; }
+        .match-box.neon-yellow { color: #ffff00; }
+
+        .player-row {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .player-row:last-child {
+            border-bottom: none;
+        }
+
+        .player-row i {
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+
+        .finals-area {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            padding-top: 10px;
+        }
+
+        .final-box {
+            width: 150px;
+        }
+
+        .tournament-wheel-area {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -10%);
+            width: 250px;
+            height: 250px;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .tournament-controls {
+            margin-top: 20px;
+            z-index: 21;
+            text-align: center;
+        }
+        
+        .t-btn {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.5);
+        }
+
+        .t-btn:hover { background: linear-gradient(135deg, #5b4ddb, #8a82f3); }
+        .t-btn:disabled { background: #555; cursor: not-allowed; box-shadow: none; color: #888; }
+
+        .winner-text {
+            color: gold;
+            font-weight: bold;
+            text-shadow: 0 0 10px gold;
+        }
+        
+        /* Layout lines - basic approximation with CSS borders */
+        .connector-line {
+            position: absolute;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .match-box.active-match {
+            box-shadow: inset 0 0 30px currentColor, 0 0 30px currentColor;
+            transform: scale(1.05);
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: inset 0 0 15px currentColor, 0 0 15px currentColor; }
+            50% { box-shadow: inset 0 0 35px currentColor, 0 0 35px currentColor; }
+            100% { box-shadow: inset 0 0 15px currentColor, 0 0 15px currentColor; }
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -2869,8 +3044,11 @@
                 </select>
             </div>
 
+            
             <button id="generateBtn"><i class="fas fa-cog"></i> Generate Wheel</button>
             <button id="spinBtn"><i class="fas fa-sync-alt"></i> Spin the Wheel!</button>
+            <button id="startTournamentBtn" style="display: none; background: linear-gradient(135deg, #9b59b6, #8e44ad);"><i class="fas fa-trophy"></i> Start Tournament</button>
+
         </div>
 
         <div class="wheel-container" id="wheelContainer">
@@ -4727,6 +4905,16 @@
 
                 // Update wheel data
                 updateWheelData();
+                
+                // Tournament Button visibility
+                const startTourneyBtn = document.getElementById('startTournamentBtn');
+                if (startTourneyBtn) {
+                    if (slices && slices.length > 8) {
+                        startTourneyBtn.style.display = 'inline-flex';
+                    } else {
+                        startTourneyBtn.style.display = 'none';
+                    }
+                }
 
                 // Load stats for this specific wheel
                 loadWheelStats();
@@ -5231,6 +5419,14 @@
                     }, 1000);
                 }
             }, 500);
+
+            // Expose required variables/functions for Tournament Module
+            window.getWheelSlices = () => slices;
+            window.generateWheel = generateWheel;
+            window.getDistinctColor = getDistinctColor;
+            window.audioEnabled = () => audioEnabled;
+            window.audioMuted = () => audioMuted;
+            window.createConfetti = createConfetti;
         });
 
         // NEW FEATURE FUNCTIONS
@@ -5629,7 +5825,7 @@
                         pointer-events: none;
                         z-index: 9999;
                         animation: gemFloat 2s ease-out forwards;
-                        transform: translate(-50%, -50%);
+                        transform: translate(-50%, -10%);
                     `;
                     document.body.appendChild(gem);
 
@@ -6444,6 +6640,36 @@
             });
         }, 500);
     </script>
-</body>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('startTournamentBtn');
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    let pool = [];
+                    try {
+                        const textarea = document.getElementById('wheelData');
+                        if (textarea && textarea.value) {
+                            const parsed = JSON.parse(textarea.value);
+                            if (parsed && parsed.slices) {
+                                pool = parsed.slices;
+                            }
+                        }
+                    } catch(e) {
+                        console.error('Error parsing wheelData:', e);
+                    }
+                    
+                    if(!pool || pool.length < 8) {
+                        alert("Need at least 8 items on the wheel for a tournament!");
+                        return;
+                    }
+                    
+                    let poolData = pool.map(s => ({ text: s.text, color: s.color }));
+                    localStorage.setItem('tournamentPool', JSON.stringify(poolData));
+                    window.open('tournament.html', '_blank');
+                });
+            }
+        });
+    </script>
+</body>
 </html>
