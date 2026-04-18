@@ -2946,7 +2946,7 @@
 <body>
     <!-- Secret Mode Trigger -->
     <div id="secretModeTrigger"
-        style="position: fixed; top: 10px; right: 10px; background-color: rgba(255, 255, 255, 0.8); color: black; border-radius: 5px; cursor: pointer; z-index: 1000; font-size: 24px; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+        style="position: fixed; top: 84px; right: 20px; background-color: rgba(255, 255, 255, 0.88); color: black; border-radius: 12px; cursor: pointer; z-index: 1002; font-size: 24px; padding: 10px 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"
         title="Secret Mode">
         <i class="fas fa-keyboard"></i>
     </div>
@@ -4187,20 +4187,44 @@
                 copyBtn.addEventListener('click', copyWheelData);
                 fileInput.addEventListener('change', handleFileUpload);
 
+                function openSecretCommandPrompt() {
+                    const input = prompt("Enter command:");
+                    if (input === null) return;
+
+                    const command = input.trim();
+                    if (command === "#secretmodeactivate") {
+                        secretModeActive = true;
+                        if (secretModeGroup) secretModeGroup.style.display = 'flex';
+                        alert("Secret mode activated.");
+                    } else if (command === "#enabletourani") {
+                        localStorage.setItem('tourAniEnabled', 'true');
+                        alert("TourAni mode enabled. Tournament endings can now generate a cinematic replay video.");
+                    } else if (command === "#disabletourani") {
+                        localStorage.setItem('tourAniEnabled', 'false');
+                        alert("TourAni mode disabled.");
+                    } else if (command === "#secretmodedeactivate") {
+                        secretModeActive = false;
+                        if (secretModeGroup) secretModeGroup.style.display = 'none';
+                        if (secretSliceSelect) secretSliceSelect.value = "-1";
+                        alert("Secret mode deactivated.");
+                    }
+                }
+
                 if (secretModeTrigger) {
-                    secretModeTrigger.addEventListener('click', function () {
-                        const input = prompt("Enter command:");
-                        if (input === "#secretmodeactivate") {
-                            secretModeActive = true;
-                            if (secretModeGroup) secretModeGroup.style.display = 'flex';
-                            alert("Secret mode activated.");
-                        } else if (input === "#secretmodedeactivate") {
-                            secretModeActive = false;
-                            if (secretModeGroup) secretModeGroup.style.display = 'none';
-                            if (secretSliceSelect) secretSliceSelect.value = "-1";
-                            alert("Secret mode deactivated.");
+                    secretModeTrigger.addEventListener('click', openSecretCommandPrompt);
+                    secretModeTrigger.addEventListener('touchend', function (event) {
+                        event.preventDefault();
+                        openSecretCommandPrompt();
+                    }, { passive: false });
+                    secretModeTrigger.addEventListener('keydown', function (event) {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            openSecretCommandPrompt();
                         }
                     });
+                    secretModeTrigger.setAttribute('tabindex', '0');
+                    secretModeTrigger.setAttribute('role', 'button');
+                    secretModeTrigger.setAttribute('aria-label', 'Open secret command prompt');
                 }
 
                 if (menuButton) {

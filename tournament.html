@@ -3,589 +3,1809 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wheel Your Luck - Neon Tournament Bracket</title>
-    <!-- Include the d3 libraries which the wheel uses -->
+    <title>Tournament Arena - Wheel Your Luck</title>
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-pink: #ff2a85;
-            --neon-blue: #00f3ff;
-            --neon-purple: #b026ff;
-            --bg-color: #0b0c10;
-            --container-bg: rgba(25, 25, 30, 0.9);
+            --neon-blue: #00f2ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #bc13fe;
+            --neon-gold: #ffd700;
+            --bg-color: #0b0b0e;
+            --glass: rgba(255, 255, 255, 0.05);
         }
-
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(255, 42, 133, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.15) 0%, transparent 50%);
-            color: #ffffff;
-            font-family: 'Teko', sans-serif;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
-
-        h1 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 20px;
-            margin-bottom: 5px;
-            color: #ffffff;
-            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-purple);
-        }
-        
-        #subtitle {
-            font-size: 1.5rem;
-            color: #cccccc;
-            margin-bottom: 30px;
-        }
-
-        .round-title {
-            text-align: center;
-            font-size: 1.5rem;
-            color: var(--neon-blue);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px var(--neon-blue);
-            border-bottom: 1px solid var(--neon-blue);
-            padding-bottom: 5px;
-        }
-
-        /* Bracket Layout */
-        .bracket-container {
-            display: grid;
-            grid-template-columns: 200px 150px 300px 150px 200px; /* QF-L, SF-L, Center Wheel, SF-R, QF-R */
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
             width: 100%;
-            max-width: 1200px;
+            min-height: 100vh;
+        }
+        .arena-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            width: 100%;
+            height: auto;
+            flex-grow: 1;
+        }
+        @media (min-width: 1024px) {
+            .arena-grid {
+                grid-template-columns: 1fr 1.5fr 1fr;
+                height: 100vh;
+                overflow: hidden;
+            }
+        }
+        .bracket-wing {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
             padding: 20px;
-            box-sizing: border-box;
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
-
-        .column {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            height: 650px;
+        @media (max-width: 1023px) {
+            .bracket-wing {
+                flex-direction: row;
+                flex-wrap: wrap;
+                order: 2;
+                border: none;
+                background: none;
+            }
         }
-
-        .match {
-            background: rgba(20, 20, 30, 0.8);
-            border: 2px solid #333333;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .match.active {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 10px rgba(0,243,255,0.2);
-        }
-
-        .match.winner {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 15px var(--neon-pink), inset 0 0 10px rgba(255,42,133,0.2);
-        }
-
-        .player {
-            padding: 5px;
-            font-size: 1.2rem;
-            min-height: 25px;
-            border-bottom: 1px solid #444444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .player:last-child {
-            border-bottom: none;
-        }
-
-        .player.empty {
-            color: #555555;
-            font-style: italic;
-        }
-
-        /* Center Column / Wheel */
-        .center-column {
+        .center-stage {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            padding: 20px;
             position: relative;
         }
-
         #wheel-container {
-            width: 250px;
-            height: 250px;
+            width: min(78vw, 320px);
+            height: min(78vw, 320px);
+            min-width: 260px;
+            min-height: 260px;
             position: relative;
-            background: var(--container-bg);
-            border-radius: 50%;
-            border: 3px solid var(--neon-purple);
-            box-shadow: 0 0 30px rgba(176, 38, 255, 0.4);
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
+            margin: 20px auto;
             cursor: pointer;
         }
-        
         #wheel {
             width: 100%;
             height: 100%;
         }
-
-        /* Wheel Pointer */
-        #wheel-container::after {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 25px solid var(--neon-pink);
-            filter: drop-shadow(0 0 5px var(--neon-pink));
-            z-index: 10;
-        }
-
-        .final-match {
+        #wheel svg {
             width: 100%;
-            background: rgba(20, 20, 30, 0.8);
-            border: 2px solid #333333;
-            border-radius: 8px;
-            padding: 10px;
+            height: 100%;
+            overflow: visible;
+            display: block;
         }
-        
-        .final-match.active {
-            border-color: var(--neon-purple);
-            box-shadow: 0 0 20px var(--neon-purple);
+        #wheel-container:hover {
+            transform: scale(1.02);
         }
 
-        #action-btn {
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            color: #ffffff;
-            border: none;
-            padding: 10px 25px;
-            font-size: 1.5rem;
-            font-family: 'Teko', sans-serif;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
+        .match {
+            width: 130px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .match.active {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 25px var(--neon-blue);
+            transform: scale(1.1);
+        }
+        .player-box {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #222;
         }
-        
-        #action-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
+        .player-box:last-child { border-bottom: none; }
+
+        /* Status & Titles */
+        .status-pill {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        #tourani-enabled-badge {
+            display: none;
+            margin-top: -4px;
+            margin-bottom: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(0, 242, 255, 0.14));
+            color: #ffe082;
+            font-size: 0.83rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.18);
+        }
+        .mode-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .mode-btn {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 0.84rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #eef6ff;
+            background: rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .mode-btn:hover {
+            transform: translateY(-1px);
+        }
+        .mode-btn.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(255, 97, 24, 0.28));
+            border-color: rgba(255, 215, 0, 0.42);
+            box-shadow: 0 0 18px rgba(255, 166, 0, 0.22);
+            color: #fff2c0;
         }
 
-        #action-btn:disabled {
-            background: #555555;
-            box-shadow: none;
-            cursor: not-allowed;
-            color: #888888;
-        }
-
-        #winner-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
+        /* Final Area */
+        #final-area {
+            margin-top: 30px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            z-index: 1000;
+        }
+        .final-match {
+            width: 180px;
+            border: 2px solid var(--neon-gold);
+            box-shadow: 0 0 20px var(--neon-gold);
+        }
+
+        #tourani-panel {
             display: none;
-        }
-
-        .trophy {
-            font-size: 100px;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite ease-in-out;
-            text-shadow: 0 0 20px gold;
-        }
-
-        .winner-name {
-            font-size: 4rem;
-            color: gold;
-            text-shadow: 0 0 20px gold;
-            text-transform: uppercase;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2150;
+            width: min(94vw, 680px);
+            padding: 24px;
+            border-radius: 24px;
+            background: linear-gradient(145deg, rgba(5, 12, 28, 0.92), rgba(18, 8, 32, 0.9));
+            border: 1px solid rgba(0, 242, 255, 0.28);
+            box-shadow: 0 0 24px rgba(0, 242, 255, 0.16), 0 0 28px rgba(255, 0, 255, 0.1), 0 24px 60px rgba(0, 0, 0, 0.45);
             text-align: center;
         }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        #tourani-panel h3 {
+            margin: 0 0 8px;
+            font-size: 1.15rem;
+            letter-spacing: 1.5px;
+            color: var(--neon-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
-    </style>
+        #tourani-panel p {
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.5;
+            font-size: 0.92rem;
+            max-width: 560px;
+        }
+        .tourani-panel-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.82);
+        }
+        .tourani-primary-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 22px;
+        }
+        .tourani-btn,
+        .tourani-link {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .tourani-btn {
+            color: #06131d;
+            background: linear-gradient(135deg, #00f2ff, #ffd700);
+            box-shadow: 0 0 18px rgba(0, 242, 255, 0.32);
+        }
+        .tourani-btn.primary-alt {
+            color: #07131b;
+            background: linear-gradient(135deg, #ffd700, #ff8a2a);
+            box-shadow: 0 0 22px rgba(255, 166, 0, 0.3);
+            min-width: 280px;
+            padding: 15px 24px;
+            font-size: 1rem;
+        }
+        .tourani-link {
+            display: none;
+            color: #101010;
+            background: linear-gradient(135deg, #ffffff, #cfe9ff);
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.22);
+        }
+        .tourani-btn:hover,
+        .tourani-link:hover {
+            transform: translateY(-1px);
+        }
+        .tourani-btn:disabled {
+            opacity: 0.58;
+            cursor: wait;
+            transform: none;
+        }
+        #tourani-status {
+            margin-top: 16px;
+            min-height: 2.6em;
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 0.9rem;
+        }
+        #tourani-panel-close {
+            display: none;
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+        }
+        #tourani-canvas {
+            display: none;
+        }
+        /* Trophy Button Fix */
+        #trophy-btn {
+            position: fixed; top: 15px; right: 15px;
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border: none; border-radius: 50%;
+            color: #000; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            z-index: 1000;
+        }
+</style>
 </head>
 <body>
+    <div class="main-wrapper">
+        <button id="trophy-btn" onclick="toggleHallOfFame()" title="Champions Gallery">🏆</button>
 
-    <h1>Neon Tournament Bracket</h1>
-    <div id="subtitle">Phase 1: Spin to Select 8 Players</div>
-
-    <div class="bracket-container">
-        <!-- Quarter Finals Left -->
-        <div class="column" id="qf-left">
-            <div class="round-title">Quarter Finals</div>
-            <div class="match" id="match-qf-1">
-                <div class="player empty" id="p-qf-1-1">?</div>
-                <div class="player empty" id="p-qf-1-2">?</div>
-            </div>
-            <div class="match" id="match-qf-2">
-                <div class="player empty" id="p-qf-2-1">?</div>
-                <div class="player empty" id="p-qf-2-2">?</div>
-            </div>
-        </div>
-
-        <!-- Semi Finals Left -->
-        <div class="column" id="sf-left">
-            <div class="round-title">Semi Finals</div>
-            <div class="match" id="match-sf-1">
-                <div class="player empty" id="p-sf-1-1">?</div>
-                <div class="player empty" id="p-sf-1-2">?</div>
-            </div>
-        </div>
-
-        <!-- Center Wheel -->
-        <div class="center-column">
-            <div id="wheel-container" onclick="handleWheelClick()">
-                <div id="wheel"></div>
-            </div>
-            
-            <div class="round-title" style="color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-purple); border-color: var(--neon-purple);">Finals</div>
-            <div class="final-match match" id="match-f-1">
-                <div class="player empty" id="p-f-1-1">?</div>
-                <div class="player empty" id="p-f-1-2">?</div>
+        <div class="arena-grid">
+            <!-- Left Wing -->
+            <div class="bracket-wing">
+                <div class="round">
+                    <div class="match" id="match-qf-1" style="margin-bottom:15px;"><div class="player-box" id="p-qf-1-1">?</div><div class="player-box" id="p-qf-1-2">?</div></div>
+                    <div class="match" id="match-qf-2"><div class="player-box" id="p-qf-2-1">?</div><div class="player-box" id="p-qf-2-2">?</div></div>
+                </div>
+                <div class="round">
+                    <div class="match" id="match-sf-1"><div class="player-box" id="p-sf-1-1">?</div><div class="player-box" id="p-sf-1-2">?</div></div>
+                </div>
             </div>
 
-            <button id="action-btn" onclick="handleWheelClick()">Select Player 1</button>
-        </div>
+            <!-- Center Stage -->
+            <div class="center-stage">
+                <div class="status-pill" id="status-msg">SELECTION PHASE (0/8)</div>
+                <div class="mode-controls">
+                    <button id="auto-mode-btn" class="mode-btn" type="button">Auto Mode: Off</button>
+                </div>
+                <div id="tourani-enabled-badge">TourAni Enabled</div>
+                <div id="wheel-container">
+                    <div id="wheel"></div>
+                    <div id="pointer" style="position:absolute; top:50%; right:-10px; transform:translateY(-50%); width:0; height:0; border-top:15px solid transparent; border-bottom:15px solid transparent; border-left:25px solid var(--neon-pink); z-index:10; filter:drop-shadow(0 0 5px var(--neon-pink));"></div>
+                </div>
 
-        <!-- Semi Finals Right -->
-        <div class="column" id="sf-right">
-            <div class="round-title">Semi Finals</div>
-            <div class="match" id="match-sf-2">
-                <div class="player empty" id="p-sf-2-1">?</div>
-                <div class="player empty" id="p-sf-2-2">?</div>
+                <div id="final-area">
+                    <div id="final-title-container" style="display:none; margin-bottom:10px;">
+                        <span style="color:var(--neon-gold); font-weight:900; letter-spacing:3px; text-shadow:0 0 10px var(--neon-gold);">THE GRAND FINAL</span>
+                    </div>
+                    <div class="match final-match" id="match-f-1">
+                        <div class="player-box" id="p-f-1-1">?</div>
+                        <div class="player-box" id="p-f-1-2">?</div>
+                    </div>
+                    <div id="tournament-winner" style="font-size:2.2rem; font-weight:900; margin-top:15px; color:gold; text-shadow:0 0 20px gold; font-family:serif;"></div>
+                    <div id="tourani-panel">
+                        <button id="tourani-panel-close" type="button" aria-label="Close TourAni panel">×</button>
+                        <div class="tourani-panel-eyebrow">TourAni Final Replay</div>
+                        <h3>TOURANI CINEMATIC EXPORT</h3>
+                        <p>A thriller-style replay of the full tournament with clearer storytelling, darker pacing, and embedded soundtrack is ready from one single action.</p>
+                        <div class="tourani-primary-actions">
+                            <button id="tourani-download-film-btn" class="tourani-btn primary-alt" type="button">Download World Cup Replay</button>
+                            <a id="tourani-download-link" class="tourani-link" href="#" download="tournament-world-cup-replay.webm">Save Replay File</a>
+                        </div>
+                        <div id="tourani-status"></div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Quarter Finals Right -->
-        <div class="column" id="qf-right">
-            <div class="round-title">Quarter Finals</div>
-            <div class="match" id="match-qf-3">
-                <div class="player empty" id="p-qf-3-1">?</div>
-                <div class="player empty" id="p-qf-3-2">?</div>
-            </div>
-            <div class="match" id="match-qf-4">
-                <div class="player empty" id="p-qf-4-1">?</div>
-                <div class="player empty" id="p-qf-4-2">?</div>
+            <!-- Right Wing -->
+            <div class="bracket-wing" style="flex-direction: row-reverse;">
+                <div class="round">
+                    <div class="match" id="match-qf-3" style="margin-bottom:15px;"><div class="player-box" id="p-qf-3-1">?</div><div class="player-box" id="p-qf-3-2">?</div></div>
+                    <div class="match" id="match-qf-4"><div class="player-box" id="p-qf-4-1">?</div><div class="player-box" id="p-qf-4-2">?</div></div>
+                </div>
+                <div class="round">
+                    <div class="match" id="match-sf-2"><div class="player-box" id="p-sf-2-1">?</div><div class="player-box" id="p-sf-2-2">?</div></div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Winner Overlay -->
-    <div id="winner-overlay">
-        <div class="trophy">🏆</div>
-        <div class="winner-name" id="final-winner-name">Winner Name</div>
-        <button id="action-btn" style="margin-top: 40px; background: #ffffff; color: #000000;" onclick="window.close()">Close Bracket</button>
+    <div id="hall-of-fame" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; flex-direction:column; align-items:center; justify-content:flex-start; padding:72px 20px 24px; overflow:auto;" onclick="this.style.display='none'">
+        <h2 style="margin:0 0 20px; color:var(--neon-gold); text-shadow:0 0 12px var(--neon-gold); letter-spacing:3px;">HALL OF FAME</h2>
+        <div id="trophy-list" style="width:min(92vw, 520px);"></div>
     </div>
-
-    <script>
-        // Data sources
-        let fullPool = [];
-        let activeSlices = []; 
-
-        // State Machine
-        let phase = 'SELECTION'; 
-        let selectionIndex = 0; 
-        let selectedPlayers = []; 
-        let remainingPool = []; 
-
-        const matches = [
-            { id: 'match-qf-1', p1Id: 'p-qf-1-1', p2Id: 'p-qf-1-2', p1Index: 0, p2Index: 1, nextMatch: 'match-sf-1', nextPlayer: 'p-sf-1-1', winner: null },
-            { id: 'match-qf-2', p1Id: 'p-qf-2-1', p2Id: 'p-qf-2-2', p1Index: 2, p2Index: 3, nextMatch: 'match-sf-1', nextPlayer: 'p-sf-1-2', winner: null },
-            { id: 'match-qf-3', p1Id: 'p-qf-3-1', p2Id: 'p-qf-3-2', p1Index: 4, p2Index: 5, nextMatch: 'match-sf-2', nextPlayer: 'p-sf-2-1', winner: null },
-            { id: 'match-qf-4', p1Id: 'p-qf-4-1', p2Id: 'p-qf-4-2', p1Index: 6, p2Index: 7, nextMatch: 'match-sf-2', nextPlayer: 'p-sf-2-2', winner: null },
-            { id: 'match-sf-1', p1Id: 'p-sf-1-1', p2Id: 'p-sf-1-2', p1Index: null, p2Index: null, nextMatch: 'match-f-1', nextPlayer: 'p-f-1-1', winner: null },
-            { id: 'match-sf-2', p1Id: 'p-sf-2-1', p2Id: 'p-sf-2-2', p1Index: null, p2Index: null, nextMatch: 'match-f-1', nextPlayer: 'p-f-1-2', winner: null },
-            { id: 'match-f-1', p1Id: 'p-f-1-1', p2Id: 'p-f-1-2', p1Index: null, p2Index: null, nextMatch: null, nextPlayer: null, winner: null },
-        ];
-        
-        let currentMatchIndex = 0; 
+    <div id="celebration" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:2100; align-items:center; justify-content:center; flex-direction:column;">
+        <div id="celeb-winner-name" style="font-size:clamp(2.5rem, 9vw, 5rem); font-weight:900; letter-spacing:4px;"></div>
+        <div style="margin-top:12px; color:var(--neon-gold); text-shadow:0 0 10px var(--neon-gold);">TOURNAMENT CHAMPION</div>
+    </div>
+    <canvas id="tourani-canvas" width="1280" height="720"></canvas>
+ <script>
+        let pool = JSON.parse(localStorage.getItem('tournamentPool') || '[]');
+        let selectedPlayers = [];
+        let availablePool = [];
+        let currentPhase = 'selection'; // 'selection' or 'matches'
+        let currentMatchIndex = 0;
         let isSpinning = false;
-        
-        window.onload = () => {
-            const rawPool = localStorage.getItem('tournamentPool');
-            if(rawPool) {
-                fullPool = JSON.parse(rawPool);
-            } else {
-                fullPool = Array.from({length: 16}).map((_, i) => ({ text: "Player " + (i+1), color: `hsl(${Math.random() * 360}, 100%, 50%)` }));
-            }
-            
-            remainingPool = [...fullPool];
-            activeSlices = [...remainingPool];
-            
-            drawWheel();
+        let isTransitioning = false;
+        let idleRotation = 0;
+        let idleRafId = null;
+        let autoModeEnabled = false;
+        let autoModeTimeoutId = null;
+        const tourAniEnabled = localStorage.getItem('tourAniEnabled') === 'true';
+        const TOURANI_RENDER_PROFILE = {
+            fps: 18,
+            videoBitsPerSecond: 2200000
+        };
+        let tourAniVideoUrl = null;
+        let tourAniLastMode = 'thriller';
+        let tourAniRenderPromise = null;
+        let tourAniPendingDownload = false;
+        const tournamentStory = {
+            selections: [],
+            matches: [],
+            champion: null
         };
 
-        // ------------- CONTINUOUS SPIN LOGIC -------------
-        let keepSpinning = false;
-        let continuousRot = 0;
-        let animFrameId = null;
+        const matches = [
+            { id: 'match-qf-1', p1Id: 'p-qf-1-1', p2Id: 'p-qf-1-2', winnerBoxId: 'p-sf-1-1' },
+            { id: 'match-qf-2', p1Id: 'p-qf-2-1', p2Id: 'p-qf-2-2', winnerBoxId: 'p-sf-1-2' },
+            { id: 'match-qf-3', p1Id: 'p-qf-3-1', p2Id: 'p-qf-3-2', winnerBoxId: 'p-sf-2-1' },
+            { id: 'match-qf-4', p1Id: 'p-qf-4-1', p2Id: 'p-qf-4-2', winnerBoxId: 'p-sf-2-2' },
+            { id: 'match-sf-1', p1Id: 'p-sf-1-1', p2Id: 'p-sf-1-2', winnerBoxId: 'p-f-1-1' },
+            { id: 'match-sf-2', p1Id: 'p-sf-2-1', p2Id: 'p-sf-2-2', winnerBoxId: 'p-f-1-2' },
+            { id: 'match-f-1', p1Id: 'p-f-1-1', p2Id: 'p-f-1-2', winnerBoxId: 'tournament-winner' }
+        ];
 
-        function startContinuousSpin() {
-            if (isSpinning) return;
-            keepSpinning = true;
-            const wheelG = d3.select(".vis-wheel");
-            if(wheelG.empty()) return;
-            
-            continuousRot = wheelG.attr('data-rot') ? parseFloat(wheelG.attr('data-rot')) : 0;
-            
-            function loop() {
-                if(!keepSpinning) return;
-                continuousRot = (continuousRot + 1.5) % 360;
-                wheelG.attr("transform", `translate(125,125) rotate(${continuousRot})`);
-                wheelG.attr('data-rot', continuousRot);
-                animFrameId = requestAnimationFrame(loop);
+        const tickAudio = new Audio('tick_sound.b64');
+        const winAudio = new Audio('https://www.myinstants.com/media/sounds/tada.mp3'); 
+        function playTick() { tickAudio.currentTime = 0; tickAudio.play().catch(() => {}); }
+
+        function normalizePoolEntry(entry, index) {
+            if (!entry) {
+                return { text: 'Entry ' + (index + 1), color: '#00f2ff' };
             }
-            loop();
+
+            var text = typeof entry.text === 'string' ? entry.text.trim() : '';
+            var color = typeof entry.color === 'string' && entry.color.trim() ? entry.color : '#00f2ff';
+            return {
+                text: text || ('Entry ' + (index + 1)),
+                color: color
+            };
         }
 
-        function stopContinuousSpin() {
-            keepSpinning = false;
-            if (animFrameId) cancelAnimationFrame(animFrameId);
-        }
+        pool = Array.isArray(pool) ? pool.map(normalizePoolEntry) : [];
+        availablePool = pool.slice();
 
-        // ------------- CONTROLLER -------------
+        // Initialize Wheel
+        let container;
+        let activeSlices = pool;
 
-        function handleWheelClick() {
-            if(isSpinning) return;
-            
-            if(phase === 'SELECTION') {
-                spinToSelect();
-            } else if(phase === 'MATCH') {
-                spinForMatch();
+        function getRenderableSlices() {
+            if (activeSlices && activeSlices.length) {
+                return activeSlices;
             }
-        }
-
-        function spinToSelect() {
-            if(remainingPool.length === 0 || selectionIndex >= 8) return;
-            isSpinning = true;
-            stopContinuousSpin();
-            document.getElementById('action-btn').disabled = true;
-            
-            const r = Math.floor(Math.random() * activeSlices.length);
-            const picked = activeSlices[r];
-            
-            spinVisualWheelTargeted(r, activeSlices.length, () => {
-                selectedPlayers.push(picked);
-                remainingPool = remainingPool.filter(p => p.text !== picked.text);
-                activeSlices = [...remainingPool];
-                
-                placeInBracket(selectionIndex, picked);
-                selectionIndex++;
-                
-                if(selectionIndex >= 8) {
-                    phase = 'MATCH';
-                    document.getElementById('subtitle').innerText = "Match Phase: Spin for the win!";
-                    document.getElementById('action-btn').innerText = "Spin Match!";
-                    setupMatch(0);
-                } else {
-                    document.getElementById('action-btn').innerText = "Select Player " + (selectionIndex + 1);
-                    drawWheel();
-                }
-                
-                isSpinning = false;
-                document.getElementById('action-btn').disabled = false;
-            });
-        }
-
-        function placeInBracket(index, player) {
-            const maps = [
-                'p-qf-1-1', 'p-qf-1-2',
-                'p-qf-2-1', 'p-qf-2-2',
-                'p-qf-3-1', 'p-qf-3-2',
-                'p-qf-4-1', 'p-qf-4-2'
+            return [
+                { text: 'Ready', color: '#00f2ff' },
+                { text: 'Set', color: '#ff5f6d' },
+                { text: 'Spin', color: '#ffd700' },
+                { text: 'Wheel', color: '#9b5cff' }
             ];
-            const div = document.getElementById(maps[index]);
-            div.innerText = player.text;
-            div.classList.remove('empty');
-            div.style.color = player.color;
-        }
-
-        function setupMatch(mIndex) {
-            if(mIndex >= matches.length) return;
-            
-            currentMatchIndex = mIndex;
-            const match = matches[mIndex];
-            
-            document.querySelectorAll('.match').forEach(el => el.classList.remove('active'));
-            document.getElementById(match.id).classList.add('active');
-            
-            const p1Text = document.getElementById(match.p1Id).innerText;
-            const p1Color = document.getElementById(match.p1Id).style.color || '#ffffff';
-            
-            const p2Text = document.getElementById(match.p2Id).innerText;
-            const p2Color = document.getElementById(match.p2Id).style.color || '#ffffff';
-            
-            activeSlices = [
-                {text: p1Text, color: p1Color},
-                {text: p2Text, color: p2Color}
-            ];
-            
-            drawWheel();
-            document.getElementById(match.id).scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        function spinForMatch() {
-            const match = matches[currentMatchIndex];
-            isSpinning = true;
-            stopContinuousSpin();
-            document.getElementById('action-btn').disabled = true;
-            document.getElementById('subtitle').innerText = "Battling: " + document.getElementById(match.p1Id).innerText + " VS " + document.getElementById(match.p2Id).innerText;
-            
-            const r = Math.floor(Math.random() * 2);
-            const winner = activeSlices[r];
-            
-            spinVisualWheelTargeted(r, activeSlices.length, () => {
-                match.winner = winner;
-                const winnerId = (r === 0 ? match.p1Id : match.p2Id);
-                document.getElementById(winnerId).style.fontWeight = 'bold';
-                
-                document.getElementById(match.id).classList.remove('active');
-                document.getElementById(match.id).classList.add('winner');
-                
-                if(match.nextMatch) {
-                    const nextDiv = document.getElementById(match.nextPlayer);
-                    nextDiv.innerText = winner.text;
-                    nextDiv.style.color = winner.color;
-                    nextDiv.classList.remove('empty');
-                    
-                    setupMatch(currentMatchIndex + 1);
-                    document.getElementById('subtitle').innerText = "Winner: " + winner.text + "! Onto next match.";
-                } else {
-                    document.getElementById('subtitle').innerText = "TOURNAMENT COMPLETE!";
-                    showWinner(winner);
-                }
-                
-                isSpinning = false;
-                document.getElementById('action-btn').disabled = false;
-            });
-        }
-        
-        function showWinner(player) {
-            document.getElementById('winner-overlay').style.display = 'flex';
-            const nameEl = document.getElementById('final-winner-name');
-            nameEl.innerText = player.text;
-            nameEl.style.color = player.color;
-            nameEl.style.textShadow = `0 0 20px ${player.color}`;
         }
 
         function drawWheel() {
-            const container = d3.select("#wheel");
-            container.selectAll("*").remove(); 
-            
-            if(activeSlices.length === 0) return;
+            var wheelDiv = d3.select('#wheel');
+            var slices = getRenderableSlices();
 
-            const w = 250, h = 250, r = Math.min(w, h)/2;
-            const svg = container.append("svg")
-                .attr("width", w)
-                .attr("height", h);
-                
-            const g = svg.append("g")
-                .attr("transform", `translate(${w/2},${h/2})`)
-                .attr("class", "vis-wheel");
+            wheelDiv.selectAll('*').remove();
 
-            const pie = d3.layout.pie().sort(null).value(() => 1);
-            const arc = d3.svg.arc().outerRadius(r).innerRadius(0); 
-            
-            const arcs = g.selectAll(".arc")
-                .data(pie(activeSlices))
-                .enter().append("g")
-                .attr("class", "arc");
+            var svg = wheelDiv.append('svg')
+                .attr('width', '100%')
+                .attr('height', '100%')
+                .attr('viewBox', '0 0 400 400');
 
-            arcs.append("path")
-                .attr("d", arc)
-                .style("fill", (d) => d.data.color)
-                .style("stroke", "rgba(255,255,255,0.4)")
-                .style("stroke-width", "1px");
+            var rootGroup = svg.append('g')
+                .attr('transform', 'translate(200,200)');
 
-            arcs.append("text")
-                .attr("transform", d => {
-                    const c = arc.centroid(d);
-                    const angle = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
-                    const rotate = angle > 90 ? angle - 180 : angle;
-                    return `translate(${c[0]},${c[1]}) rotate(${rotate})`;
+            container = rootGroup.append('g').attr('class', 'container-group');
+
+            var pie = d3.layout.pie().value(function () { return 1; }).sort(null);
+            var arc = d3.svg.arc().outerRadius(160).innerRadius(34);
+            var labelArc = d3.svg.arc().outerRadius(128).innerRadius(128);
+
+            var arcs = container.selectAll('g.slice')
+                .data(pie(slices))
+                .enter()
+                .append('g')
+                .attr('class', 'slice');
+
+            arcs.append('path')
+                .attr('d', arc)
+                .attr('fill', function (d) { return d.data.color || '#00f2ff'; })
+                .attr('stroke', 'rgba(255,255,255,0.35)')
+                .attr('stroke-width', 2);
+
+            arcs.append('text')
+                .attr('transform', function (d) {
+                    var c = labelArc.centroid(d);
+                    var angle = ((d.startAngle + d.endAngle) / 2) * 180 / Math.PI - 90;
+                    return 'translate(' + c[0] + ',' + c[1] + ') rotate(' + angle + ')';
                 })
-                .attr("dy", ".35em")
-                .style("text-anchor", "middle")
-                .style("fill", "#ffffff")
-                .style("font-size", "14px")
-                .style("font-family", "'Teko', sans-serif")
-                .style("text-shadow", "1px 1px 2px #000000")
-                .style("pointer-events", "none")
-                .text(d => {
-                    const txt = d.data.text;
-                    return txt.length > 10 ? txt.substring(0,8) + '..' : txt;
-                });
-                
-            if(!isSpinning) {
-                setTimeout(startContinuousSpin, 100);
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .attr('fill', '#ffffff')
+                .style('font-size', slices.length > 8 ? '10px' : '12px')
+                .style('font-weight', '800')
+                .style('text-shadow', '0 0 6px rgba(0,0,0,0.9)')
+                .text(function (d) { return d.data.text; });
+
+            rootGroup.append('circle')
+                .attr('r', 36)
+                .attr('fill', '#07131b')
+                .attr('stroke', '#00f2ff')
+                .attr('stroke-width', 4);
+
+            rootGroup.append('circle')
+                .attr('r', 10)
+                .attr('fill', '#ffffff');
+
+            container.attr('transform', 'rotate(' + idleRotation + ')');
+        }
+
+        function startContinuousSpin() {
+            if (idleRafId) cancelAnimationFrame(idleRafId);
+            function step() {
+                if (!isSpinning && container) {
+                    idleRotation = (idleRotation + 0.8) % 360;
+                    container.attr('transform', 'rotate(' + idleRotation + ')');
+                }
+                idleRafId = requestAnimationFrame(step);
+            }
+            step();
+        }
+
+        function clearAutoModeTimer() {
+            if (autoModeTimeoutId) {
+                clearTimeout(autoModeTimeoutId);
+                autoModeTimeoutId = null;
             }
         }
 
-        function spinVisualWheelTargeted(targetIndex, totalSlices, callback) {
-            const spinDuration = 3000;
-            const wheelG = d3.select(".vis-wheel");
-            
-            if(wheelG.empty()) {
-                setTimeout(callback, 500); 
+        function updateAutoModeButton() {
+            var button = document.getElementById('auto-mode-btn');
+            if (!button) return;
+            button.textContent = 'Auto Mode: ' + (autoModeEnabled ? 'On' : 'Off');
+            button.classList.toggle('active', autoModeEnabled);
+        }
+
+        function queueAutoModeSpin(delay) {
+            clearAutoModeTimer();
+            if (!autoModeEnabled) return;
+
+            autoModeTimeoutId = setTimeout(function () {
+                autoModeTimeoutId = null;
+                if (!autoModeEnabled || isSpinning || isTransitioning) return;
+
+                if (currentPhase === 'selection') {
+                    if (availablePool.length && selectedPlayers.length < 8) {
+                        spinToSelect();
+                    }
+                    return;
+                }
+
+                if (currentPhase === 'matches' && activeSlices && activeSlices.length === 2) {
+                    spinForMatch();
+                }
+            }, delay || 800);
+        }
+
+        function setAutoMode(enabled) {
+            autoModeEnabled = !!enabled;
+            updateAutoModeButton();
+
+            if (!autoModeEnabled) {
+                clearAutoModeTimer();
                 return;
             }
-            stopContinuousSpin();
 
-            const sliceAngle = 360 / totalSlices;
-            const stopAngle = 360 - (targetIndex * sliceAngle + sliceAngle/2);
-            const currentRot = wheelG.attr('data-rot') ? parseFloat(wheelG.attr('data-rot')) : 0;
-            const spins = 5 * 360; 
-            const newRot = currentRot + spins + stopAngle - (currentRot % 360);
-            
-            wheelG.attr('data-rot', newRot);
-            
-            wheelG.transition()
-                .duration(spinDuration)
-                .ease("cubic-out")
-                .attrTween("transform", function() {
-                    const i = d3.interpolate(currentRot, newRot);
-                    return function(t) {
-                        return `translate(125,125) rotate(${i(t)})`;
+            queueAutoModeSpin(currentPhase === 'selection' ? 900 : 1100);
+        }
+
+        document.getElementById('wheel-container').onclick = function () {
+            if (isSpinning || isTransitioning) return;
+            if (!availablePool.length && currentPhase === 'selection') {
+                document.getElementById('status-msg').textContent = 'No tournament players were loaded.';
+                return;
+            }
+            if (currentPhase === 'selection') spinToSelect();
+            else spinForMatch();
+        };
+
+        function spinToSelect() {
+            if (selectedPlayers.length >= 8 || !container || !availablePool.length) return;
+
+            isSpinning = true;
+            activeSlices = availablePool.slice();
+            drawWheel();
+
+            var stopIndex = Math.floor(Math.random() * availablePool.length);
+            var sliceAngle = 360 / availablePool.length;
+            var finalAngle = idleRotation + 360 * 5 + (360 - (stopIndex * sliceAngle) - (sliceAngle / 2));
+
+            container.transition().duration(3600).ease('cubic-out')
+                .attrTween('transform', function () {
+                    var interpolate = d3.interpolate(idleRotation, finalAngle);
+                    var lastTick = -1;
+                    return function (t) {
+                        var currentRotation = interpolate(t);
+                        var tickIndex = Math.floor(currentRotation / Math.max(8, sliceAngle));
+                        if (tickIndex !== lastTick) {
+                            playTick();
+                            lastTick = tickIndex;
+                        }
+                        return 'rotate(' + currentRotation + ')';
                     };
                 })
-                .each("end", () => {
-                    setTimeout(() => {
-                        callback();
-                        setTimeout(() => {
-                            if (!isSpinning) startContinuousSpin();
-                        }, 100);
-                    }, 800);
+                .each('end', function () {
+                    isSpinning = false;
+                    idleRotation = finalAngle % 360;
+
+                    var winner = availablePool[stopIndex];
+                    selectedPlayers.push(winner);
+                    availablePool.splice(stopIndex, 1);
+                    placeInBracket(winner, selectedPlayers.length);
+                    recordSelectionStory(winner, selectedPlayers.length);
+                    document.getElementById('status-msg').textContent = 'Selected (' + selectedPlayers.length + '/8): ' + winner.text;
+
+                    if (selectedPlayers.length === 8) {
+                        currentPhase = 'matches';
+                        isTransitioning = true;
+                        setTimeout(function () {
+                            setupMatch(0);
+                        }, 1200);
+                    } else if (autoModeEnabled) {
+                        queueAutoModeSpin(850);
+                    }
                 });
         }
+
+        function placeInBracket(player, count) {
+            var mapIds = ['p-qf-1-1', 'p-qf-1-2', 'p-qf-2-1', 'p-qf-2-2', 'p-qf-3-1', 'p-qf-3-2', 'p-qf-4-1', 'p-qf-4-2'];
+            var box = document.getElementById(mapIds[count - 1]);
+            if (!box) return;
+            box.textContent = player.text;
+            box.style.color = player.color;
+            box.style.textShadow = '0 0 8px ' + player.color;
+        }
+
+        function isRealPlayerText(value) {
+            return !!value && value !== '?' && value.trim() !== '';
+        }
+
+        function getAdvanceDelay(matchId) {
+            if (matchId.indexOf('match-sf-') === 0) return 2600;
+            if (matchId.indexOf('match-qf-') === 0) return 1600;
+            return 0;
+        }
+
+            function setPlainStatusMessage(message, color) {
+                var status = document.getElementById('status-msg');
+                status.textContent = message;
+                status.style.color = color || 'var(--neon-blue)';
+                status.style.textShadow = color ? '0 0 10px ' + color : '0 0 5px var(--neon-blue)';
+                status.style.borderColor = color || 'var(--neon-blue)';
+            }
+
+        function setupMatch(mIndex) {
+            if (mIndex >= matches.length) return;
+            isTransitioning = false;
+            currentMatchIndex = mIndex;
+
+            var match = matches[mIndex];
+            document.getElementById('final-title-container').style.display = match.id === 'match-f-1' ? 'block' : 'none';
+
+            Array.prototype.forEach.call(document.querySelectorAll('.match'), function (el) {
+                el.classList.remove('active');
+            });
+            document.getElementById(match.id).classList.add('active');
+
+            var p1 = document.getElementById(match.p1Id);
+            var p2 = document.getElementById(match.p2Id);
+
+            if (!isRealPlayerText(p1.textContent) || !isRealPlayerText(p2.textContent)) {
+                document.getElementById('status-msg').textContent = 'Waiting for previous match winners before advancing.';
+                return;
+            }
+
+            activeSlices = [
+                { text: p1.textContent, color: p1.style.color || '#00f2ff' },
+                { text: p2.textContent, color: p2.style.color || '#ff00ff' }
+            ];
+
+            document.getElementById('status-msg').innerHTML = '<span style="color:' + activeSlices[0].color + '">' + activeSlices[0].text + '</span> vs <span style="color:' + activeSlices[1].color + '">' + activeSlices[1].text + '</span>';
+            drawWheel();
+            if (autoModeEnabled) {
+                queueAutoModeSpin(match.id === 'match-f-1' ? 1500 : 1100);
+            }
+        }
+
+        function spinForMatch() {
+            if (!container) return;
+
+            isSpinning = true;
+            var match = matches[currentMatchIndex];
+            if (!activeSlices || activeSlices.length !== 2 || !isRealPlayerText(activeSlices[0].text) || !isRealPlayerText(activeSlices[1].text)) {
+                isSpinning = false;
+                document.getElementById('status-msg').textContent = 'This match cannot start until both players are set.';
+                return;
+            }
+            var stopIndex = Math.floor(Math.random() * 2);
+            var sliceAngle = 180;
+            var finalAngle = idleRotation + 360 * 6 + (360 - (stopIndex * sliceAngle) - (sliceAngle / 2));
+
+            container.transition().duration(3800).ease('cubic-out')
+                .attrTween('transform', function () {
+                    var interpolate = d3.interpolate(idleRotation, finalAngle);
+                    var lastTick = -1;
+                    return function (t) {
+                        var currentRotation = interpolate(t);
+                        var tickIndex = Math.floor(currentRotation / 20);
+                        if (tickIndex !== lastTick) {
+                            playTick();
+                            lastTick = tickIndex;
+                        }
+                        return 'rotate(' + currentRotation + ')';
+                    };
+                })
+                .each('end', function () {
+                    isSpinning = false;
+                    idleRotation = finalAngle % 360;
+
+                    var winner = activeSlices[stopIndex];
+                    var winnerBox = document.getElementById(match.winnerBoxId);
+                    winnerBox.textContent = winner.text;
+                    winnerBox.style.color = winner.color;
+                    winnerBox.style.textShadow = '0 0 10px ' + winner.color;
+                    recordMatchStory(match, winner);
+
+                    if (match.id === 'match-f-1') {
+                        clearAutoModeTimer();
+                        setPlainStatusMessage(winner.text + ' wins the tournament!', winner.color);
+                        saveTrophy(winner.text, winner.color);
+                        showTourAniPanel();
+                        showCelebration(winner);
+                    } else {
+                        isTransitioning = true;
+                        setPlainStatusMessage(winner.text + ' advances to the next round', winner.color);
+                        var nextMatchIndex = currentMatchIndex + 1;
+                        setTimeout(function () {
+                            setupMatch(nextMatchIndex);
+                        }, getAdvanceDelay(match.id));
+                    }
+                });
+        }
+
+        function saveTrophy(name, color) {
+            var trophies = JSON.parse(localStorage.getItem('tournamentTrophies') || '[]');
+            trophies.push({ name: name, color: color, date: new Date().toLocaleDateString() });
+            localStorage.setItem('tournamentTrophies', JSON.stringify(trophies));
+        }
+
+        function toggleHallOfFame() {
+            var hall = document.getElementById('hall-of-fame');
+            if (!hall) return;
+
+            if (hall.style.display === 'flex') {
+                hall.style.display = 'none';
+                return;
+            }
+
+            hall.style.display = 'flex';
+            var list = document.getElementById('trophy-list');
+            var trophies = JSON.parse(localStorage.getItem('tournamentTrophies') || '[]');
+            list.innerHTML = trophies.length ? '' : '<div style="padding:16px; text-align:center; color:#ddd;">No champions yet.</div>';
+
+            trophies.slice().reverse().forEach(function (entry) {
+                var row = document.createElement('div');
+                row.style.cssText = 'padding:14px 16px; margin-bottom:12px; border:1px solid rgba(255,215,0,0.35); border-radius:14px; background:rgba(255,255,255,0.05); box-shadow:0 0 18px rgba(255,215,0,0.12);';
+                row.innerHTML = '<div style="font-size:1.3rem; font-weight:800; color:' + entry.color + '; text-shadow:0 0 10px ' + entry.color + ';">' + entry.name + '</div><div style="margin-top:6px; color:#bbb; font-size:0.85rem;">Winner • ' + entry.date + '</div>';
+                list.appendChild(row);
+            });
+        }
+
+        function copyStoryPlayer(player) {
+            return {
+                text: player.text,
+                color: player.color || '#00f2ff'
+            };
+        }
+
+        function recordSelectionStory(player, slot) {
+            tournamentStory.selections.push({
+                slot: slot,
+                player: copyStoryPlayer(player)
+            });
+        }
+
+        function recordMatchStory(match, winner) {
+            var p1 = document.getElementById(match.p1Id);
+            var p2 = document.getElementById(match.p2Id);
+            tournamentStory.matches.push({
+                matchId: match.id,
+                winnerBoxId: match.winnerBoxId,
+                p1: copyStoryPlayer({ text: p1.textContent, color: p1.style.color || '#00f2ff' }),
+                p2: copyStoryPlayer({ text: p2.textContent, color: p2.style.color || '#ff00ff' }),
+                winner: copyStoryPlayer(winner)
+            });
+
+            if (match.id === 'match-f-1') {
+                tournamentStory.champion = copyStoryPlayer(winner);
+            }
+        }
+
+        function showTourAniPanel() {
+            if (!tourAniEnabled || !tournamentStory.champion) return;
+
+            var status = document.getElementById('tourani-status');
+            if (!status) return;
+
+            status.textContent = 'TourAni is enabled. Click download to render the World Cup replay with music, drama, and the full tournament story.';
+            openTourAniPanel();
+        }
+
+        function syncTourAniUi() {
+            var badge = document.getElementById('tourani-enabled-badge');
+            var downloadLink = document.getElementById('tourani-download-link');
+            var primaryDownloadButton = document.getElementById('tourani-download-film-btn');
+            var closeButton = document.getElementById('tourani-panel-close');
+
+            if (badge) {
+                badge.style.display = tourAniEnabled ? 'inline-flex' : 'none';
+            }
+
+            if (!tourAniEnabled) return;
+
+            var hasVideo = !!tourAniVideoUrl;
+            if (downloadLink) {
+                downloadLink.style.display = hasVideo ? 'inline-flex' : 'none';
+                if (hasVideo) {
+                    downloadLink.href = tourAniVideoUrl;
+                    downloadLink.download = 'tournament-world-cup-replay.webm';
+                    downloadLink.textContent = 'Save Replay File';
+                }
+            }
+            if (primaryDownloadButton) {
+                primaryDownloadButton.textContent = hasVideo ? 'Save World Cup Replay' : 'Render World Cup Replay';
+            }
+            if (closeButton) {
+                closeButton.style.display = tournamentStory.champion ? 'inline-flex' : 'none';
+            }
+        }
+
+        async function ensureTourAniVideo() {
+            var status = document.getElementById('tourani-status');
+
+            if (tourAniVideoUrl) {
+                triggerTourAniDownload();
+                return;
+            }
+
+            tourAniPendingDownload = false;
+            if (status) {
+                status.textContent = 'Rendering the replay now. When it finishes, use the Save button or the Save Replay File link.';
+            }
+            if (tourAniRenderPromise) {
+                await tourAniRenderPromise;
+            } else if (!tourAniVideoUrl) {
+                await generateTournamentFilm();
+            }
+        }
+
+        function triggerTourAniDownload() {
+            if (!tourAniVideoUrl) return false;
+
+            var tempLink = document.createElement('a');
+            tempLink.href = tourAniVideoUrl;
+            tempLink.download = 'tournament-world-cup-replay.webm';
+            tempLink.style.display = 'none';
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            document.body.removeChild(tempLink);
+            return true;
+        }
+
+        function openTourAniPanel() {
+            var panel = document.getElementById('tourani-panel');
+            if (!panel) return;
+            panel.style.display = 'block';
+            syncTourAniUi();
+        }
+
+        function closeTourAniPanel() {
+            var panel = document.getElementById('tourani-panel');
+            if (!panel) return;
+            panel.style.display = 'none';
+        }
+
+        function getFilmMimeTypeOptions(includeAudio) {
+            if (includeAudio) {
+                return [
+                    'video/webm;codecs=vp9,opus',
+                    'video/webm;codecs=vp8,opus',
+                    'video/webm;codecs=vp9',
+                    'video/webm;codecs=vp8',
+                    'video/webm'
+                ];
+            }
+
+            return [
+                'video/webm;codecs=vp9',
+                'video/webm;codecs=vp8',
+                'video/webm'
+            ];
+        }
+
+        function createFilmRecorder(stream, includeAudio) {
+            var options = getFilmMimeTypeOptions(includeAudio);
+
+            for (var i = 0; i < options.length; i += 1) {
+                var mimeType = options[i];
+                if (!window.MediaRecorder || !MediaRecorder.isTypeSupported(mimeType)) {
+                    continue;
+                }
+
+                try {
+                    return {
+                        recorder: new MediaRecorder(stream, {
+                            mimeType: mimeType,
+                            videoBitsPerSecond: TOURANI_RENDER_PROFILE.videoBitsPerSecond
+                        }),
+                        mimeType: mimeType
+                    };
+                } catch (error) {
+                }
+            }
+
+            try {
+                return {
+                    recorder: new MediaRecorder(stream, {
+                        videoBitsPerSecond: TOURANI_RENDER_PROFILE.videoBitsPerSecond
+                    }),
+                    mimeType: 'video/webm'
+                };
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function cloneSnapshot(snapshot) {
+            return JSON.parse(JSON.stringify(snapshot));
+        }
+
+        function createBaseSnapshot() {
+            return {
+                'p-qf-1-1': { text: '?', color: '#3b4a54' },
+                'p-qf-1-2': { text: '?', color: '#3b4a54' },
+                'p-qf-2-1': { text: '?', color: '#3b4a54' },
+                'p-qf-2-2': { text: '?', color: '#3b4a54' },
+                'p-qf-3-1': { text: '?', color: '#3b4a54' },
+                'p-qf-3-2': { text: '?', color: '#3b4a54' },
+                'p-qf-4-1': { text: '?', color: '#3b4a54' },
+                'p-qf-4-2': { text: '?', color: '#3b4a54' },
+                'p-sf-1-1': { text: '?', color: '#3b4a54' },
+                'p-sf-1-2': { text: '?', color: '#3b4a54' },
+                'p-sf-2-1': { text: '?', color: '#3b4a54' },
+                'p-sf-2-2': { text: '?', color: '#3b4a54' },
+                'p-f-1-1': { text: '?', color: '#3b4a54' },
+                'p-f-1-2': { text: '?', color: '#3b4a54' },
+                'tournament-winner': { text: '?', color: '#ffd700' }
+            };
+        }
+
+        function getSelectionSlotId(slot) {
+            var ids = ['p-qf-1-1', 'p-qf-1-2', 'p-qf-2-1', 'p-qf-2-2', 'p-qf-3-1', 'p-qf-3-2', 'p-qf-4-1', 'p-qf-4-2'];
+            return ids[slot - 1];
+        }
+
+        function getRoundLabel(matchId) {
+            if (matchId.indexOf('match-qf-') === 0) return 'Quarter Final';
+            if (matchId.indexOf('match-sf-') === 0) return 'Semi Final';
+            return 'Grand Final';
+        }
+
+        function getRoundStageText(matchId) {
+            if (matchId.indexOf('match-qf-') === 0) return 'The quarter finals open under the lights. Every spin now carries the pressure of a knockout night.';
+            if (matchId.indexOf('match-sf-') === 0) return 'The semi finals feel like a stadium holding its breath. Two survivors will earn the right to walk into the final.';
+            return 'The grand final is the last march to glory. One decisive spin will lift the champion above the rest.';
+        }
+
+        function getMatchNumber(matchId) {
+            var parts = matchId.split('-');
+            return parts[parts.length - 1];
+        }
+
+        function buildFilmScenes(mode) {
+            var filmMode = mode || 'thriller';
+            var scenes = [];
+            var snapshot = createBaseSnapshot();
+            var selectionBatchSize = 2;
+            var lastRoundLabel = '';
+
+            scenes.push({
+                type: 'intro',
+                duration: 1800,
+                title: 'WORLD CUP NIGHT',
+                subtitle: 'Floodlights blaze, the crowd rises, and eight contenders step into a knockout tournament built on pure nerve.',
+                snapshot: cloneSnapshot(snapshot)
+            });
+
+            scenes.push({
+                type: 'overview',
+                duration: 1700,
+                title: 'THE CUP STORY BEGINS',
+                subtitle: 'The wheel becomes the draw machine, the bracket becomes the stadium, and every name is chasing the same trophy.',
+                snapshot: cloneSnapshot(snapshot)
+            });
+
+            for (var selectionIndex = 0; selectionIndex < tournamentStory.selections.length; selectionIndex += selectionBatchSize) {
+                var selectionBatch = tournamentStory.selections.slice(selectionIndex, selectionIndex + selectionBatchSize);
+                selectionBatch.forEach(function (entry) {
+                    snapshot[getSelectionSlotId(entry.slot)] = copyStoryPlayer(entry.player);
+                });
+
+                if (selectionBatch.length) {
+                    var featuredSelection = selectionBatch[selectionBatch.length - 1];
+                    var selectionNames = selectionBatch.map(function (entry) {
+                        return entry.player.text;
+                    });
+                    scenes.push({
+                        type: 'selection',
+                        duration: filmMode === 'thriller' ? 1050 : 900,
+                        title: 'DRAW REVEAL ' + (Math.floor(selectionIndex / selectionBatchSize) + 1),
+                        subtitle: selectionNames.join(' and ') + ' are pulled into the bracket as the stadium reacts to the latest draw drama.',
+                        snapshot: cloneSnapshot(snapshot),
+                        wheelSlices: tournamentStory.selections.slice(0, selectionIndex + selectionBatch.length).map(function (entry) {
+                            return copyStoryPlayer(entry.player);
+                        }),
+                        focusPlayer: copyStoryPlayer(featuredSelection.player)
+                    });
+                }
+            }
+
+            tournamentStory.matches.forEach(function (entry) {
+                var roundLabel = getRoundLabel(entry.matchId);
+                if (roundLabel !== lastRoundLabel) {
+                    scenes.push({
+                        type: 'round',
+                        duration: roundLabel === 'Grand Final' ? 1800 : 1450,
+                        title: roundLabel.toUpperCase(),
+                        subtitle: getRoundStageText(entry.matchId),
+                        snapshot: cloneSnapshot(snapshot),
+                        activeMatchId: entry.matchId,
+                        wheelSlices: [copyStoryPlayer(entry.p1), copyStoryPlayer(entry.p2)]
+                    });
+                    lastRoundLabel = roundLabel;
+                }
+
+                snapshot[entry.winnerBoxId] = copyStoryPlayer(entry.winner);
+                scenes.push({
+                    type: 'match',
+                    duration: roundLabel === 'Grand Final' ? 2400 : (roundLabel === 'Semi Final' ? 1800 : 1550),
+                    title: roundLabel.toUpperCase() + ' SHOWDOWN ' + getMatchNumber(entry.matchId),
+                    subtitle: entry.p1.text + ' and ' + entry.p2.text + ' collide under full pressure. The wheel turns, the crowd swells, and ' + entry.winner.text + ' punches through.',
+                    snapshot: cloneSnapshot(snapshot),
+                    wheelSlices: [copyStoryPlayer(entry.p1), copyStoryPlayer(entry.p2)],
+                    focusPlayer: copyStoryPlayer(entry.winner),
+                    activeMatchId: entry.matchId,
+                    winnerBoxId: entry.winnerBoxId
+                });
+            });
+
+            if (tournamentStory.champion) {
+                scenes.push({
+                    type: 'champion',
+                    duration: 2800,
+                    title: 'CHAMPION CROWNED',
+                    subtitle: tournamentStory.champion.text + ' survives the entire cup run, wins the final under the lights, and lifts the tournament crown like a world champion.',
+                    snapshot: cloneSnapshot(snapshot),
+                    focusPlayer: copyStoryPlayer(tournamentStory.champion)
+                });
+            }
+
+            return scenes;
+        }
+
+        function getFilmLayout() {
+            return {
+                boxes: {
+                    'p-qf-1-1': { x: 82, y: 140, w: 170, h: 36 },
+                    'p-qf-1-2': { x: 82, y: 182, w: 170, h: 36 },
+                    'p-qf-2-1': { x: 82, y: 300, w: 170, h: 36 },
+                    'p-qf-2-2': { x: 82, y: 342, w: 170, h: 36 },
+                    'p-qf-3-1': { x: 1028, y: 140, w: 170, h: 36 },
+                    'p-qf-3-2': { x: 1028, y: 182, w: 170, h: 36 },
+                    'p-qf-4-1': { x: 1028, y: 300, w: 170, h: 36 },
+                    'p-qf-4-2': { x: 1028, y: 342, w: 170, h: 36 },
+                    'p-sf-1-1': { x: 302, y: 190, w: 170, h: 36 },
+                    'p-sf-1-2': { x: 302, y: 232, w: 170, h: 36 },
+                    'p-sf-2-1': { x: 808, y: 190, w: 170, h: 36 },
+                    'p-sf-2-2': { x: 808, y: 232, w: 170, h: 36 },
+                    'p-f-1-1': { x: 555, y: 470, w: 170, h: 36 },
+                    'p-f-1-2': { x: 555, y: 512, w: 170, h: 36 },
+                    'tournament-winner': { x: 502, y: 590, w: 276, h: 52 }
+                },
+                wheel: { x: 640, y: 250, r: 118 }
+            };
+        }
+
+        function drawBackdrop(ctx, canvas, elapsed) {
+            var gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#020612');
+            gradient.addColorStop(0.35, '#132848');
+            gradient.addColorStop(0.72, '#26103b');
+            gradient.addColorStop(1, '#030a12');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var horizon = canvas.height * 0.74;
+            var pitch = ctx.createLinearGradient(0, horizon - 20, 0, canvas.height);
+            pitch.addColorStop(0, 'rgba(11, 41, 33, 0.1)');
+            pitch.addColorStop(1, 'rgba(8, 28, 18, 0.88)');
+            ctx.fillStyle = pitch;
+            ctx.fillRect(0, horizon - 20, canvas.width, canvas.height - horizon + 20);
+
+            for (var i = 0; i < 14; i += 1) {
+                var x = (elapsed * 0.026 + i * 110) % (canvas.width + 260) - 130;
+                var y = 78 + i * 32;
+                var glow = ctx.createRadialGradient(x, y, 0, x, y, 100);
+                glow.addColorStop(0, i % 3 === 0 ? 'rgba(255,215,0,0.12)' : 'rgba(0,242,255,0.14)');
+                glow.addColorStop(1, 'rgba(0,242,255,0)');
+                ctx.fillStyle = glow;
+                ctx.beginPath();
+                ctx.arc(x, y, 100, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            for (var j = 0; j < 3; j += 1) {
+                var sweepX = 180 + j * 360 + Math.sin(elapsed * 0.00055 + j) * 90;
+                ctx.save();
+                ctx.translate(sweepX, horizon - 120);
+                ctx.rotate(-0.18 + j * 0.18 + Math.sin(elapsed * 0.00045 + j) * 0.1);
+                var beam = ctx.createLinearGradient(0, 0, 0, -340);
+                beam.addColorStop(0, 'rgba(255,255,255,0.03)');
+                beam.addColorStop(1, 'rgba(255,255,255,0.18)');
+                ctx.fillStyle = beam;
+                ctx.beginPath();
+                ctx.moveTo(-44, 0);
+                ctx.lineTo(44, 0);
+                ctx.lineTo(10, -340);
+                ctx.lineTo(-10, -340);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(canvas.width / 2, horizon + 18, 460, 74, 0, Math.PI, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function drawBracketLines(ctx) {
+            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(252, 200); ctx.lineTo(302, 200);
+            ctx.moveTo(252, 360); ctx.lineTo(302, 360);
+            ctx.moveTo(472, 208); ctx.lineTo(555, 208);
+            ctx.moveTo(472, 360); ctx.lineTo(555, 360);
+            ctx.moveTo(1028, 200); ctx.lineTo(978, 200);
+            ctx.moveTo(1028, 360); ctx.lineTo(978, 360);
+            ctx.moveTo(808, 208); ctx.lineTo(725, 208);
+            ctx.moveTo(808, 360); ctx.lineTo(725, 360);
+            ctx.stroke();
+        }
+
+        function drawRoundedRectPath(ctx, x, y, width, height, radius) {
+            var safeRadius = Math.min(radius, width / 2, height / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + safeRadius, y);
+            ctx.lineTo(x + width - safeRadius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + safeRadius);
+            ctx.lineTo(x + width, y + height - safeRadius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - safeRadius, y + height);
+            ctx.lineTo(x + safeRadius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - safeRadius);
+            ctx.lineTo(x, y + safeRadius);
+            ctx.quadraticCurveTo(x, y, x + safeRadius, y);
+            ctx.closePath();
+        }
+
+        function drawPlayerCard(ctx, box, player, active, championBox) {
+            var bg = ctx.createLinearGradient(box.x, box.y, box.x + box.w, box.y + box.h);
+            bg.addColorStop(0, active ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.08)');
+            bg.addColorStop(1, 'rgba(6,8,16,0.92)');
+            ctx.fillStyle = bg;
+            ctx.strokeStyle = active ? (player.color || '#00f2ff') : 'rgba(255,255,255,0.16)';
+            ctx.lineWidth = championBox ? 3 : 2;
+            ctx.shadowColor = active ? (player.color || '#00f2ff') : 'transparent';
+            ctx.shadowBlur = active ? 18 : 0;
+            drawRoundedRectPath(ctx, box.x, box.y, box.w, box.h, championBox ? 18 : 14);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = player.text === '?' ? '#7a8791' : (player.color || '#ffffff');
+            ctx.font = championBox ? '800 28px Segoe UI' : '700 17px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(player.text, box.x + box.w / 2, box.y + box.h / 2 + 1);
+        }
+
+        function drawReplayBracket(ctx, snapshot, activeMatchId, elapsed) {
+            var layout = getFilmLayout();
+            var highlightMap = {
+                'match-qf-1': ['p-qf-1-1', 'p-qf-1-2'],
+                'match-qf-2': ['p-qf-2-1', 'p-qf-2-2'],
+                'match-qf-3': ['p-qf-3-1', 'p-qf-3-2'],
+                'match-qf-4': ['p-qf-4-1', 'p-qf-4-2'],
+                'match-sf-1': ['p-sf-1-1', 'p-sf-1-2'],
+                'match-sf-2': ['p-sf-2-1', 'p-sf-2-2'],
+                'match-f-1': ['p-f-1-1', 'p-f-1-2']
+            };
+            var highlighted = highlightMap[activeMatchId] || [];
+
+            drawBracketLines(ctx);
+
+            Object.keys(layout.boxes).forEach(function (key) {
+                var box = layout.boxes[key];
+                var player = snapshot[key] || { text: '?', color: '#3b4a54' };
+                var isActive = highlighted.indexOf(key) !== -1 || key === activeMatchId;
+                drawPlayerCard(ctx, box, player, isActive, key === 'tournament-winner');
+            });
+
+            ctx.fillStyle = 'rgba(255,255,255,0.58)';
+            ctx.font = '700 15px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('LEFT BRACKET', 220, 92);
+            ctx.fillText('RIGHT BRACKET', 1060, 92);
+            ctx.fillText('THE FINAL', 640, 440);
+        }
+
+        function drawReplayWheel(ctx, scene, progress, elapsed) {
+            var layout = getFilmLayout();
+            var wheel = layout.wheel;
+            var slices = scene.wheelSlices && scene.wheelSlices.length ? scene.wheelSlices : [
+                { text: 'START', color: '#00f2ff' },
+                { text: 'BUILD', color: '#ff5f6d' },
+                { text: 'CLASH', color: '#ffd700' },
+                { text: 'WIN', color: '#9b5cff' }
+            ];
+            var angleStep = (Math.PI * 2) / slices.length;
+            var baseRotation = elapsed * 0.0007 + progress * Math.PI * (scene.type === 'match' ? 1.35 : 0.45);
+
+            ctx.save();
+            ctx.translate(wheel.x, wheel.y);
+            ctx.rotate(baseRotation);
+
+            for (var i = 0; i < slices.length; i += 1) {
+                var start = i * angleStep;
+                var end = start + angleStep;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, wheel.r, start, end);
+                ctx.closePath();
+                ctx.fillStyle = slices[i].color;
+                ctx.globalAlpha = 0.94;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.rotate(start + angleStep / 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '800 15px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.fillText(slices[i].text, wheel.r * 0.63, 5);
+                ctx.restore();
+            }
+
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.arc(wheel.x, wheel.y, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#07131b';
+            ctx.fill();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#00f2ff';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(wheel.x + wheel.r + 14, wheel.y);
+            ctx.lineTo(wheel.x + wheel.r + 52, wheel.y - 20);
+            ctx.lineTo(wheel.x + wheel.r + 52, wheel.y + 20);
+            ctx.closePath();
+            ctx.fillStyle = '#ff00ff';
+            ctx.shadowColor = '#ff00ff';
+            ctx.shadowBlur = 18;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+            var words = (text || '').split(' ');
+            var line = '';
+            var lines = [];
+
+            for (var i = 0; i < words.length; i += 1) {
+                var testLine = line ? line + ' ' + words[i] : words[i];
+                if (ctx.measureText(testLine).width > maxWidth && line) {
+                    lines.push(line);
+                    line = words[i];
+                } else {
+                    line = testLine;
+                }
+            }
+
+            if (line) lines.push(line);
+
+            for (var j = 0; j < lines.length; j += 1) {
+                ctx.fillText(lines[j], x, y + (j * lineHeight));
+            }
+        }
+
+        function drawFilmChrome(ctx, canvas) {
+            var topGradient = ctx.createLinearGradient(0, 0, 0, 120);
+            topGradient.addColorStop(0, 'rgba(0,0,0,0.88)');
+            topGradient.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = topGradient;
+            ctx.fillRect(0, 0, canvas.width, 120);
+
+            var bottomGradient = ctx.createLinearGradient(0, canvas.height - 160, 0, canvas.height);
+            bottomGradient.addColorStop(0, 'rgba(0,0,0,0)');
+            bottomGradient.addColorStop(1, 'rgba(0,0,0,0.9)');
+            ctx.fillStyle = bottomGradient;
+            ctx.fillRect(0, canvas.height - 160, canvas.width, 160);
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
+            ctx.fillRect(0, 0, canvas.width, 34);
+            ctx.fillRect(0, canvas.height - 34, canvas.width, 34);
+        }
+
+        function renderFilmFrame(ctx, canvas, scene, progress, elapsed) {
+            var pulse = 0.92 + Math.sin(elapsed * 0.005) * 0.08;
+            drawBackdrop(ctx, canvas, elapsed);
+            drawReplayBracket(ctx, scene.snapshot, scene.activeMatchId, elapsed);
+            drawReplayWheel(ctx, scene, progress, elapsed);
+            drawFilmChrome(ctx, canvas);
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+            ctx.fillRect(76, 92, 1128, 556);
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(76, 92, 1128, 556);
+
+            ctx.fillStyle = 'rgba(255,215,0,0.16)';
+            drawRoundedRectPath(ctx, 88, 46, 218, 44, 22);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(255,255,255,0.95)';
+            ctx.font = '800 18px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('TOURANI WORLD CUP CUT', 197, 74);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.92)';
+            ctx.font = '900 46px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText(scene.title, canvas.width / 2, 64);
+
+            ctx.fillStyle = 'rgba(5, 8, 14, 0.78)';
+            drawRoundedRectPath(ctx, 154, 92, 972, 112, 22);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(255,255,255,0.82)';
+            ctx.font = '500 24px Segoe UI';
+            drawWrappedText(ctx, scene.subtitle, canvas.width / 2, 132, 880, 29);
+
+            ctx.fillStyle = 'rgba(0,0,0,0.42)';
+            drawRoundedRectPath(ctx, 458, 614, 364, 56, 28);
+            ctx.fill();
+
+            if (scene.focusPlayer) {
+                ctx.fillStyle = scene.focusPlayer.color;
+                ctx.shadowColor = scene.focusPlayer.color;
+                ctx.shadowBlur = 18 * pulse;
+                ctx.font = '900 30px Segoe UI';
+                ctx.fillText(scene.focusPlayer.text, canvas.width / 2, 650);
+                ctx.shadowBlur = 0;
+            }
+
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.88)';
+            ctx.font = '700 20px Segoe UI';
+            ctx.fillText('KNOCKOUT REPLAY • LIGHTS • PRESSURE • GLORY', canvas.width / 2, 698);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.12)';
+            ctx.fillRect(160, 676, 960, 10);
+            var progressGradient = ctx.createLinearGradient(160, 0, 1120, 0);
+            progressGradient.addColorStop(0, 'rgba(0,242,255,0.95)');
+            progressGradient.addColorStop(1, 'rgba(255,215,0,0.95)');
+            ctx.fillStyle = progressGradient;
+            ctx.fillRect(160, 676, 960 * progress, 10);
+        }
+
+        function createTone(audioContext, destination, config) {
+            var oscillator = audioContext.createOscillator();
+            var gain = audioContext.createGain();
+            oscillator.type = config.type || 'sine';
+            oscillator.frequency.setValueAtTime(config.frequency, config.start);
+            gain.gain.setValueAtTime(0.0001, config.start);
+            gain.gain.exponentialRampToValueAtTime(config.volume || 0.04, config.start + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, config.start + config.duration);
+            oscillator.connect(gain);
+            gain.connect(destination);
+            oscillator.start(config.start);
+            oscillator.stop(config.start + config.duration + 0.02);
+        }
+
+        function createNoiseBurst(audioContext, destination, config) {
+            var duration = config.duration || 0.24;
+            var buffer = audioContext.createBuffer(1, Math.max(1, Math.floor(audioContext.sampleRate * duration)), audioContext.sampleRate);
+            var channel = buffer.getChannelData(0);
+            for (var i = 0; i < channel.length; i += 1) {
+                channel[i] = (Math.random() * 2 - 1) * (1 - (i / channel.length));
+            }
+
+            var source = audioContext.createBufferSource();
+            var filter = audioContext.createBiquadFilter();
+            var gain = audioContext.createGain();
+            source.buffer = buffer;
+            filter.type = config.filterType || 'bandpass';
+            filter.frequency.setValueAtTime(config.frequency || 1200, config.start);
+            gain.gain.setValueAtTime(0.0001, config.start);
+            gain.gain.exponentialRampToValueAtTime(config.volume || 0.03, config.start + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, config.start + duration);
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(destination);
+            source.start(config.start);
+            source.stop(config.start + duration + 0.02);
+        }
+
+        function createTourAniAudioBed(scenes, totalDuration, includeMusic, mode) {
+            if (!includeMusic || !window.AudioContext) {
+                return null;
+            }
+
+            var audioContext = new AudioContext();
+            var destination = audioContext.createMediaStreamDestination();
+            var master = audioContext.createGain();
+            master.gain.value = 0.78;
+            master.connect(destination);
+
+            var now = audioContext.currentTime + 0.08;
+            var beat = mode === 'thriller' ? 0.5 : 0.58;
+            var motif = [220.0, 246.94, 293.66, 329.63, 392.0, 329.63, 293.66, 246.94];
+            var brass = [523.25, 587.33, 659.25, 698.46];
+            var bass = [55.0, 65.41, 73.42, 82.41];
+            var musicLength = Math.max(totalDuration / 1000, 1);
+
+            for (var t = 0, step = 0; t < musicLength; t += beat, step += 1) {
+                createTone(audioContext, master, {
+                    type: 'sawtooth',
+                    frequency: bass[step % bass.length],
+                    start: now + t,
+                    duration: beat * 0.96,
+                    volume: 0.034
+                });
+
+                createTone(audioContext, master, {
+                    type: 'triangle',
+                    frequency: motif[step % motif.length],
+                    start: now + t + 0.06,
+                    duration: beat * 0.72,
+                    volume: 0.018
+                });
+
+                if (step % 2 === 0) {
+                    createTone(audioContext, master, {
+                        type: 'square',
+                        frequency: brass[step % brass.length],
+                        start: now + t + 0.18,
+                        duration: beat * 0.38,
+                        volume: 0.012
+                    });
+                }
+
+                createNoiseBurst(audioContext, master, {
+                    start: now + t,
+                    duration: 0.12,
+                    volume: 0.02,
+                    frequency: 140
+                });
+            }
+
+            createTone(audioContext, master, {
+                type: 'sine',
+                frequency: 41.2,
+                start: now,
+                duration: musicLength,
+                volume: 0.016
+            });
+
+            var cursor = 0;
+            scenes.forEach(function (scene) {
+                var sceneTime = now + cursor / 1000;
+                if (scene.type === 'intro' || scene.type === 'overview') {
+                    createTone(audioContext, master, {
+                        type: 'triangle',
+                        frequency: 164.81,
+                        start: sceneTime + 0.08,
+                        duration: 0.9,
+                        volume: 0.026
+                    });
+                    createNoiseBurst(audioContext, master, {
+                        start: sceneTime + 0.12,
+                        duration: 0.28,
+                        volume: 0.02,
+                        frequency: 1000
+                    });
+                }
+
+                if (scene.type === 'selection') {
+                    createNoiseBurst(audioContext, master, {
+                        start: sceneTime + 0.14,
+                        duration: 0.24,
+                        volume: 0.024,
+                        frequency: 1700
+                    });
+                    createTone(audioContext, master, {
+                        type: 'square',
+                        frequency: 349.23,
+                        start: sceneTime + 0.18,
+                        duration: 0.3,
+                        volume: 0.024
+                    });
+                }
+
+                if (scene.type === 'round') {
+                    createTone(audioContext, master, {
+                        type: 'sawtooth',
+                        frequency: 233.08,
+                        start: sceneTime,
+                        duration: 0.8,
+                        volume: 0.034
+                    });
+                    createNoiseBurst(audioContext, master, {
+                        start: sceneTime + 0.08,
+                        duration: 0.42,
+                        volume: 0.024,
+                        frequency: 880
+                    });
+                }
+
+                if (scene.type === 'match') {
+                    createNoiseBurst(audioContext, master, {
+                        start: sceneTime + 0.22,
+                        duration: 0.32,
+                        volume: 0.028,
+                        frequency: 960
+                    });
+                    createTone(audioContext, master, {
+                        type: 'triangle',
+                        frequency: 523.25,
+                        start: sceneTime + 0.4,
+                        duration: 0.35,
+                        volume: 0.026
+                    });
+                }
+
+                if (scene.type === 'champion') {
+                    createNoiseBurst(audioContext, master, {
+                        start: sceneTime + 0.12,
+                        duration: 0.58,
+                        volume: 0.034,
+                        frequency: 1200
+                    });
+                    createTone(audioContext, master, {
+                        type: 'sawtooth',
+                        frequency: 440,
+                        start: sceneTime + 0.22,
+                        duration: 1.05,
+                        volume: 0.042
+                    });
+                }
+
+                cursor += scene.duration;
+            });
+
+            return {
+                stream: destination.stream,
+                context: audioContext,
+                stop: function () {
+                    if (audioContext && audioContext.state !== 'closed') {
+                        audioContext.close();
+                    }
+                }
+            };
+        }
+
+        function mergeStreams(videoStream, audioStream) {
+            var merged = new MediaStream();
+            videoStream.getVideoTracks().forEach(function (track) {
+                merged.addTrack(track);
+            });
+            if (audioStream) {
+                audioStream.getAudioTracks().forEach(function (track) {
+                    merged.addTrack(track);
+                });
+            }
+            return merged;
+        }
+
+        async function generateTournamentFilm() {
+            if (tourAniRenderPromise) {
+                return tourAniRenderPromise;
+            }
+
+            tourAniRenderPromise = (async function () {
+                var filmMode = 'thriller';
+                var primaryDownloadButton = document.getElementById('tourani-download-film-btn');
+                var status = document.getElementById('tourani-status');
+                var link = document.getElementById('tourani-download-link');
+                var canvas = document.getElementById('tourani-canvas');
+
+                if (!tourAniEnabled || !primaryDownloadButton || !status || !link || !canvas) return;
+                if (!window.MediaRecorder || !canvas.captureStream) {
+                    status.textContent = 'This browser cannot render the downloadable film. Try a Chromium-based desktop browser.';
+                    return;
+                }
+
+                var scenes = buildFilmScenes(filmMode);
+                if (!scenes.length) {
+                    status.textContent = 'No tournament story was recorded yet.';
+                    return;
+                }
+
+                if (tourAniVideoUrl) {
+                    URL.revokeObjectURL(tourAniVideoUrl);
+                    tourAniVideoUrl = null;
+                }
+                syncTourAniUi();
+
+                tourAniLastMode = filmMode;
+                primaryDownloadButton.disabled = true;
+                primaryDownloadButton.textContent = 'Rendering World Cup Replay...';
+                link.style.display = 'none';
+                status.textContent = 'Rendering a cinematic World Cup style replay with music, knockout drama, and a full tournament recap.';
+
+                var ctx = canvas.getContext('2d');
+                var baseStream = canvas.captureStream(TOURANI_RENDER_PROFILE.fps);
+                var chunks = [];
+                var totalDuration = scenes.reduce(function (sum, scene) {
+                    return sum + scene.duration;
+                }, 0);
+                var audioBed = createTourAniAudioBed(scenes, totalDuration, true, filmMode);
+                if (audioBed && audioBed.context && audioBed.context.state === 'suspended') {
+                    try {
+                        await audioBed.context.resume();
+                    } catch (resumeError) {
+                    }
+                }
+                var hasAudioTrack = !!(audioBed && audioBed.stream && audioBed.stream.getAudioTracks().length);
+                var stream = mergeStreams(baseStream, hasAudioTrack ? audioBed.stream : null);
+                var recorderConfig = createFilmRecorder(stream, hasAudioTrack);
+
+                if (!recorderConfig && hasAudioTrack) {
+                    audioBed.stop();
+                    audioBed = null;
+                    hasAudioTrack = false;
+                    stream = mergeStreams(baseStream, null);
+                    recorderConfig = createFilmRecorder(stream, false);
+                    status.textContent = 'Your browser rejected audio recording for this codec. Exporting the replay video without soundtrack so the download still works.';
+                }
+
+                if (!recorderConfig) {
+                    status.textContent = 'No supported recording codec was found for this browser.';
+                    return;
+                }
+
+                var recorder = recorderConfig.recorder;
+                var mimeType = recorderConfig.mimeType || recorder.mimeType || 'video/webm';
+
+                recorder.ondataavailable = function (event) {
+                    if (event.data && event.data.size > 0) chunks.push(event.data);
+                };
+
+                var stopPromise = new Promise(function (resolve, reject) {
+                    recorder.onstop = resolve;
+                    recorder.onerror = function (event) {
+                        reject(event.error || new Error('MediaRecorder failed while building the replay.'));
+                    };
+                });
+
+                recorder.start(200);
+
+                await new Promise(function (resolve) {
+                    var startTime = null;
+
+                    function renderFrame(now) {
+                        if (startTime === null) startTime = now;
+                        var elapsed = now - startTime;
+                        var cursor = 0;
+                        var activeScene = scenes[scenes.length - 1];
+                        var progress = 1;
+
+                        for (var i = 0; i < scenes.length; i += 1) {
+                            if (elapsed < cursor + scenes[i].duration) {
+                                activeScene = scenes[i];
+                                progress = (elapsed - cursor) / scenes[i].duration;
+                                break;
+                            }
+                            cursor += scenes[i].duration;
+                        }
+
+                        renderFilmFrame(ctx, canvas, activeScene, Math.max(0, Math.min(progress, 1)), elapsed);
+
+                        if (elapsed < totalDuration) {
+                            requestAnimationFrame(renderFrame);
+                        } else {
+                            resolve();
+                        }
+                    }
+
+                    requestAnimationFrame(renderFrame);
+                });
+
+                recorder.stop();
+                await stopPromise;
+                if (audioBed) {
+                    audioBed.stop();
+                }
+
+                if (!chunks.length) {
+                    throw new Error('Replay recording produced no video data.');
+                }
+
+                var blob = new Blob(chunks, { type: mimeType });
+                tourAniVideoUrl = URL.createObjectURL(blob);
+                link.href = tourAniVideoUrl;
+                link.download = 'tournament-world-cup-replay.webm';
+                primaryDownloadButton.disabled = false;
+                primaryDownloadButton.textContent = 'Save World Cup Replay';
+                syncTourAniUi();
+                status.textContent = 'The World Cup replay is ready. Click Save World Cup Replay or use the Save Replay File link to download it.';
+            })();
+
+            try {
+                await tourAniRenderPromise;
+            } catch (error) {
+                var primaryDownloadButton = document.getElementById('tourani-download-film-btn');
+                var status = document.getElementById('tourani-status');
+                if (primaryDownloadButton) {
+                    primaryDownloadButton.disabled = false;
+                    primaryDownloadButton.textContent = 'Render World Cup Replay';
+                }
+                if (status) {
+                    status.textContent = error && error.message ? error.message : 'Replay generation failed.';
+                }
+            } finally {
+                tourAniRenderPromise = null;
+            }
+
+            return tourAniVideoUrl;
+        }
+
+        function showCelebration(winner) {
+            winAudio.play().catch(function () {});
+            var overlay = document.getElementById('celebration');
+            var name = document.getElementById('celeb-winner-name');
+            if (!overlay || !name) return;
+
+            name.textContent = winner.text;
+            name.style.color = winner.color;
+            name.style.textShadow = '0 0 20px ' + winner.color;
+            overlay.style.display = 'flex';
+            setTimeout(function () {
+                overlay.style.display = 'none';
+            }, 3500);
+        }
+
+        var autoModeButton = document.getElementById('auto-mode-btn');
+        var tourAniDownloadFilmButton = document.getElementById('tourani-download-film-btn');
+        var tourAniPanelCloseButton = document.getElementById('tourani-panel-close');
+        if (autoModeButton) {
+            autoModeButton.addEventListener('click', function () {
+                setAutoMode(!autoModeEnabled);
+            });
+        }
+        if (tourAniDownloadFilmButton) {
+            tourAniDownloadFilmButton.addEventListener('click', function () {
+                ensureTourAniVideo();
+            });
+        }
+        if (tourAniPanelCloseButton) {
+            tourAniPanelCloseButton.addEventListener('click', closeTourAniPanel);
+        }
+
+        updateAutoModeButton();
+        syncTourAniUi();
+        drawWheel();
+        startContinuousSpin();
     </script>
 </body>
 </html>
