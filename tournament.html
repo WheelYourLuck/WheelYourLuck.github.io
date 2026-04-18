@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tournament Arena - Wheel Your Luck</title>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
     <style>
         :root {
             --neon-blue: #00f2ff;
@@ -72,10 +71,10 @@
             position: relative;
         }
         #wheel-container {
-            width: min(78vw, 320px);
-            height: min(78vw, 320px);
-            min-width: 260px;
-            min-height: 260px;
+            width: min(78vw, 400px);
+            height: min(78vw, 400px);
+            min-width: 300px;
+            min-height: 300px;
             position: relative;
             display: flex;
             align-items: center;
@@ -83,10 +82,14 @@
             filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
             margin: 20px auto;
             cursor: pointer;
+            z-index: 5;
         }
         #wheel {
             width: 100%;
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         #wheel svg {
             width: 100%;
@@ -100,17 +103,35 @@
 
         .match {
             width: 130px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid #333;
-            border-radius: 12px;
+            background: rgba(0,0,0,0.65);
+            border: 1px solid #444;
+            border-radius: 14px;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            position: relative;
+        }
+        .match::before {
+            content: attr(data-round);
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            white-space: nowrap;
+            letter-spacing: 1px;
         }
         .match.active {
             border-color: var(--neon-blue);
             box-shadow: 0 0 25px var(--neon-blue);
             transform: scale(1.1);
+        }
+        .match.active::before {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
         }
         .player-box {
             height: 34px;
@@ -327,11 +348,11 @@
             <!-- Left Wing -->
             <div class="bracket-wing">
                 <div class="round">
-                    <div class="match" id="match-qf-1" style="margin-bottom:15px;"><div class="player-box" id="p-qf-1-1">?</div><div class="player-box" id="p-qf-1-2">?</div></div>
-                    <div class="match" id="match-qf-2"><div class="player-box" id="p-qf-2-1">?</div><div class="player-box" id="p-qf-2-2">?</div></div>
+                    <div class="match" id="match-qf-1" data-round="Quarter Final" style="margin-bottom:25px;"><div class="player-box" id="p-qf-1-1">?</div><div class="player-box" id="p-qf-1-2">?</div></div>
+                    <div class="match" id="match-qf-2" data-round="Quarter Final"><div class="player-box" id="p-qf-2-1">?</div><div class="player-box" id="p-qf-2-2">?</div></div>
                 </div>
                 <div class="round">
-                    <div class="match" id="match-sf-1"><div class="player-box" id="p-sf-1-1">?</div><div class="player-box" id="p-sf-1-2">?</div></div>
+                    <div class="match" id="match-sf-1" data-round="Semi Final"><div class="player-box" id="p-sf-1-1">?</div><div class="player-box" id="p-sf-1-2">?</div></div>
                 </div>
             </div>
 
@@ -351,7 +372,7 @@
                     <div id="final-title-container" style="display:none; margin-bottom:10px;">
                         <span style="color:var(--neon-gold); font-weight:900; letter-spacing:3px; text-shadow:0 0 10px var(--neon-gold);">THE GRAND FINAL</span>
                     </div>
-                    <div class="match final-match" id="match-f-1">
+                    <div class="match final-match" id="match-f-1" data-round="Grand Final">
                         <div class="player-box" id="p-f-1-1">?</div>
                         <div class="player-box" id="p-f-1-2">?</div>
                     </div>
@@ -373,11 +394,11 @@
             <!-- Right Wing -->
             <div class="bracket-wing" style="flex-direction: row-reverse;">
                 <div class="round">
-                    <div class="match" id="match-qf-3" style="margin-bottom:15px;"><div class="player-box" id="p-qf-3-1">?</div><div class="player-box" id="p-qf-3-2">?</div></div>
-                    <div class="match" id="match-qf-4"><div class="player-box" id="p-qf-4-1">?</div><div class="player-box" id="p-qf-4-2">?</div></div>
+                    <div class="match" id="match-qf-3" data-round="Quarter Final" style="margin-bottom:25px;"><div class="player-box" id="p-qf-3-1">?</div><div class="player-box" id="p-qf-3-2">?</div></div>
+                    <div class="match" id="match-qf-4" data-round="Quarter Final"><div class="player-box" id="p-qf-4-1">?</div><div class="player-box" id="p-qf-4-2">?</div></div>
                 </div>
                 <div class="round">
-                    <div class="match" id="match-sf-2"><div class="player-box" id="p-sf-2-1">?</div><div class="player-box" id="p-sf-2-2">?</div></div>
+                    <div class="match" id="match-sf-2" data-round="Semi Final"><div class="player-box" id="p-sf-2-1">?</div><div class="player-box" id="p-sf-2-2">?</div></div>
                 </div>
             </div>
         </div>
@@ -392,7 +413,26 @@
     </div>
     <canvas id="tourani-canvas" width="1280" height="720"></canvas>
  <script>
-        let pool = JSON.parse(localStorage.getItem('tournamentPool') || '[]');
+        function getStoredJson(key, fallbackValue) {
+            try {
+                var raw = localStorage.getItem(key);
+                if (!raw) return fallbackValue;
+                return JSON.parse(raw);
+            } catch (error) {
+                return fallbackValue;
+            }
+        }
+
+        function getStoredValue(key, fallbackValue) {
+            try {
+                var raw = localStorage.getItem(key);
+                return raw === null ? fallbackValue : raw;
+            } catch (error) {
+                return fallbackValue;
+            }
+        }
+
+        let pool = getStoredJson('tournamentPool', []);
         let selectedPlayers = [];
         let availablePool = [];
         let currentPhase = 'selection'; // 'selection' or 'matches'
@@ -403,7 +443,7 @@
         let idleRafId = null;
         let autoModeEnabled = false;
         let autoModeTimeoutId = null;
-        const tourAniEnabled = localStorage.getItem('tourAniEnabled') === 'true';
+        const tourAniEnabled = getStoredValue('tourAniEnabled', 'false') === 'true';
         const TOURANI_RENDER_PROFILE = {
             fps: 18,
             videoBitsPerSecond: 2200000
@@ -453,7 +493,80 @@
 
         // Initialize Wheel
         let container;
+        let wheelSpinAnimationId = null;
         let activeSlices = pool;
+
+        function createSvgElement(tagName) {
+            return document.createElementNS('http://www.w3.org/2000/svg', tagName);
+        }
+
+        function polarToCartesian(cx, cy, radius, angleInDegrees) {
+            var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+            return {
+                x: cx + (radius * Math.cos(angleInRadians)),
+                y: cy + (radius * Math.sin(angleInRadians))
+            };
+        }
+
+        function describeArcSlice(cx, cy, outerRadius, innerRadius, startAngle, endAngle) {
+            var outerStart = polarToCartesian(cx, cy, outerRadius, endAngle);
+            var outerEnd = polarToCartesian(cx, cy, outerRadius, startAngle);
+            var innerStart = polarToCartesian(cx, cy, innerRadius, startAngle);
+            var innerEnd = polarToCartesian(cx, cy, innerRadius, endAngle);
+            var largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+
+            return [
+                'M', outerStart.x, outerStart.y,
+                'A', outerRadius, outerRadius, 0, largeArcFlag, 0, outerEnd.x, outerEnd.y,
+                'L', innerStart.x, innerStart.y,
+                'A', innerRadius, innerRadius, 0, largeArcFlag, 1, innerEnd.x, innerEnd.y,
+                'Z'
+            ].join(' ');
+        }
+
+        function setWheelRotation(angle) {
+            if (!container) return;
+            container.setAttribute('transform', 'rotate(' + angle + ' 200 200)');
+        }
+
+        function easeOutCubic(value) {
+            return 1 - Math.pow(1 - value, 3);
+        }
+
+        function animateWheelRotation(fromAngle, toAngle, duration, tickStep, onComplete) {
+            if (wheelSpinAnimationId) {
+                cancelAnimationFrame(wheelSpinAnimationId);
+                wheelSpinAnimationId = null;
+            }
+
+            var startTime = null;
+            var lastTick = -1;
+
+            function frame(timestamp) {
+                if (startTime === null) startTime = timestamp;
+                var elapsed = timestamp - startTime;
+                var progress = Math.min(elapsed / duration, 1);
+                var eased = easeOutCubic(progress);
+                var currentRotation = fromAngle + ((toAngle - fromAngle) * eased);
+                setWheelRotation(currentRotation);
+
+                var tickIndex = Math.floor(currentRotation / tickStep);
+                if (tickIndex !== lastTick) {
+                    playTick();
+                    lastTick = tickIndex;
+                }
+
+                if (progress < 1) {
+                    wheelSpinAnimationId = requestAnimationFrame(frame);
+                    return;
+                }
+
+                wheelSpinAnimationId = null;
+                if (onComplete) onComplete();
+            }
+
+            wheelSpinAnimationId = requestAnimationFrame(frame);
+        }
 
         function getRenderableSlices() {
             if (activeSlices && activeSlices.length) {
@@ -468,62 +581,66 @@
         }
 
         function drawWheel() {
-            var wheelDiv = d3.select('#wheel');
+            var wheelDiv = document.getElementById('wheel');
             var slices = getRenderableSlices();
 
-            wheelDiv.selectAll('*').remove();
+            wheelDiv.innerHTML = '';
 
-            var svg = wheelDiv.append('svg')
-                .attr('width', '100%')
-                .attr('height', '100%')
-                .attr('viewBox', '0 0 400 400');
+            var svg = createSvgElement('svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', '0 0 400 400');
 
-            var rootGroup = svg.append('g')
-                .attr('transform', 'translate(200,200)');
+            container = createSvgElement('g');
+            container.setAttribute('class', 'container-group');
 
-            container = rootGroup.append('g').attr('class', 'container-group');
+            var sliceAngle = 360 / slices.length;
+            for (var index = 0; index < slices.length; index += 1) {
+                var slice = slices[index];
+                var startAngle = index * sliceAngle;
+                var endAngle = startAngle + sliceAngle;
+                var path = createSvgElement('path');
+                path.setAttribute('d', describeArcSlice(200, 200, 160, 34, startAngle, endAngle));
+                path.setAttribute('fill', slice.color || '#00f2ff');
+                path.setAttribute('stroke', 'rgba(255,255,255,0.35)');
+                path.setAttribute('stroke-width', '2');
+                container.appendChild(path);
 
-            var pie = d3.layout.pie().value(function () { return 1; }).sort(null);
-            var arc = d3.svg.arc().outerRadius(160).innerRadius(34);
-            var labelArc = d3.svg.arc().outerRadius(128).innerRadius(128);
+                var midAngle = startAngle + (sliceAngle / 2);
+                var labelPoint = polarToCartesian(200, 200, 120, midAngle);
+                var text = createSvgElement('text');
+                text.setAttribute('x', labelPoint.x);
+                text.setAttribute('y', labelPoint.y);
+                text.setAttribute('fill', '#ffffff');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'middle');
+                text.setAttribute('font-size', slices.length > 8 ? '10' : '12');
+                text.setAttribute('font-weight', '800');
+                text.setAttribute('transform', 'rotate(' + midAngle + ' ' + labelPoint.x + ' ' + labelPoint.y + ')');
+                text.textContent = slice.text;
+                container.appendChild(text);
+            }
 
-            var arcs = container.selectAll('g.slice')
-                .data(pie(slices))
-                .enter()
-                .append('g')
-                .attr('class', 'slice');
+            svg.appendChild(container);
 
-            arcs.append('path')
-                .attr('d', arc)
-                .attr('fill', function (d) { return d.data.color || '#00f2ff'; })
-                .attr('stroke', 'rgba(255,255,255,0.35)')
-                .attr('stroke-width', 2);
+            var centerOuter = createSvgElement('circle');
+            centerOuter.setAttribute('cx', '200');
+            centerOuter.setAttribute('cy', '200');
+            centerOuter.setAttribute('r', '36');
+            centerOuter.setAttribute('fill', '#07131b');
+            centerOuter.setAttribute('stroke', '#00f2ff');
+            centerOuter.setAttribute('stroke-width', '4');
+            svg.appendChild(centerOuter);
 
-            arcs.append('text')
-                .attr('transform', function (d) {
-                    var c = labelArc.centroid(d);
-                    var angle = ((d.startAngle + d.endAngle) / 2) * 180 / Math.PI - 90;
-                    return 'translate(' + c[0] + ',' + c[1] + ') rotate(' + angle + ')';
-                })
-                .attr('text-anchor', 'middle')
-                .attr('dy', '0.35em')
-                .attr('fill', '#ffffff')
-                .style('font-size', slices.length > 8 ? '10px' : '12px')
-                .style('font-weight', '800')
-                .style('text-shadow', '0 0 6px rgba(0,0,0,0.9)')
-                .text(function (d) { return d.data.text; });
+            var centerInner = createSvgElement('circle');
+            centerInner.setAttribute('cx', '200');
+            centerInner.setAttribute('cy', '200');
+            centerInner.setAttribute('r', '10');
+            centerInner.setAttribute('fill', '#ffffff');
+            svg.appendChild(centerInner);
 
-            rootGroup.append('circle')
-                .attr('r', 36)
-                .attr('fill', '#07131b')
-                .attr('stroke', '#00f2ff')
-                .attr('stroke-width', 4);
-
-            rootGroup.append('circle')
-                .attr('r', 10)
-                .attr('fill', '#ffffff');
-
-            container.attr('transform', 'rotate(' + idleRotation + ')');
+            wheelDiv.appendChild(svg);
+            setWheelRotation(idleRotation);
         }
 
         function startContinuousSpin() {
@@ -531,7 +648,7 @@
             function step() {
                 if (!isSpinning && container) {
                     idleRotation = (idleRotation + 0.8) % 360;
-                    container.attr('transform', 'rotate(' + idleRotation + ')');
+                    setWheelRotation(idleRotation);
                 }
                 idleRafId = requestAnimationFrame(step);
             }
@@ -610,21 +727,7 @@
             var sliceAngle = 360 / availablePool.length;
             var finalAngle = idleRotation + 360 * 5 + (360 - (stopIndex * sliceAngle) - (sliceAngle / 2));
 
-            container.transition().duration(3600).ease('cubic-out')
-                .attrTween('transform', function () {
-                    var interpolate = d3.interpolate(idleRotation, finalAngle);
-                    var lastTick = -1;
-                    return function (t) {
-                        var currentRotation = interpolate(t);
-                        var tickIndex = Math.floor(currentRotation / Math.max(8, sliceAngle));
-                        if (tickIndex !== lastTick) {
-                            playTick();
-                            lastTick = tickIndex;
-                        }
-                        return 'rotate(' + currentRotation + ')';
-                    };
-                })
-                .each('end', function () {
+            animateWheelRotation(idleRotation, finalAngle, 3600, Math.max(8, sliceAngle), function () {
                     isSpinning = false;
                     idleRotation = finalAngle % 360;
 
@@ -721,21 +824,7 @@
             var sliceAngle = 180;
             var finalAngle = idleRotation + 360 * 6 + (360 - (stopIndex * sliceAngle) - (sliceAngle / 2));
 
-            container.transition().duration(3800).ease('cubic-out')
-                .attrTween('transform', function () {
-                    var interpolate = d3.interpolate(idleRotation, finalAngle);
-                    var lastTick = -1;
-                    return function (t) {
-                        var currentRotation = interpolate(t);
-                        var tickIndex = Math.floor(currentRotation / 20);
-                        if (tickIndex !== lastTick) {
-                            playTick();
-                            lastTick = tickIndex;
-                        }
-                        return 'rotate(' + currentRotation + ')';
-                    };
-                })
-                .each('end', function () {
+            animateWheelRotation(idleRotation, finalAngle, 3800, 20, function () {
                     isSpinning = false;
                     idleRotation = finalAngle % 360;
 
@@ -766,7 +855,7 @@
         }
 
         function saveTrophy(name, color) {
-            var trophies = JSON.parse(localStorage.getItem('tournamentTrophies') || '[]');
+            var trophies = getStoredJson('tournamentTrophies', []);
             trophies.push({ name: name, color: color, date: new Date().toLocaleDateString() });
             localStorage.setItem('tournamentTrophies', JSON.stringify(trophies));
         }
@@ -782,7 +871,7 @@
 
             hall.style.display = 'flex';
             var list = document.getElementById('trophy-list');
-            var trophies = JSON.parse(localStorage.getItem('tournamentTrophies') || '[]');
+            var trophies = getStoredJson('tournamentTrophies', []);
             list.innerHTML = trophies.length ? '' : '<div style="padding:16px; text-align:center; color:#ddd;">No champions yet.</div>';
 
             trophies.slice().reverse().forEach(function (entry) {
@@ -1004,6 +1093,24 @@
             return parts[parts.length - 1];
         }
 
+        function getPromotionLine(matchId, winnerName) {
+            if (!winnerName) return '';
+            if (matchId.indexOf('match-qf-') === 0) return winnerName + ' glides into the semi final spotlight.';
+            if (matchId.indexOf('match-sf-') === 0) return winnerName + ' earns a beautiful walkout to the grand final.';
+            return winnerName + ' rises above the bracket and takes the crown.';
+        }
+
+        function drawFittedCenterText(ctx, text, x, y, maxWidth, fontWeight, initialSize, fontFamily) {
+            var size = initialSize;
+            var family = fontFamily || 'Segoe UI';
+            while (size > 18) {
+                ctx.font = fontWeight + ' ' + size + 'px ' + family;
+                if (ctx.measureText(text).width <= maxWidth) break;
+                size -= 2;
+            }
+            ctx.fillText(text, x, y);
+        }
+
         function buildFilmScenes(mode) {
             var filmMode = mode || 'thriller';
             var scenes = [];
@@ -1013,7 +1120,7 @@
 
             scenes.push({
                 type: 'intro',
-                duration: 1800,
+                duration: 2500,
                 title: 'WORLD CUP NIGHT',
                 subtitle: 'Floodlights blaze, the crowd rises, and eight contenders step into a knockout tournament built on pure nerve.',
                 snapshot: cloneSnapshot(snapshot)
@@ -1021,7 +1128,7 @@
 
             scenes.push({
                 type: 'overview',
-                duration: 1700,
+                duration: 2200,
                 title: 'THE CUP STORY BEGINS',
                 subtitle: 'The wheel becomes the draw machine, the bracket becomes the stadium, and every name is chasing the same trophy.',
                 snapshot: cloneSnapshot(snapshot)
@@ -1040,7 +1147,7 @@
                     });
                     scenes.push({
                         type: 'selection',
-                        duration: filmMode === 'thriller' ? 1050 : 900,
+                        duration: filmMode === 'thriller' ? 1800 : 1500,
                         title: 'DRAW REVEAL ' + (Math.floor(selectionIndex / selectionBatchSize) + 1),
                         subtitle: selectionNames.join(' and ') + ' are pulled into the bracket as the stadium reacts to the latest draw drama.',
                         snapshot: cloneSnapshot(snapshot),
@@ -1057,7 +1164,7 @@
                 if (roundLabel !== lastRoundLabel) {
                     scenes.push({
                         type: 'round',
-                        duration: roundLabel === 'Grand Final' ? 1800 : 1450,
+                        duration: roundLabel === 'Grand Final' ? 2500 : 2000,
                         title: roundLabel.toUpperCase(),
                         subtitle: getRoundStageText(entry.matchId),
                         snapshot: cloneSnapshot(snapshot),
@@ -1070,25 +1177,28 @@
                 snapshot[entry.winnerBoxId] = copyStoryPlayer(entry.winner);
                 scenes.push({
                     type: 'match',
-                    duration: roundLabel === 'Grand Final' ? 2400 : (roundLabel === 'Semi Final' ? 1800 : 1550),
-                    title: roundLabel.toUpperCase() + ' SHOWDOWN ' + getMatchNumber(entry.matchId),
-                    subtitle: entry.p1.text + ' and ' + entry.p2.text + ' collide under full pressure. The wheel turns, the crowd swells, and ' + entry.winner.text + ' punches through.',
+                    duration: roundLabel === 'Grand Final' ? 3500 : (roundLabel === 'Semi Final' ? 2800 : 2400),
+                    title: entry.p1.text + ' VS ' + entry.p2.text,
+                    subtitle: getPromotionLine(entry.matchId, entry.winner.text),
                     snapshot: cloneSnapshot(snapshot),
                     wheelSlices: [copyStoryPlayer(entry.p1), copyStoryPlayer(entry.p2)],
                     focusPlayer: copyStoryPlayer(entry.winner),
                     activeMatchId: entry.matchId,
-                    winnerBoxId: entry.winnerBoxId
+                    winnerBoxId: entry.winnerBoxId,
+                    promotionColor: entry.winner.color || '#ffd700'
                 });
             });
 
             if (tournamentStory.champion) {
                 scenes.push({
                     type: 'champion',
-                    duration: 2800,
-                    title: 'CHAMPION CROWNED',
-                    subtitle: tournamentStory.champion.text + ' survives the entire cup run, wins the final under the lights, and lifts the tournament crown like a world champion.',
+                    duration: 4600,
+                    title: tournamentStory.champion.text,
+                    subtitle: 'Champion of the night',
+                    honorLine: 'All honour to the champion',
                     snapshot: cloneSnapshot(snapshot),
-                    focusPlayer: copyStoryPlayer(tournamentStory.champion)
+                    focusPlayer: copyStoryPlayer(tournamentStory.champion),
+                    promotionColor: tournamentStory.champion.color || '#ffd700'
                 });
             }
 
@@ -1114,7 +1224,7 @@
                     'p-f-1-2': { x: 555, y: 512, w: 170, h: 36 },
                     'tournament-winner': { x: 502, y: 590, w: 276, h: 52 }
                 },
-                wheel: { x: 640, y: 250, r: 118 }
+                wheel: { x: 640, y: 335, r: 160 } // Centered wheel with a larger, visible radius
             };
         }
 
@@ -1242,15 +1352,25 @@
                 var box = layout.boxes[key];
                 var player = snapshot[key] || { text: '?', color: '#3b4a54' };
                 var isActive = highlighted.indexOf(key) !== -1 || key === activeMatchId;
+                
+                // DIM THE BACKGROUND OF NON-ACTIVE PLAYERS
+                ctx.save();
+                if (!isActive && activeMatchId) {
+                    ctx.globalAlpha = 0.3; // Make background bracket very subtle during matches
+                }
                 drawPlayerCard(ctx, box, player, isActive, key === 'tournament-winner');
+                ctx.restore();
             });
 
+            ctx.save();
+            ctx.globalAlpha = activeMatchId ? 0.2 : 0.6; // Hide texts during matches
             ctx.fillStyle = 'rgba(255,255,255,0.58)';
             ctx.font = '700 15px Segoe UI';
             ctx.textAlign = 'center';
             ctx.fillText('LEFT BRACKET', 220, 92);
             ctx.fillText('RIGHT BRACKET', 1060, 92);
             ctx.fillText('THE FINAL', 640, 440);
+            ctx.restore();
         }
 
         function drawReplayWheel(ctx, scene, progress, elapsed) {
@@ -1263,7 +1383,10 @@
                 { text: 'WIN', color: '#9b5cff' }
             ];
             var angleStep = (Math.PI * 2) / slices.length;
-            var baseRotation = elapsed * 0.0007 + progress * Math.PI * (scene.type === 'match' ? 1.35 : 0.45);
+            
+            // INCREASED SPIN SPEED FOR HIGHER VISIBILITY IN REPLAY
+            var spinMultiplier = scene.type === 'match' ? 1.8 : 0.6;
+            var baseRotation = elapsed * 0.0007 + progress * Math.PI * spinMultiplier;
 
             ctx.save();
             ctx.translate(wheel.x, wheel.y);
@@ -1277,42 +1400,163 @@
                 ctx.arc(0, 0, wheel.r, start, end);
                 ctx.closePath();
                 ctx.fillStyle = slices[i].color;
-                ctx.globalAlpha = 0.94;
+                ctx.globalAlpha = 0.98; // High visibility
                 ctx.fill();
                 ctx.globalAlpha = 1;
-                ctx.strokeStyle = 'rgba(255,255,255,0.28)';
-                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 3;
                 ctx.stroke();
 
                 ctx.save();
                 ctx.rotate(start + angleStep / 2);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = '800 15px Segoe UI';
+                ctx.font = '800 18px Segoe UI'; // Increased font size for player names inside wheel
+                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                ctx.shadowBlur = 6;
                 ctx.textAlign = 'center';
-                ctx.fillText(slices[i].text, wheel.r * 0.63, 5);
+                ctx.fillText(slices[i].text.toUpperCase(), wheel.r * 0.65, 6);
                 ctx.restore();
             }
 
             ctx.restore();
 
+            // Wheel center and pointer
             ctx.beginPath();
-            ctx.arc(wheel.x, wheel.y, 30, 0, Math.PI * 2);
-            ctx.fillStyle = '#07131b';
+            ctx.arc(wheel.x, wheel.y, 35, 0, Math.PI * 2);
+            ctx.fillStyle = '#111';
             ctx.fill();
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 5;
             ctx.strokeStyle = '#00f2ff';
             ctx.stroke();
 
+            // Arrow on top
             ctx.beginPath();
-            ctx.moveTo(wheel.x + wheel.r + 14, wheel.y);
-            ctx.lineTo(wheel.x + wheel.r + 52, wheel.y - 20);
-            ctx.lineTo(wheel.x + wheel.r + 52, wheel.y + 20);
+            ctx.moveTo(wheel.x + wheel.r + 10, wheel.y);
+            ctx.lineTo(wheel.x + wheel.r + 60, wheel.y - 25);
+            ctx.lineTo(wheel.x + wheel.r + 60, wheel.y + 25);
             ctx.closePath();
             ctx.fillStyle = '#ff00ff';
             ctx.shadowColor = '#ff00ff';
-            ctx.shadowBlur = 18;
+            ctx.shadowBlur = 20;
             ctx.fill();
             ctx.shadowBlur = 0;
+        }
+
+        function drawChampionSpotlight(ctx, canvas, scene, progress, elapsed) {
+            var champion = scene.focusPlayer || { text: 'Champion', color: '#ffd700' };
+            var championColor = champion.color || '#ffd700';
+            var cx = canvas.width / 2;
+            var cy = canvas.height * 0.48;
+            var pulse = 0.92 + Math.sin(elapsed * 0.006) * 0.08;
+
+            ctx.save();
+            ctx.globalAlpha = 0.22;
+            drawReplayBracket(ctx, scene.snapshot, null, elapsed);
+            ctx.restore();
+
+            var backGlow = ctx.createRadialGradient(cx, cy - 20, 30, cx, cy, 320);
+            backGlow.addColorStop(0, 'rgba(255,215,0,0.32)');
+            backGlow.addColorStop(0.45, 'rgba(255,255,255,0.08)');
+            backGlow.addColorStop(1, 'rgba(255,215,0,0)');
+            ctx.fillStyle = backGlow;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 320, 0, Math.PI * 2);
+            ctx.fill();
+
+            for (var beamIndex = 0; beamIndex < 5; beamIndex += 1) {
+                var beamAngle = -0.6 + beamIndex * 0.3 + Math.sin(elapsed * 0.0007 + beamIndex) * 0.08;
+                ctx.save();
+                ctx.translate(cx, cy + 220);
+                ctx.rotate(beamAngle);
+                var beamGradient = ctx.createLinearGradient(0, 0, 0, -420);
+                beamGradient.addColorStop(0, 'rgba(255,215,0,0)');
+                beamGradient.addColorStop(0.4, 'rgba(255,255,255,0.08)');
+                beamGradient.addColorStop(1, 'rgba(255,215,0,0.24)');
+                ctx.fillStyle = beamGradient;
+                ctx.beginPath();
+                ctx.moveTo(-34, 0);
+                ctx.lineTo(34, 0);
+                ctx.lineTo(10, -420);
+                ctx.lineTo(-10, -420);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            for (var confettiIndex = 0; confettiIndex < 42; confettiIndex += 1) {
+                var travel = (elapsed * 0.08 + confettiIndex * 37) % (canvas.height + 180);
+                var x = (confettiIndex * 71 + Math.sin(elapsed * 0.001 + confettiIndex) * 40) % canvas.width;
+                var y = travel - 120;
+                var size = 8 + (confettiIndex % 4) * 3;
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate((elapsed * 0.004 + confettiIndex) % (Math.PI * 2));
+                ctx.fillStyle = confettiIndex % 3 === 0 ? championColor : (confettiIndex % 2 === 0 ? '#ffffff' : '#ffd700');
+                ctx.globalAlpha = 0.78;
+                ctx.fillRect(-size / 2, -size / 2, size, size * 0.45);
+                ctx.restore();
+            }
+
+            ctx.save();
+            ctx.translate(cx, cy + 34);
+            ctx.scale(1.05 + (pulse - 0.92) * 0.18, 1.05 + (pulse - 0.92) * 0.18);
+            ctx.fillStyle = 'rgba(255,215,0,0.95)';
+            ctx.shadowColor = 'rgba(255,215,0,0.4)';
+            ctx.shadowBlur = 30;
+            ctx.beginPath();
+            ctx.moveTo(-54, -64);
+            ctx.lineTo(-28, -20);
+            ctx.lineTo(-8, -56);
+            ctx.lineTo(0, -18);
+            ctx.lineTo(8, -56);
+            ctx.lineTo(28, -20);
+            ctx.lineTo(54, -64);
+            ctx.lineTo(42, -4);
+            ctx.lineTo(24, 8);
+            ctx.lineTo(24, 30);
+            ctx.lineTo(-24, 30);
+            ctx.lineTo(-24, 8);
+            ctx.lineTo(-42, -4);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            var plaqueWidth = 740;
+            var plaqueHeight = 250;
+            var plaqueX = cx - plaqueWidth / 2;
+            var plaqueY = cy + 70;
+            var plaqueGradient = ctx.createLinearGradient(plaqueX, plaqueY, plaqueX + plaqueWidth, plaqueY + plaqueHeight);
+            plaqueGradient.addColorStop(0, 'rgba(10, 14, 30, 0.84)');
+            plaqueGradient.addColorStop(0.55, 'rgba(28, 18, 10, 0.92)');
+            plaqueGradient.addColorStop(1, 'rgba(6, 9, 18, 0.88)');
+            ctx.fillStyle = plaqueGradient;
+            ctx.strokeStyle = 'rgba(255,215,0,0.68)';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = championColor;
+            ctx.shadowBlur = 34;
+            drawRoundedRectPath(ctx, plaqueX, plaqueY, plaqueWidth, plaqueHeight, 30);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#ffe7a8';
+            ctx.font = '800 24px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText((scene.honorLine || 'ALL HONOUR TO THE CHAMPION').toUpperCase(), cx, plaqueY + 52);
+
+            ctx.fillStyle = championColor;
+            ctx.shadowColor = championColor;
+            ctx.shadowBlur = 24;
+            drawFittedCenterText(ctx, champion.text.toUpperCase(), cx, plaqueY + 130, plaqueWidth - 80, '900', 68, 'Segoe UI');
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '700 24px Segoe UI';
+            ctx.fillText((scene.subtitle || 'Champion of the night').toUpperCase(), cx, plaqueY + 180);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.font = '700 18px Segoe UI';
+            ctx.fillText('CROWNED WITH PRIDE, GLORY, AND THE FULL RESPECT OF THE BRACKET', cx, plaqueY + 218);
         }
 
         function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1359,22 +1603,16 @@
             var matchId = scene.activeMatchId;
             if (!matchId) return;
 
-            var roundLabel, matchDesc, accentColor, bgColor;
+            var roundLabel, accentColor;
             if (matchId.indexOf('match-qf-') === 0) {
                 roundLabel = 'QUARTER FINAL';
-                matchDesc = 'KNOCKOUT ROUND  •  THE PRESSURE BUILDS  •  ONE LOSS AND YOU ARE OUT';
                 accentColor = '#00f2ff';
-                bgColor = 'rgba(0, 180, 255, 0.10)';
             } else if (matchId.indexOf('match-sf-') === 0) {
                 roundLabel = 'SEMI FINAL';
-                matchDesc = 'ONE WIN FROM THE FINAL  •  THE HEAT IS MAXIMUM  •  NERVES OF STEEL REQUIRED';
                 accentColor = '#bc13fe';
-                bgColor = 'rgba(188, 19, 254, 0.10)';
             } else {
                 roundLabel = 'GRAND FINAL';
-                matchDesc = 'THE ULTIMATE SHOWDOWN  •  ONE DECISIVE SPIN  •  THE LAST NAME STANDING TAKES ALL';
                 accentColor = '#ffd700';
-                bgColor = 'rgba(255, 215, 0, 0.10)';
             }
 
             var p1 = (scene.wheelSlices && scene.wheelSlices[0]) ? scene.wheelSlices[0].text : '';
@@ -1383,157 +1621,125 @@
             var p2Color = (scene.wheelSlices && scene.wheelSlices[1]) ? (scene.wheelSlices[1].color || '#ff00ff') : '#ff00ff';
 
             var cx = canvas.width / 2;
-            var baseY = 377;
-            var panelH = 82;
-            var barW = 920;
-            var barX = cx - barW / 2;
-            var glowPulse = 0.6 + Math.sin(elapsed * 0.004) * 0.4;
+            var layout = getFilmLayout();
+            var wheel = layout.wheel;
 
-            // Background strip
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(barX, baseY, barW, panelH);
-
-            // Shared gradient for separator lines
-            var lineGrad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
-            lineGrad.addColorStop(0, 'rgba(255,255,255,0)');
-            lineGrad.addColorStop(0.18, accentColor);
-            lineGrad.addColorStop(0.5, '#ffffff');
-            lineGrad.addColorStop(0.82, accentColor);
-            lineGrad.addColorStop(1, 'rgba(255,255,255,0)');
-
-            // Top separator line
             ctx.save();
-            ctx.strokeStyle = lineGrad;
-            ctx.lineWidth = 2.5;
-            ctx.shadowColor = accentColor;
-            ctx.shadowBlur = 28 * glowPulse;
-            ctx.beginPath(); ctx.moveTo(barX, baseY); ctx.lineTo(barX + barW, baseY); ctx.stroke();
-            ctx.shadowBlur = 0;
-            ctx.restore();
 
-            // Bottom separator line
-            ctx.save();
-            ctx.strokeStyle = lineGrad;
-            ctx.lineWidth = 2.5;
-            ctx.shadowColor = accentColor;
-            ctx.shadowBlur = 28 * glowPulse;
-            ctx.beginPath(); ctx.moveTo(barX, baseY + panelH); ctx.lineTo(barX + barW, baseY + panelH); ctx.stroke();
-            ctx.shadowBlur = 0;
-            ctx.restore();
-
-            // Round label — large, bold, glowing
-            ctx.save();
+            // 1. TOP ROUND LABEL (Pushed higher to clear the wheel)
             ctx.textAlign = 'center';
             ctx.shadowColor = accentColor;
-            ctx.shadowBlur = 40 * pulse;
-            ctx.fillStyle = accentColor;
-            ctx.font = '900 34px Segoe UI';
-            ctx.fillText('\u25c6  ' + roundLabel + '  \u25c6', cx, baseY + 32);
-            ctx.shadowBlur = 0;
-            ctx.restore();
-
-            // VS matchup row
+            ctx.shadowBlur = 30 * pulse;
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 60px Segoe UI'; 
+            ctx.fillText(roundLabel, cx, 100);
+            
+            // 2. THE MATCHUP (Pushed to the very bottom to clear the wheel)
             if (p1 && p2) {
-                var vsY = baseY + 58;
+                var vsY = canvas.height - 110;
 
-                ctx.save();
+                // Background Glow for names at the bottom
+                var grd = ctx.createLinearGradient(0, vsY - 60, 0, vsY + 60);
+                grd.addColorStop(0, 'rgba(0,0,0,0)');
+                grd.addColorStop(0.5, 'rgba(0,0,0,0.8)');
+                grd.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = grd;
+                ctx.fillRect(0, vsY - 60, canvas.width, 120);
+
+                // Player 1
                 ctx.shadowColor = p1Color;
-                ctx.shadowBlur = 20 * glowPulse;
+                ctx.shadowBlur = 20;
                 ctx.fillStyle = p1Color;
-                ctx.font = '800 20px Segoe UI';
+                ctx.font = '900 54px Segoe UI';
                 ctx.textAlign = 'right';
-                ctx.fillText(p1, cx - 44, vsY);
-                ctx.restore();
+                ctx.fillText(p1.toUpperCase(), cx - 80, vsY + 20);
 
-                ctx.save();
-                ctx.shadowColor = accentColor;
-                ctx.shadowBlur = 14;
+                // VS
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = 10;
                 ctx.fillStyle = '#ffffff';
-                ctx.font = '900 16px Segoe UI';
+                ctx.font = '900 32px Segoe UI';
                 ctx.textAlign = 'center';
-                ctx.fillText('\u26a1 VS \u26a1', cx, vsY);
-                ctx.restore();
+                ctx.fillText('VS', cx, vsY + 15);
 
-                ctx.save();
+                // Player 2
                 ctx.shadowColor = p2Color;
-                ctx.shadowBlur = 20 * glowPulse;
+                ctx.shadowBlur = 20;
                 ctx.fillStyle = p2Color;
-                ctx.font = '800 20px Segoe UI';
+                ctx.font = '900 54px Segoe UI';
                 ctx.textAlign = 'left';
-                ctx.fillText(p2, cx + 44, vsY);
-                ctx.restore();
+                ctx.fillText(p2.toUpperCase(), cx + 80, vsY + 20);
             }
 
-            // Descriptor tagline — small, subtle
-            ctx.save();
-            ctx.fillStyle = 'rgba(255,255,255,0.52)';
-            ctx.font = '600 12px Segoe UI';
-            ctx.textAlign = 'center';
-            ctx.fillText(matchDesc, cx, baseY + 74);
             ctx.restore();
         }
 
         function renderFilmFrame(ctx, canvas, scene, progress, elapsed) {
             var pulse = 0.92 + Math.sin(elapsed * 0.005) * 0.08;
+            
+            // Cinematic Fading: 
+            // Progress goes from 0 to 1 throughout the scene duration.
+            // We want globalAlpha to be 0 at progress=0, 1 at progress=0.15, 1 at progress=0.85, 0 at progress=1.
+            var edgeFade = 0.15;
+            var alpha = 1.0;
+            if (progress < edgeFade) {
+                alpha = progress / edgeFade;
+            } else if (progress > (1.0 - edgeFade)) {
+                alpha = (1.0 - progress) / edgeFade;
+            }
+            
+            ctx.globalAlpha = alpha;
             drawBackdrop(ctx, canvas, elapsed);
-            drawReplayBracket(ctx, scene.snapshot, scene.activeMatchId, elapsed);
-            drawReplayWheel(ctx, scene, progress, elapsed);
-            drawStageAnnouncement(ctx, canvas, scene, elapsed, pulse);
-            drawFilmChrome(ctx, canvas);
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-            ctx.fillRect(76, 92, 1128, 556);
-            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(76, 92, 1128, 556);
-
-            ctx.fillStyle = 'rgba(255,215,0,0.16)';
-            drawRoundedRectPath(ctx, 88, 46, 218, 44, 22);
-            ctx.fill();
-            ctx.fillStyle = 'rgba(255,255,255,0.95)';
-            ctx.font = '800 18px Segoe UI';
-            ctx.textAlign = 'center';
-            ctx.fillText('TOURANI WORLD CUP CUT', 197, 74);
-
-            ctx.fillStyle = 'rgba(255,255,255,0.92)';
-            ctx.font = '900 46px Segoe UI';
-            ctx.textAlign = 'center';
-            ctx.fillText(scene.title, canvas.width / 2, 64);
-
-            ctx.fillStyle = 'rgba(5, 8, 14, 0.78)';
-            drawRoundedRectPath(ctx, 154, 92, 972, 112, 22);
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            ctx.fillStyle = 'rgba(255,255,255,0.82)';
-            ctx.font = '500 24px Segoe UI';
-            drawWrappedText(ctx, scene.subtitle, canvas.width / 2, 132, 880, 29);
-
-            ctx.fillStyle = 'rgba(0,0,0,0.42)';
-            drawRoundedRectPath(ctx, 458, 614, 364, 56, 28);
-            ctx.fill();
-
-            if (scene.focusPlayer) {
-                ctx.fillStyle = scene.focusPlayer.color;
-                ctx.shadowColor = scene.focusPlayer.color;
-                ctx.shadowBlur = 18 * pulse;
-                ctx.font = '900 30px Segoe UI';
-                ctx.fillText(scene.focusPlayer.text, canvas.width / 2, 650);
-                ctx.shadowBlur = 0;
+            if (scene.type === 'champion') {
+                drawChampionSpotlight(ctx, canvas, scene, progress, elapsed);
+            } else {
+                drawReplayBracket(ctx, scene.snapshot, scene.activeMatchId, elapsed);
+                drawReplayWheel(ctx, scene, progress, elapsed);
+                drawStageAnnouncement(ctx, canvas, scene, elapsed, pulse);
             }
 
-            ctx.fillStyle = 'rgba(255, 215, 0, 0.88)';
-            ctx.font = '700 20px Segoe UI';
-            ctx.fillText('KNOCKOUT REPLAY • LIGHTS • PRESSURE • GLORY', canvas.width / 2, 698);
+            drawFilmChrome(ctx, canvas);
 
-            ctx.fillStyle = 'rgba(255,255,255,0.12)';
-            ctx.fillRect(160, 676, 960, 10);
-            var progressGradient = ctx.createLinearGradient(160, 0, 1120, 0);
-            progressGradient.addColorStop(0, 'rgba(0,242,255,0.95)');
-            progressGradient.addColorStop(1, 'rgba(255,215,0,0.95)');
-            ctx.fillStyle = progressGradient;
-            ctx.fillRect(160, 676, 960 * progress, 10);
+            // Clean overlay layout
+            ctx.globalAlpha = alpha * 0.5;
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            
+            ctx.globalAlpha = alpha;
+            
+            // Header
+            ctx.fillStyle = 'rgba(0,0,0,0.4)';
+            drawRoundedRectPath(ctx, 40, 40, 320, 50, 0);
+            ctx.fill();
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '800 20px Segoe UI';
+            ctx.textAlign = 'left';
+            ctx.fillText('• TOURANI CHAMPIONSHIP CUT', 65, 75);
+
+            // Footer / Title of Scene (Big but clean)
+            if (scene.title) {
+                var footerHeight = scene.subtitle ? 114 : 80;
+                var footerTop = canvas.height - (footerHeight + 30);
+                ctx.fillStyle = 'rgba(0,0,0,0.64)';
+                ctx.fillRect(0, footerTop, canvas.width, footerHeight);
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                drawFittedCenterText(ctx, scene.title.toUpperCase(), canvas.width / 2, footerTop + 40, canvas.width - 120, '900', 40, 'Segoe UI');
+
+                if (scene.subtitle) {
+                    ctx.fillStyle = scene.promotionColor || '#ffd700';
+                    ctx.shadowColor = scene.promotionColor || '#ffd700';
+                    ctx.shadowBlur = 16;
+                    drawFittedCenterText(ctx, scene.subtitle.toUpperCase(), canvas.width / 2, footerTop + 78, canvas.width - 140, '800', 24, 'Segoe UI');
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            ctx.globalAlpha = 1.0; // Reset
         }
 
         function createTone(audioContext, destination, config) {
@@ -1942,27 +2148,33 @@
             }, 3500);
         }
 
-        var autoModeButton = document.getElementById('auto-mode-btn');
-        var tourAniDownloadFilmButton = document.getElementById('tourani-download-film-btn');
-        var tourAniPanelCloseButton = document.getElementById('tourani-panel-close');
-        if (autoModeButton) {
-            autoModeButton.addEventListener('click', function () {
-                setAutoMode(!autoModeEnabled);
-            });
-        }
-        if (tourAniDownloadFilmButton) {
-            tourAniDownloadFilmButton.addEventListener('click', function () {
-                ensureTourAniVideo();
-            });
-        }
-        if (tourAniPanelCloseButton) {
-            tourAniPanelCloseButton.addEventListener('click', closeTourAniPanel);
+        function initializeTournamentPage() {
+            var autoModeButton = document.getElementById('auto-mode-btn');
+            var tourAniDownloadFilmButton = document.getElementById('tourani-download-film-btn');
+            var tourAniPanelCloseButton = document.getElementById('tourani-panel-close');
+
+            if (autoModeButton) {
+                autoModeButton.addEventListener('click', function () {
+                    setAutoMode(!autoModeEnabled);
+                });
+            }
+            if (tourAniDownloadFilmButton) {
+                tourAniDownloadFilmButton.addEventListener('click', function () {
+                    ensureTourAniVideo();
+                });
+            }
+            if (tourAniPanelCloseButton) {
+                tourAniPanelCloseButton.addEventListener('click', closeTourAniPanel);
+            }
+
+            updateAutoModeButton();
+            syncTourAniUi();
+
+            drawWheel();
+            startContinuousSpin();
         }
 
-        updateAutoModeButton();
-        syncTourAniUi();
-        drawWheel();
-        startContinuousSpin();
+        initializeTournamentPage();
     </script>
 </body>
 </html>
