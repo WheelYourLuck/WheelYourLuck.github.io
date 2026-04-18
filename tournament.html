@@ -432,6 +432,9 @@
         const winAudio = new Audio('https://www.myinstants.com/media/sounds/tada.mp3'); 
         function playTick() { tickAudio.currentTime = 0; tickAudio.play().catch(() => {}); }
 
+        const tournamentMusic = new Audio('tournament.mp3');
+        tournamentMusic.loop = true;
+
         function normalizePoolEntry(entry, index) {
             if (!entry) {
                 return { text: 'Entry ' + (index + 1), color: '#00f2ff' };
@@ -595,6 +598,10 @@
         function spinToSelect() {
             if (selectedPlayers.length >= 8 || !container || !availablePool.length) return;
 
+            if (selectedPlayers.length === 0) {
+                tournamentMusic.currentTime = 0;
+                tournamentMusic.play().catch(function () {});
+            }
             isSpinning = true;
             activeSlices = availablePool.slice();
             drawWheel();
@@ -741,6 +748,8 @@
 
                     if (match.id === 'match-f-1') {
                         clearAutoModeTimer();
+                        tournamentMusic.pause();
+                        tournamentMusic.currentTime = 0;
                         setPlainStatusMessage(winner.text + ' wins the tournament!', winner.color);
                         saveTrophy(winner.text, winner.color);
                         showTourAniPanel();
@@ -1617,6 +1626,32 @@
             return merged;
         }
 
+        async function createMp3AudioBed() {
+            if (!window.AudioContext) return null;
+            try {
+                var audioContext = new AudioContext();
+                var destination = audioContext.createMediaStreamDestination();
+                var response = await fetch('tournament.mp3');
+                var arrayBuffer = await response.arrayBuffer();
+                var audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                var source = audioContext.createBufferSource();
+                source.buffer = audioBuffer;
+                source.loop = true;
+                source.connect(destination);
+                source.start(0);
+                return {
+                    stream: destination.stream,
+                    context: audioContext,
+                    stop: function () {
+                        try { source.stop(); } catch (e) {}
+                        if (audioContext.state !== 'closed') audioContext.close();
+                    }
+                };
+            } catch (e) {
+                return null;
+            }
+        }
+
         async function generateTournamentFilm() {
             if (tourAniRenderPromise) {
                 return tourAniRenderPromise;
@@ -1659,7 +1694,10 @@
                 var totalDuration = scenes.reduce(function (sum, scene) {
                     return sum + scene.duration;
                 }, 0);
-                var audioBed = createTourAniAudioBed(scenes, totalDuration, true, filmMode);
+                var audioBed = await createMp3AudioBed();
+                if (!audioBed) {
+                    audioBed = createTourAniAudioBed(scenes, totalDuration, true, filmMode);
+                }
                 if (audioBed && audioBed.context && audioBed.context.state === 'suspended') {
                     try {
                         await audioBed.context.resume();
