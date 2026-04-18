@@ -449,6 +449,7 @@
             videoBitsPerSecond: 2200000
         };
         let tourAniVideoUrl = null;
+        let tourAniVideoFileName = 'tournament-world-cup-replay.webm';
         let tourAniLastMode = 'thriller';
         let tourAniRenderPromise = null;
         let tourAniPendingDownload = false;
@@ -939,7 +940,7 @@
                 downloadLink.style.display = hasVideo ? 'inline-flex' : 'none';
                 if (hasVideo) {
                     downloadLink.href = tourAniVideoUrl;
-                    downloadLink.download = 'tournament-world-cup-replay.webm';
+                    downloadLink.download = tourAniVideoFileName;
                     downloadLink.textContent = 'Save Replay File';
                 }
             }
@@ -975,7 +976,7 @@
 
             var tempLink = document.createElement('a');
             tempLink.href = tourAniVideoUrl;
-            tempLink.download = 'tournament-world-cup-replay.webm';
+            tempLink.download = tourAniVideoFileName;
             tempLink.style.display = 'none';
             document.body.appendChild(tempLink);
             tempLink.click();
@@ -996,22 +997,83 @@
             panel.style.display = 'none';
         }
 
-        function getFilmMimeTypeOptions(includeAudio) {
-            if (includeAudio) {
-                return [
-                    'video/webm;codecs=vp9,opus',
-                    'video/webm;codecs=vp8,opus',
-                    'video/webm;codecs=vp9',
-                    'video/webm;codecs=vp8',
-                    'video/webm'
-                ];
+        var fixWebmDurationModulePromise = null;
+
+        function prefersMp4Recording() {
+            if (!navigator || !navigator.userAgent) return false;
+            return /iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent);
+        }
+
+        function getDownloadFileName(mimeType) {
+            return mimeType && mimeType.indexOf('mp4') !== -1
+                ? 'tournament-world-cup-replay.mp4'
+                : 'tournament-world-cup-replay.webm';
+        }
+
+        async function loadFixWebmDurationModule() {
+            if (fixWebmDurationModulePromise) {
+                return fixWebmDurationModulePromise;
             }
 
-            return [
-                'video/webm;codecs=vp9',
+            fixWebmDurationModulePromise = import('https://cdn.jsdelivr.net/npm/@fix-webm-duration/fix/+esm')
+                .then(function (module) {
+                    return module && module.fixWebmDuration ? module.fixWebmDuration : null;
+                })
+                .catch(function () {
+                    return null;
+                });
+
+            return fixWebmDurationModulePromise;
+        }
+
+        async function finalizeRecordedBlob(blob, mimeType, durationMs) {
+            if (!blob || !mimeType || mimeType.indexOf('webm') === -1) {
+                return blob;
+            }
+
+            var fixWebmDuration = await loadFixWebmDurationModule();
+            if (!fixWebmDuration) {
+                return blob;
+            }
+
+            try {
+                var fixedBlob = await fixWebmDuration(blob, Math.max(1, Math.round(durationMs)), { logger: false });
+                return fixedBlob || blob;
+            } catch (error) {
+                return blob;
+            }
+        }
+
+        function getFilmMimeTypeOptions(includeAudio) {
+            var preferMp4 = prefersMp4Recording();
+            var mp4WithAudio = [
+                'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+                'video/mp4;codecs=h264,mp4a.40.2',
+                'video/mp4'
+            ];
+            var mp4VideoOnly = [
+                'video/mp4;codecs=avc1.42E01E',
+                'video/mp4;codecs=h264',
+                'video/mp4'
+            ];
+            var webmWithAudio = [
+                'video/webm;codecs=vp8,opus',
+                'video/webm;codecs=vp9,opus',
                 'video/webm;codecs=vp8',
+                'video/webm;codecs=vp9',
                 'video/webm'
             ];
+            var webmVideoOnly = [
+                'video/webm;codecs=vp8',
+                'video/webm;codecs=vp9',
+                'video/webm'
+            ];
+
+            if (includeAudio) {
+                return preferMp4 ? mp4WithAudio.concat(webmWithAudio) : webmWithAudio.concat(mp4WithAudio);
+            }
+
+            return preferMp4 ? mp4VideoOnly.concat(webmVideoOnly) : webmVideoOnly.concat(mp4VideoOnly);
         }
 
         function createFilmRecorder(stream, includeAudio) {
@@ -2105,13 +2167,16 @@
                 }
 
                 var blob = new Blob(chunks, { type: mimeType });
+                blob = await finalizeRecordedBlob(blob, mimeType, totalDuration);
+                var downloadFileName = getDownloadFileName(mimeType);
+                tourAniVideoFileName = downloadFileName;
                 tourAniVideoUrl = URL.createObjectURL(blob);
                 link.href = tourAniVideoUrl;
-                link.download = 'tournament-world-cup-replay.webm';
+                link.download = downloadFileName;
                 primaryDownloadButton.disabled = false;
                 primaryDownloadButton.textContent = 'Save World Cup Replay';
                 syncTourAniUi();
-                status.textContent = 'The World Cup replay is ready. Click Save World Cup Replay or use the Save Replay File link to download it.';
+                status.textContent = 'The World Cup replay is ready with editor-friendly export metadata. Click Save World Cup Replay or use the Save Replay File link to download it.';
             })();
 
             try {
