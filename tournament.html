@@ -1355,11 +1355,130 @@
             ctx.fillRect(0, canvas.height - 34, canvas.width, 34);
         }
 
+        function drawStageAnnouncement(ctx, canvas, scene, elapsed, pulse) {
+            var matchId = scene.activeMatchId;
+            if (!matchId) return;
+
+            var roundLabel, matchDesc, accentColor, bgColor;
+            if (matchId.indexOf('match-qf-') === 0) {
+                roundLabel = 'QUARTER FINAL';
+                matchDesc = 'KNOCKOUT ROUND  •  THE PRESSURE BUILDS  •  ONE LOSS AND YOU ARE OUT';
+                accentColor = '#00f2ff';
+                bgColor = 'rgba(0, 180, 255, 0.10)';
+            } else if (matchId.indexOf('match-sf-') === 0) {
+                roundLabel = 'SEMI FINAL';
+                matchDesc = 'ONE WIN FROM THE FINAL  •  THE HEAT IS MAXIMUM  •  NERVES OF STEEL REQUIRED';
+                accentColor = '#bc13fe';
+                bgColor = 'rgba(188, 19, 254, 0.10)';
+            } else {
+                roundLabel = 'GRAND FINAL';
+                matchDesc = 'THE ULTIMATE SHOWDOWN  •  ONE DECISIVE SPIN  •  THE LAST NAME STANDING TAKES ALL';
+                accentColor = '#ffd700';
+                bgColor = 'rgba(255, 215, 0, 0.10)';
+            }
+
+            var p1 = (scene.wheelSlices && scene.wheelSlices[0]) ? scene.wheelSlices[0].text : '';
+            var p2 = (scene.wheelSlices && scene.wheelSlices[1]) ? scene.wheelSlices[1].text : '';
+            var p1Color = (scene.wheelSlices && scene.wheelSlices[0]) ? (scene.wheelSlices[0].color || '#00f2ff') : '#00f2ff';
+            var p2Color = (scene.wheelSlices && scene.wheelSlices[1]) ? (scene.wheelSlices[1].color || '#ff00ff') : '#ff00ff';
+
+            var cx = canvas.width / 2;
+            var baseY = 377;
+            var panelH = 82;
+            var barW = 920;
+            var barX = cx - barW / 2;
+            var glowPulse = 0.6 + Math.sin(elapsed * 0.004) * 0.4;
+
+            // Background strip
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(barX, baseY, barW, panelH);
+
+            // Shared gradient for separator lines
+            var lineGrad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
+            lineGrad.addColorStop(0, 'rgba(255,255,255,0)');
+            lineGrad.addColorStop(0.18, accentColor);
+            lineGrad.addColorStop(0.5, '#ffffff');
+            lineGrad.addColorStop(0.82, accentColor);
+            lineGrad.addColorStop(1, 'rgba(255,255,255,0)');
+
+            // Top separator line
+            ctx.save();
+            ctx.strokeStyle = lineGrad;
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = accentColor;
+            ctx.shadowBlur = 28 * glowPulse;
+            ctx.beginPath(); ctx.moveTo(barX, baseY); ctx.lineTo(barX + barW, baseY); ctx.stroke();
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // Bottom separator line
+            ctx.save();
+            ctx.strokeStyle = lineGrad;
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = accentColor;
+            ctx.shadowBlur = 28 * glowPulse;
+            ctx.beginPath(); ctx.moveTo(barX, baseY + panelH); ctx.lineTo(barX + barW, baseY + panelH); ctx.stroke();
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // Round label — large, bold, glowing
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.shadowColor = accentColor;
+            ctx.shadowBlur = 40 * pulse;
+            ctx.fillStyle = accentColor;
+            ctx.font = '900 34px Segoe UI';
+            ctx.fillText('\u25c6  ' + roundLabel + '  \u25c6', cx, baseY + 32);
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // VS matchup row
+            if (p1 && p2) {
+                var vsY = baseY + 58;
+
+                ctx.save();
+                ctx.shadowColor = p1Color;
+                ctx.shadowBlur = 20 * glowPulse;
+                ctx.fillStyle = p1Color;
+                ctx.font = '800 20px Segoe UI';
+                ctx.textAlign = 'right';
+                ctx.fillText(p1, cx - 44, vsY);
+                ctx.restore();
+
+                ctx.save();
+                ctx.shadowColor = accentColor;
+                ctx.shadowBlur = 14;
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '900 16px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.fillText('\u26a1 VS \u26a1', cx, vsY);
+                ctx.restore();
+
+                ctx.save();
+                ctx.shadowColor = p2Color;
+                ctx.shadowBlur = 20 * glowPulse;
+                ctx.fillStyle = p2Color;
+                ctx.font = '800 20px Segoe UI';
+                ctx.textAlign = 'left';
+                ctx.fillText(p2, cx + 44, vsY);
+                ctx.restore();
+            }
+
+            // Descriptor tagline — small, subtle
+            ctx.save();
+            ctx.fillStyle = 'rgba(255,255,255,0.52)';
+            ctx.font = '600 12px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText(matchDesc, cx, baseY + 74);
+            ctx.restore();
+        }
+
         function renderFilmFrame(ctx, canvas, scene, progress, elapsed) {
             var pulse = 0.92 + Math.sin(elapsed * 0.005) * 0.08;
             drawBackdrop(ctx, canvas, elapsed);
             drawReplayBracket(ctx, scene.snapshot, scene.activeMatchId, elapsed);
             drawReplayWheel(ctx, scene, progress, elapsed);
+            drawStageAnnouncement(ctx, canvas, scene, elapsed, pulse);
             drawFilmChrome(ctx, canvas);
 
             ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
