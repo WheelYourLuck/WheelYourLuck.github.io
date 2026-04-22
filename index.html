@@ -135,6 +135,233 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
         }
 
+        .tournament-spotlight {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+            padding: 28px;
+            background:
+                radial-gradient(circle at top left, rgba(255, 215, 120, 0.3), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(78, 205, 196, 0.28), transparent 28%),
+                linear-gradient(135deg, rgba(22, 26, 76, 0.92), rgba(120, 26, 72, 0.88), rgba(255, 124, 67, 0.88));
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            box-shadow:
+                0 26px 50px rgba(0, 0, 0, 0.24),
+                inset 0 1px 0 rgba(255, 255, 255, 0.24),
+                0 0 35px rgba(255, 215, 120, 0.18);
+        }
+
+        .tournament-spotlight::before {
+            content: '';
+            position: absolute;
+            inset: auto -10% -35% 45%;
+            height: 240px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 65%);
+            transform: rotate(-10deg);
+            pointer-events: none;
+        }
+
+        .tournament-spotlight::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 18%, rgba(255, 255, 255, 0.16) 32%, transparent 46%);
+            transform: translateX(-120%);
+            animation: spotlightSweep 5.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .tournament-spotlight-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr);
+            gap: 24px;
+            align-items: center;
+        }
+
+        .tournament-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(7, 10, 34, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #fff4cf;
+            margin-bottom: 16px;
+        }
+
+        .tournament-spotlight-copy h2 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            text-shadow: 0 6px 30px rgba(0, 0, 0, 0.24);
+        }
+
+        .tournament-spotlight-copy p {
+            margin: 16px 0 0;
+            max-width: 640px;
+            font-size: 1.06rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .tournament-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .tournament-highlight-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #fff;
+            font-size: 0.92rem;
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+        }
+
+        .tournament-spotlight-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .tournament-cta,
+        .tournament-secondary-cta {
+            min-height: 54px;
+            border-radius: 999px;
+            padding: 0 22px;
+            font-size: 0.98rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .tournament-cta {
+            background: linear-gradient(135deg, #ffd166, #ff7c43);
+            color: #1f2430;
+            box-shadow: 0 16px 30px rgba(255, 124, 67, 0.28);
+        }
+
+        .tournament-cta:hover:not(:disabled) {
+            background: linear-gradient(135deg, #ffdf7c, #ff8a56);
+        }
+
+        .tournament-secondary-cta {
+            background: rgba(8, 14, 46, 0.3);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .tournament-secondary-cta:hover {
+            background: rgba(8, 14, 46, 0.42);
+        }
+
+        .tournament-spotlight-meta {
+            display: grid;
+            gap: 14px;
+            align-self: stretch;
+        }
+
+        .tournament-status-card,
+        .tournament-feature-card {
+            position: relative;
+            padding: 20px;
+            border-radius: 22px;
+            background: rgba(8, 10, 40, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .tournament-status-label {
+            display: block;
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.72);
+            margin-bottom: 10px;
+        }
+
+        .tournament-status-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 1.15;
+            color: #fff6d5;
+        }
+
+        .tournament-status-text {
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.88);
+            line-height: 1.55;
+        }
+
+        .tournament-status-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .tournament-stat-chip {
+            min-width: 120px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .tournament-stat-chip strong {
+            display: block;
+            font-size: 1.05rem;
+            color: #fff;
+        }
+
+        .tournament-stat-chip span {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tournament-feature-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #fff;
+        }
+
+        .tournament-feature-card p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.84);
+            line-height: 1.55;
+        }
+
+        .tournament-ready {
+            box-shadow:
+                0 0 0 1px rgba(255, 209, 102, 0.38),
+                0 16px 30px rgba(255, 124, 67, 0.24);
+        }
+
         @keyframes gradientText {
 
             0%,
@@ -156,6 +383,18 @@
 
             50% {
                 transform: scale(1.05);
+            }
+        }
+
+        @keyframes spotlightSweep {
+
+            0%,
+            100% {
+                transform: translateX(-120%);
+            }
+
+            50% {
+                transform: translateX(120%);
             }
         }
 
@@ -1037,6 +1276,24 @@
         }
 
         @media (max-width: 768px) {
+            .tournament-spotlight {
+                padding: 22px 18px;
+                border-radius: 22px;
+            }
+
+            .tournament-spotlight-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .tournament-spotlight-actions {
+                flex-direction: column;
+            }
+
+            .tournament-cta,
+            .tournament-secondary-cta {
+                width: 100%;
+            }
+
             .controls-panel {
                 flex-direction: column;
             }
@@ -3008,6 +3265,48 @@
         <h1><i class="fas fa-redo"></i> Ultimate Spin Wheel</h1>
         <p class="subtitle">Make it yours — ideas, dares, prizes, anything.</p>
 
+        <section class="tournament-spotlight" id="tournamentSpotlight" aria-labelledby="tournamentSpotlightTitle">
+            <div class="tournament-spotlight-inner">
+                <div class="tournament-spotlight-copy">
+                    <div class="tournament-eyebrow"><i class="fas fa-trophy"></i> Headline Feature</div>
+                    <h2 id="tournamentSpotlightTitle">Turn your wheel into a knockout tournament.</h2>
+                    <p>Build a full bracket, spin through quarter-finals to the grand final, and crown a winner with a mode that feels bigger, faster, and far more dramatic than a single spin.</p>
+                    <div class="tournament-highlights">
+                        <span class="tournament-highlight-pill"><i class="fas fa-bolt"></i> Live bracket drama</span>
+                        <span class="tournament-highlight-pill"><i class="fas fa-trophy"></i> Champion reveal</span>
+                        <span class="tournament-highlight-pill"><i class="fas fa-film"></i> TourAni replay support</span>
+                    </div>
+                    <div class="tournament-spotlight-actions">
+                        <button id="tournamentSpotlightBtn" class="tournament-cta" type="button"><i class="fas fa-trophy"></i> Launch Tournament Mode</button>
+                        <button id="tournamentPresetBtn" class="tournament-secondary-cta" type="button"><i class="fas fa-globe"></i> Load 8+ Entry Preset</button>
+                    </div>
+                </div>
+
+                <div class="tournament-spotlight-meta">
+                    <div class="tournament-status-card" id="tournamentStatusCard">
+                        <span class="tournament-status-label">Tournament Status</span>
+                        <div class="tournament-status-title" id="tournamentStatusTitle">Add at least 8 slices to unlock the bracket.</div>
+                        <p class="tournament-status-text" id="tournamentStatusText">Your current wheel needs more contenders before the tournament feature can start.</p>
+                        <div class="tournament-status-stats">
+                            <div class="tournament-stat-chip">
+                                <strong id="tournamentCurrentCount">0 slices</strong>
+                                <span>Current Wheel</span>
+                            </div>
+                            <div class="tournament-stat-chip">
+                                <strong id="tournamentNeededCount">8 needed</strong>
+                                <span>Bracket Minimum</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tournament-feature-card">
+                        <h3>Why people click it</h3>
+                        <p>The tournament mode turns simple picks into a full event: quarter-finals, semis, finals, and a cinematic winner moment that makes the homepage feel like a game show instead of a utility.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <div class="controls-panel">
             <div class="control-group">
                 <label for="sliceCount"><i class="fas fa-pizza-slice"></i> Number of Slices:</label>
@@ -4196,6 +4495,12 @@
                         secretModeActive = true;
                         if (secretModeGroup) secretModeGroup.style.display = 'flex';
                         alert("Secret mode activated.");
+                    } else if (command === "#cheattour") {
+                        localStorage.setItem('tournamentCheatPlannerArmed', 'true');
+                        alert("Cheat tournament planner armed. Start Tournament to script the bracket before kickoff.");
+                    } else if (command === "#disablecheattour") {
+                        localStorage.removeItem('tournamentCheatPlannerArmed');
+                        alert("Cheat tournament planner disabled.");
                     } else if (command === "#enabletourani") {
                         localStorage.setItem('tourAniEnabled', 'true');
                         alert("TourAni mode enabled. Tournament endings can now generate a cinematic replay video.");
@@ -4206,6 +4511,7 @@
                         secretModeActive = false;
                         if (secretModeGroup) secretModeGroup.style.display = 'none';
                         if (secretSliceSelect) secretSliceSelect.value = "-1";
+                        localStorage.removeItem('tournamentCheatPlannerArmed');
                         alert("Secret mode deactivated.");
                     }
                 }
@@ -4929,16 +5235,8 @@
 
                 // Update wheel data
                 updateWheelData();
-                
-                // Tournament Button visibility
-                const startTourneyBtn = document.getElementById('startTournamentBtn');
-                if (startTourneyBtn) {
-                    if (slices && slices.length > 8) {
-                        startTourneyBtn.style.display = 'inline-flex';
-                    } else {
-                        startTourneyBtn.style.display = 'none';
-                    }
-                }
+
+                updateTournamentSpotlight();
 
                 // Load stats for this specific wheel
                 loadWheelStats();
@@ -4972,7 +5270,91 @@
                         secretSliceSelect.appendChild(option);
                     });
                 }
+
+                updateTournamentSpotlight();
             }
+
+            function getTournamentPoolFromTextarea() {
+                try {
+                    const parsed = JSON.parse(wheelDataTextarea.value);
+                    if (parsed && Array.isArray(parsed.slices)) {
+                        return parsed.slices;
+                    }
+                } catch (error) {
+                    console.error('Error parsing wheelData:', error);
+                }
+
+                return [];
+            }
+
+            function updateTournamentSpotlight() {
+                const pool = getTournamentPoolFromTextarea();
+                const count = pool.length;
+                const remaining = Math.max(0, 8 - count);
+                const startTourneyBtn = document.getElementById('startTournamentBtn');
+                const spotlightBtn = document.getElementById('tournamentSpotlightBtn');
+                const statusCard = document.getElementById('tournamentStatusCard');
+                const statusTitle = document.getElementById('tournamentStatusTitle');
+                const statusText = document.getElementById('tournamentStatusText');
+                const currentCount = document.getElementById('tournamentCurrentCount');
+                const neededCount = document.getElementById('tournamentNeededCount');
+                const isReady = count >= 8;
+
+                if (currentCount) {
+                    currentCount.textContent = count + (count === 1 ? ' slice' : ' slices');
+                }
+
+                if (neededCount) {
+                    neededCount.textContent = isReady ? 'Ready now' : remaining + ' more';
+                }
+
+                if (statusCard) {
+                    statusCard.classList.toggle('tournament-ready', isReady);
+                }
+
+                if (statusTitle) {
+                    statusTitle.textContent = isReady
+                        ? 'Tournament mode is live for this wheel.'
+                        : 'Add at least 8 slices to unlock the bracket.';
+                }
+
+                if (statusText) {
+                    statusText.textContent = isReady
+                        ? 'This wheel has enough contenders. Launch the bracket and turn your picks into quarter-finals, semis, and a final showdown.'
+                        : 'Your current wheel needs ' + remaining + ' more ' + (remaining === 1 ? 'slice' : 'slices') + ' before tournament mode can generate a full bracket.';
+                }
+
+                if (startTourneyBtn) {
+                    startTourneyBtn.style.display = isReady ? 'inline-flex' : 'none';
+                }
+
+                if (spotlightBtn) {
+                    spotlightBtn.disabled = !isReady;
+                    spotlightBtn.innerHTML = isReady
+                        ? '<i class="fas fa-trophy"></i> Launch Tournament Mode'
+                        : '<i class="fas fa-lock"></i> Need 8+ slices to launch';
+                }
+            }
+
+            function launchTournamentFromCurrentWheel() {
+                const pool = getTournamentPoolFromTextarea();
+
+                if (!pool || pool.length < 8) {
+                    alert('Need at least 8 items on the wheel for a tournament!');
+                    updateTournamentSpotlight();
+                    return;
+                }
+
+                const poolData = pool.map(s => ({ text: s.text, color: s.color }));
+                localStorage.setItem('tournamentPool', JSON.stringify(poolData));
+                if (localStorage.getItem('tournamentCheatPlannerArmed') !== 'true') {
+                    localStorage.removeItem('tournamentCheatPlan');
+                }
+                window.location.href = 'tournament.html';
+            }
+
+            window.launchTournamentFromCurrentWheel = launchTournamentFromCurrentWheel;
+            window.updateTournamentSpotlight = updateTournamentSpotlight;
 
             // Spin the wheel
             function spinWheel() {
@@ -5429,6 +5811,7 @@
 
             // Initialize the app
             init();
+            updateTournamentSpotlight();
 
             // Initialize enhanced features after a short delay
             setTimeout(() => {
@@ -6668,29 +7051,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('startTournamentBtn');
+            const spotlightBtn = document.getElementById('tournamentSpotlightBtn');
+            const presetBtn = document.getElementById('tournamentPresetBtn');
+            const presetCountriesBtn = document.getElementById('presetCountriesBtn');
             if (btn) {
-                btn.addEventListener('click', () => {
-                    let pool = [];
-                    try {
-                        const textarea = document.getElementById('wheelData');
-                        if (textarea && textarea.value) {
-                            const parsed = JSON.parse(textarea.value);
-                            if (parsed && parsed.slices) {
-                                pool = parsed.slices;
-                            }
-                        }
-                    } catch(e) {
-                        console.error('Error parsing wheelData:', e);
+                btn.addEventListener('click', () => window.launchTournamentFromCurrentWheel && window.launchTournamentFromCurrentWheel());
+            }
+            if (spotlightBtn) {
+                spotlightBtn.addEventListener('click', () => window.launchTournamentFromCurrentWheel && window.launchTournamentFromCurrentWheel());
+            }
+            if (presetBtn) {
+                presetBtn.addEventListener('click', () => {
+                    if (presetCountriesBtn) {
+                        presetCountriesBtn.click();
                     }
-                    
-                    if(!pool || pool.length < 8) {
-                        alert("Need at least 8 items on the wheel for a tournament!");
-                        return;
-                    }
-                    
-                    let poolData = pool.map(s => ({ text: s.text, color: s.color }));
-                    localStorage.setItem('tournamentPool', JSON.stringify(poolData));
-                    window.open('tournament.html', '_blank');
                 });
             }
         });

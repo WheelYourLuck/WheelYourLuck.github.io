@@ -5,85 +5,616 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tournament Arena - Wheel Your Luck</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&display=swap');
+
         :root {
-            --neon-blue: #00f2ff;
-            --neon-pink: #ff00ff;
-            --neon-purple: #bc13fe;
-            --neon-gold: #ffd700;
-            --bg-color: #0b0b0e;
-            --glass: rgba(255, 255, 255, 0.05);
+            --neon-blue: #8feeff;
+            --neon-cyan: #6be4ff;
+            --neon-pink: #ff66c4;
+            --neon-lime: #c8ff6a;
+            --neon-gold: #ffd27a;
+            --ink: #08111d;
+            --ink-soft: rgba(7, 16, 28, 0.84);
+            --panel: rgba(10, 18, 31, 0.94);
+            --line: rgba(126, 231, 255, 0.82);
+            --line-soft: rgba(126, 231, 255, 0.28);
+            --text-soft: rgba(228, 239, 255, 0.72);
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            padding: 0;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
-            color: #fff;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
             overflow-x: hidden;
-            min-height: 100vh;
+            color: #f6fbff;
+            font-family: 'Rajdhani', sans-serif;
+            background:
+                radial-gradient(circle at 50% 18%, rgba(68, 129, 255, 0.22), transparent 28%),
+                radial-gradient(circle at 18% 42%, rgba(189, 59, 255, 0.18), transparent 25%),
+                radial-gradient(circle at 86% 74%, rgba(87, 223, 255, 0.2), transparent 22%),
+                linear-gradient(180deg, #1a1739 0%, #0b1230 28%, #060915 60%, #04060b 100%);
         }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::before {
+            background-image:
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px),
+                radial-gradient(circle at center, rgba(255, 220, 140, 0.1) 0 1px, transparent 1px);
+            background-size: 24px 24px, 38px 38px;
+            opacity: 0.16;
+            mix-blend-mode: screen;
+        }
+
+        body::after {
+            background:
+                linear-gradient(90deg, transparent 0%, rgba(151, 229, 255, 0.04) 50%, transparent 100%),
+                radial-gradient(circle at 50% 0%, rgba(146, 237, 255, 0.12), transparent 38%);
+        }
+
         .main-wrapper {
+            position: relative;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             width: 100%;
             min-height: 100vh;
+            padding: 28px 12px 72px;
         }
-        .arena-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            width: 100%;
-            height: auto;
-            flex-grow: 1;
+
+        .tournament-stage {
+            position: relative;
+            width: min(100%, 760px);
         }
-        @media (min-width: 1024px) {
-            .arena-grid {
-                grid-template-columns: 1fr 1.5fr 1fr;
-                height: 100vh;
-                overflow: hidden;
-            }
+
+        #trophy-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgba(255, 210, 122, 0.42);
+            border-radius: 50%;
+            background: linear-gradient(180deg, rgba(255, 223, 145, 0.95), rgba(160, 104, 23, 0.95));
+            color: #1d1407;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(255, 210, 122, 0.38);
+            z-index: 20;
         }
-        .bracket-wing {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-        @media (max-width: 1023px) {
-            .bracket-wing {
-                flex-direction: row;
-                flex-wrap: wrap;
-                order: 2;
-                border: none;
-                background: none;
-            }
-        }
-        .center-stage {
+
+        .cosmic-layout {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
+            gap: 28px;
         }
-        #wheel-container {
-            width: min(78vw, 400px);
-            height: min(78vw, 400px);
-            min-width: 300px;
-            min-height: 300px;
+
+        .bracket-board {
             position: relative;
+            width: 100%;
+            padding: 26px 22px 30px;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at top center, rgba(255, 210, 122, 0.14), transparent 30%),
+                radial-gradient(circle at 18% 18%, rgba(255, 102, 196, 0.12), transparent 26%),
+                linear-gradient(180deg, rgba(10, 25, 43, 0.97), rgba(4, 10, 19, 0.98)),
+                linear-gradient(135deg, rgba(109, 228, 255, 0.08), transparent 35%);
+            border: 1px solid rgba(152, 233, 255, 0.32);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 42px rgba(68, 219, 255, 0.1),
+                inset 0 -30px 80px rgba(255, 102, 196, 0.05),
+                0 32px 60px rgba(0, 0, 0, 0.5),
+                0 0 28px rgba(96, 215, 255, 0.16),
+                0 0 42px rgba(255, 210, 122, 0.08);
+            overflow: hidden;
+        }
+
+        .bracket-board::before {
+            content: '';
+            position: absolute;
+            inset: 14px;
+            border-radius: 22px;
+            border: 1px solid rgba(138, 230, 255, 0.08);
+            pointer-events: none;
+        }
+
+        .board-title {
+            margin: 0 0 18px;
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4.4rem);
+            letter-spacing: 2px;
+            color: #f8fbff;
+            background: linear-gradient(90deg, #f8fbff 0%, #ffd27a 40%, #8feeff 72%, #ff66c4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.22), 0 0 26px rgba(97, 218, 255, 0.22);
+        }
+
+        .board-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.92fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .board-column {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .board-heading {
+            margin: 0 0 12px;
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            letter-spacing: 1px;
+            color: var(--neon-gold);
+            text-shadow: 0 0 12px rgba(255, 210, 122, 0.32);
+        }
+
+        .board-column.semi-column,
+        .board-column.final-column {
+            padding-top: 2px;
+        }
+
+        .match-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .match-cluster {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-right: 24px;
+        }
+
+        .match-cluster::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 4px;
+            width: 18px;
+            height: 34%;
+            border-top: 2px solid var(--line-soft);
+            border-right: 2px solid var(--line-soft);
+            border-bottom: 2px solid var(--line-soft);
+            transform: translateY(-50%);
+            filter: drop-shadow(0 0 8px rgba(122, 234, 255, 0.35));
+        }
+
+        .board-column.semi-column .match-stack,
+        .board-column.final-column .match-stack {
+            gap: 54px;
+        }
+
+        .board-column.semi-column .match-stack {
+            padding-top: 48px;
+        }
+
+        .board-column.final-column .match-stack {
+            padding-top: 125px;
+        }
+
+        .match-shell {
+            position: relative;
+            padding-right: 22px;
+        }
+
+        .match-shell::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 18px;
+            border-top: 2px solid var(--line-soft);
+            transform: translateY(-50%);
+            filter: drop-shadow(0 0 8px rgba(122, 234, 255, 0.35));
+        }
+
+        .board-column.final-column .match-shell::after {
+            display: none;
+        }
+
+        .match {
+            position: relative;
+            width: 100%;
+            min-height: 95px;
+            padding: 4px;
+            border-radius: 16px;
+            background:
+                linear-gradient(180deg, rgba(7, 16, 27, 0.99), rgba(16, 29, 47, 0.96)),
+                radial-gradient(circle at top right, rgba(255, 102, 196, 0.08), transparent 40%);
+            border: 1px solid rgba(127, 229, 255, 0.36);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+                inset 0 0 18px rgba(95, 211, 255, 0.1),
+                0 0 16px rgba(88, 204, 255, 0.1);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .match::before {
+            content: attr(data-round);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -20px;
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            color: rgba(255, 248, 226, 0.66);
+        }
+
+        .match.active {
+            border-color: rgba(161, 240, 255, 0.9);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+                inset 0 0 22px rgba(113, 229, 255, 0.14),
+                0 0 22px rgba(107, 228, 255, 0.45),
+                0 0 30px rgba(255, 102, 196, 0.18);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .match.active::before {
+            color: #eafcff;
+            text-shadow: 0 0 8px rgba(120, 231, 255, 0.55);
+        }
+
+        .player-box {
+            position: relative;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #f5f8ff;
+            background: linear-gradient(180deg, rgba(31, 45, 68, 0.92), rgba(12, 21, 34, 0.98));
+            border-radius: 11px;
+            overflow: hidden;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(143, 238, 255, 0.12);
+            box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.03), 0 10px 20px rgba(0, 0, 0, 0.16);
+        }
+
+        .player-box + .player-box {
+            margin-top: 4px;
+        }
+
+        .player-box::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(105, 220, 255, 0.55));
+            box-shadow: 0 0 10px rgba(107, 228, 255, 0.2), 0 0 18px rgba(255, 102, 196, 0.14);
+            flex: 0 0 auto;
+        }
+
+        .player-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.12), transparent 38%);
+            opacity: 0.28;
+            pointer-events: none;
+        }
+
+        #final-area {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+
+        #final-title-container {
+            display: none;
+            text-align: center;
+        }
+
+        #final-title-container span {
+            display: inline-flex;
+            padding: 4px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 210, 122, 0.28);
+            background: rgba(255, 210, 122, 0.08);
+            color: var(--neon-gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 210, 122, 0.28);
+        }
+
+        .final-match {
+            border-color: rgba(255, 210, 122, 0.45);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+                inset 0 0 22px rgba(255, 210, 122, 0.1),
+                0 0 22px rgba(255, 210, 122, 0.16);
+        }
+
+        .board-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        .status-pill {
+            width: min(100%, 520px);
+            padding: 12px 18px;
+            border: 1px solid rgba(122, 234, 255, 0.44);
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(8, 21, 35, 0.95), rgba(17, 14, 34, 0.88));
+            color: var(--neon-blue);
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(122, 234, 255, 0.3);
+            box-shadow: inset 0 0 16px rgba(79, 210, 255, 0.1), 0 0 18px rgba(255, 102, 196, 0.08);
+        }
+
+        .mode-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .mode-btn,
+        #tourani-enabled-badge {
+            min-height: 42px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .mode-btn {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #edf7ff;
+            background: rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .mode-btn.active {
+            border-color: rgba(255, 210, 122, 0.35);
+            background: linear-gradient(135deg, rgba(255, 210, 122, 0.18), rgba(255, 131, 60, 0.18));
+            box-shadow: 0 0 16px rgba(255, 188, 90, 0.18);
+            color: #fff2cf;
+        }
+
+        #tourani-enabled-badge {
+            display: none;
+            border: 1px solid rgba(255, 210, 122, 0.35);
+            background: linear-gradient(135deg, rgba(255, 210, 122, 0.16), rgba(107, 228, 255, 0.12));
+            color: #ffe3a5;
+            box-shadow: 0 0 16px rgba(255, 210, 122, 0.12);
+        }
+
+        .champion-bay {
+            position: relative;
+            width: min(100%, 680px);
+            min-height: 440px;
+            padding: 30px 168px 126px 28px;
+            border-radius: 38px;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(123, 232, 255, 0.24), transparent 48%),
+                radial-gradient(circle at 12% 16%, rgba(255, 102, 196, 0.12), transparent 30%),
+                linear-gradient(180deg, rgba(8, 18, 30, 0.94), rgba(4, 8, 14, 0.97));
+            border: 1px solid rgba(145, 232, 255, 0.24);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+                inset 0 0 48px rgba(118, 228, 255, 0.1),
+                inset 0 -40px 70px rgba(255, 102, 196, 0.05),
+                0 36px 66px rgba(0, 0, 0, 0.45);
+            overflow: visible;
+        }
+
+        .champion-bay::before,
+        .champion-bay::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            bottom: 82px;
+            width: 44px;
+            border: 4px solid rgba(189, 145, 88, 0.68);
+            border-top-width: 8px;
+            border-bottom-width: 8px;
+            border-radius: 30px;
+            box-shadow: inset 0 0 16px rgba(255, 222, 165, 0.12), 0 0 22px rgba(107, 228, 255, 0.1);
+            opacity: 0.9;
+        }
+
+        .champion-bay::before {
+            left: 10px;
+            transform: perspective(180px) rotateY(26deg);
+        }
+
+        .champion-bay::after {
+            right: 10px;
+            transform: perspective(180px) rotateY(-26deg);
+        }
+
+        .champion-path {
+            position: relative;
+            width: min(100%, 420px);
+            margin: 0 auto;
+            padding-top: 8px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .champion-frame {
+            position: relative;
+            min-height: 82px;
+            padding: 12px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(12, 27, 43, 0.95), rgba(8, 15, 26, 0.95));
+            border: 1px solid rgba(122, 234, 255, 0.38);
+            box-shadow: inset 0 0 18px rgba(122, 234, 255, 0.12), 0 0 22px rgba(122, 234, 255, 0.15);
+        }
+
+        .champion-frame::before,
+        .champion-frame::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 54px;
+            border-top: 3px solid rgba(255, 223, 145, 0.7);
+            filter: drop-shadow(0 0 8px rgba(255, 223, 145, 0.28));
+        }
+
+        .champion-frame::before {
+            right: calc(100% + 10px);
+        }
+
+        .champion-frame::after {
+            left: calc(100% + 10px);
+        }
+
+        .champion-label {
+            margin: 16px 0 10px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            letter-spacing: 1px;
+            color: var(--neon-gold);
+            text-shadow: 0 0 18px rgba(255, 210, 122, 0.32);
+        }
+
+        #tournament-winner {
+            min-height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
-            filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
-            margin: 20px auto;
-            cursor: pointer;
-            z-index: 5;
+            padding: 8px 14px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(35, 38, 55, 0.88), rgba(14, 18, 29, 0.95));
+            border: 2px solid rgba(255, 210, 122, 0.55);
+            color: var(--neon-gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.35rem, 4vw, 2rem);
+            letter-spacing: 1px;
+            text-shadow: 0 0 18px rgba(255, 210, 122, 0.45);
+            box-shadow: inset 0 0 16px rgba(255, 210, 122, 0.12), 0 0 18px rgba(255, 210, 122, 0.16);
         }
+
+        .wheel-dais {
+            position: absolute;
+            left: 50%;
+            bottom: 14px;
+            transform: translateX(-50%);
+            width: min(78vw, 336px);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+        }
+
+        .wheel-dais::before {
+            content: '';
+            position: absolute;
+            inset: 16px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 50% 42%, rgba(255, 238, 182, 0.68), rgba(25, 46, 76, 0.14) 26%, rgba(6, 13, 25, 0.92) 72%),
+                conic-gradient(from 0deg, #d29e47, #f0d487, #2d6bb0, #ff66c4, #d7af59, #8feeff, #1d3b6f, #d29e47);
+            box-shadow: 0 0 34px rgba(85, 213, 255, 0.3), 0 0 20px rgba(255, 102, 196, 0.22), 0 0 50px rgba(0, 0, 0, 0.42);
+        }
+
+        .wheel-dais::after {
+            content: '';
+            position: absolute;
+            inset: 44px;
+            border-radius: 50%;
+            border: 10px solid rgba(5, 13, 24, 0.86);
+            box-shadow: inset 0 0 0 1px rgba(255, 245, 219, 0.2);
+        }
+
+        #wheel-container {
+            position: relative;
+            width: min(64vw, 246px);
+            height: min(64vw, 246px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            padding: 6px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 35%, rgba(245, 221, 154, 0.28), rgba(7, 15, 27, 0.24) 48%, rgba(7, 15, 27, 0) 72%);
+            filter: drop-shadow(0 0 28px rgba(104, 228, 255, 0.28)) drop-shadow(0 0 16px rgba(255, 102, 196, 0.16));
+            transition: transform 0.25s ease;
+        }
+
+        .tournament-wheel-readout {
+            position: absolute;
+            top: -74px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: min(72vw, 280px);
+            max-width: min(82vw, 340px);
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 210, 122, 0.32);
+            background: linear-gradient(135deg, rgba(7, 15, 27, 0.96), rgba(18, 14, 40, 0.92));
+            box-shadow: 0 0 18px rgba(255, 210, 122, 0.12), 0 0 24px rgba(107, 228, 255, 0.12);
+            text-align: center;
+            z-index: 12;
+        }
+
+        .tournament-wheel-readout span {
+            display: block;
+            color: #fff7de;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(0.95rem, 2vw, 1.18rem);
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 210, 122, 0.28);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #wheel-container:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+
         #wheel {
             width: 100%;
             height: 100%;
@@ -91,129 +622,72 @@
             align-items: center;
             justify-content: center;
         }
+
         #wheel svg {
             width: 100%;
             height: 100%;
             overflow: visible;
             display: block;
         }
-        #wheel-container:hover {
-            transform: scale(1.02);
-        }
 
-        .match {
-            width: 130px;
-            background: rgba(0,0,0,0.65);
-            border: 1px solid #444;
-            border-radius: 14px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            position: relative;
-        }
-        .match::before {
-            content: attr(data-round);
+        #pointer {
             position: absolute;
-            top: -18px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase;
-            white-space: nowrap;
-            letter-spacing: 1px;
-        }
-        .match.active {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 25px var(--neon-blue);
-            transform: scale(1.1);
-        }
-        .match.active::before {
-            color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--neon-blue);
-        }
-        .player-box {
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #222;
-        }
-        .player-box:last-child { border-bottom: none; }
-
-        /* Status & Titles */
-        .status-pill {
-            background: rgba(0, 242, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            text-shadow: 0 0 5px var(--neon-blue);
-        }
-        #tourani-enabled-badge {
-            display: none;
-            margin-top: -4px;
-            margin-bottom: 10px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(0, 242, 255, 0.14));
-            color: #ffe082;
-            font-size: 0.83rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 0 16px rgba(255, 215, 0, 0.18);
-        }
-        .mode-controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .mode-btn {
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 999px;
-            padding: 10px 16px;
-            font-size: 0.84rem;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: #eef6ff;
-            background: rgba(255, 255, 255, 0.06);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-        .mode-btn:hover {
-            transform: translateY(-1px);
-        }
-        .mode-btn.active {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(255, 97, 24, 0.28));
-            border-color: rgba(255, 215, 0, 0.42);
-            box-shadow: 0 0 18px rgba(255, 166, 0, 0.22);
-            color: #fff2c0;
+            width: 0;
+            height: 0;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-top: 30px solid #ffd27a;
+            filter: drop-shadow(0 0 8px rgba(255, 210, 122, 0.95)) drop-shadow(0 0 14px rgba(143, 238, 255, 0.8));
+            z-index: 10;
         }
 
-        /* Final Area */
-        #final-area {
-            margin-top: 30px;
-            width: 100%;
+        #pointer::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: -30px;
+            width: 20px;
+            height: 12px;
+            border-radius: 999px 999px 4px 4px;
+            background: linear-gradient(180deg, #fff4c6, #ff66c4);
+            box-shadow: 0 0 12px rgba(255, 102, 196, 0.45);
+        }
+
+        .wheel-side-controls {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-18%);
+            width: 122px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 12px;
+            z-index: 4;
         }
-        .final-match {
-            width: 180px;
-            border: 2px solid var(--neon-gold);
-            box-shadow: 0 0 20px var(--neon-gold);
+
+        .wheel-side-controls .mode-controls {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+
+        .wheel-side-controls .mode-btn,
+        .wheel-side-controls #tourani-enabled-badge {
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            min-height: 54px;
+            padding: 12px 10px;
+            line-height: 1.1;
+            background-clip: padding-box;
+            box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.04), 0 0 18px rgba(15, 24, 38, 0.28);
+        }
+
+        .wheel-side-controls #tourani-enabled-badge {
+            display: none;
         }
 
         #tourani-panel {
@@ -226,25 +700,29 @@
             width: min(94vw, 680px);
             padding: 24px;
             border-radius: 24px;
-            background: linear-gradient(145deg, rgba(5, 12, 28, 0.92), rgba(18, 8, 32, 0.9));
+            background: linear-gradient(145deg, rgba(5, 12, 28, 0.94), rgba(18, 8, 32, 0.92));
             border: 1px solid rgba(0, 242, 255, 0.28);
-            box-shadow: 0 0 24px rgba(0, 242, 255, 0.16), 0 0 28px rgba(255, 0, 255, 0.1), 0 24px 60px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 0 24px rgba(0, 242, 255, 0.16), 0 0 28px rgba(255, 210, 122, 0.1), 0 24px 60px rgba(0, 0, 0, 0.45);
             text-align: center;
         }
+
         #tourani-panel h3 {
             margin: 0 0 8px;
-            font-size: 1.15rem;
-            letter-spacing: 1.5px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.7rem;
+            letter-spacing: 1px;
             color: var(--neon-gold);
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
+
         #tourani-panel p {
             margin: 0 auto;
             color: rgba(255, 255, 255, 0.82);
             line-height: 1.5;
-            font-size: 0.92rem;
+            font-size: 0.96rem;
             max-width: 560px;
         }
+
         .tourani-panel-eyebrow {
             display: inline-flex;
             align-items: center;
@@ -260,6 +738,7 @@
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.82);
         }
+
         .tourani-primary-actions {
             display: flex;
             flex-wrap: wrap;
@@ -267,6 +746,7 @@
             gap: 12px;
             margin-top: 22px;
         }
+
         .tourani-btn,
         .tourani-link {
             border: none;
@@ -278,11 +758,13 @@
             text-decoration: none;
             transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
         }
+
         .tourani-btn {
             color: #06131d;
             background: linear-gradient(135deg, #00f2ff, #ffd700);
             box-shadow: 0 0 18px rgba(0, 242, 255, 0.32);
         }
+
         .tourani-btn.primary-alt {
             color: #07131b;
             background: linear-gradient(135deg, #ffd700, #ff8a2a);
@@ -291,27 +773,71 @@
             padding: 15px 24px;
             font-size: 1rem;
         }
+
         .tourani-link {
             display: none;
             color: #101010;
             background: linear-gradient(135deg, #ffffff, #cfe9ff);
             box-shadow: 0 0 14px rgba(255, 255, 255, 0.22);
         }
+
         .tourani-btn:hover,
         .tourani-link:hover {
             transform: translateY(-1px);
         }
+
         .tourani-btn:disabled {
             opacity: 0.58;
             cursor: wait;
             transform: none;
         }
+
         #tourani-status {
             margin-top: 16px;
             min-height: 2.6em;
             color: rgba(255, 255, 255, 0.76);
             font-size: 0.9rem;
         }
+
+        .tourani-progress {
+            display: none;
+            margin-top: 14px;
+            text-align: left;
+        }
+
+        .tourani-progress.is-visible {
+            display: block;
+        }
+
+        .tourani-progress-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+        }
+
+        .tourani-progress-track {
+            position: relative;
+            width: 100%;
+            height: 10px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+
+        .tourani-progress-fill {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #ffd700, #ff8a2a, #8feeff);
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.22);
+            transition: width 0.18s linear;
+        }
+
         #tourani-panel-close {
             display: none;
             position: absolute;
@@ -325,58 +851,465 @@
             background: rgba(255, 255, 255, 0.08);
             cursor: pointer;
         }
+
         #tourani-canvas {
             display: none;
         }
-        /* Trophy Button Fix */
-        #trophy-btn {
-            position: fixed; top: 15px; right: 15px;
-            width: 45px; height: 45px;
-            background: linear-gradient(135deg, #ffd700, #b8860b);
-            border: none; border-radius: 50%;
-            color: #000; font-size: 1.2rem; cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            z-index: 1000;
+
+        .cheat-planner-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2200;
+            padding: 26px 14px;
+            background:
+                radial-gradient(circle at 50% 18%, rgba(255, 210, 122, 0.16), transparent 26%),
+                linear-gradient(180deg, rgba(2, 6, 15, 0.92), rgba(4, 7, 17, 0.97));
+            overflow-y: auto;
+        }
+
+        .cheat-planner-shell {
+            width: min(100%, 980px);
+            margin: 0 auto;
+            padding: 24px;
+            border-radius: 28px;
+            border: 1px solid rgba(143, 238, 255, 0.28);
+            background:
+                radial-gradient(circle at top center, rgba(255, 210, 122, 0.12), transparent 28%),
+                linear-gradient(180deg, rgba(9, 22, 38, 0.97), rgba(3, 8, 18, 0.98));
+            box-shadow: 0 36px 80px rgba(0, 0, 0, 0.52), 0 0 24px rgba(107, 228, 255, 0.14);
+        }
+
+        .cheat-planner-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 210, 122, 0.22);
+            background: rgba(255, 210, 122, 0.1);
+            color: var(--neon-gold);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .cheat-planner-shell h2 {
+            margin: 16px 0 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.3rem);
+            letter-spacing: 1.5px;
+            color: #f8fbff;
+        }
+
+        .cheat-planner-shell > p {
+            margin: 0;
+            max-width: 760px;
+            color: rgba(246, 251, 255, 0.8);
+            font-size: 1rem;
+            line-height: 1.55;
+        }
+
+        .cheat-planner-summary {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(143, 238, 255, 0.18);
+            background: linear-gradient(135deg, rgba(10, 24, 40, 0.96), rgba(15, 9, 32, 0.9));
+            color: rgba(246, 251, 255, 0.9);
+            font-size: 0.98rem;
+            line-height: 1.45;
+        }
+
+        .cheat-planner-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .cheat-planner-card {
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(143, 238, 255, 0.16);
+            background:
+                linear-gradient(180deg, rgba(8, 19, 34, 0.94), rgba(6, 10, 21, 0.98)),
+                radial-gradient(circle at top left, rgba(255, 102, 196, 0.12), transparent 34%);
+            box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.03), 0 0 18px rgba(0, 0, 0, 0.22);
+        }
+
+        .cheat-planner-card.full {
+            grid-column: 1 / -1;
+        }
+
+        .cheat-planner-card h3 {
+            margin: 0 0 6px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: var(--neon-gold);
+        }
+
+        .cheat-planner-card p {
+            margin: 0 0 14px;
+            color: rgba(246, 251, 255, 0.68);
+            font-size: 0.92rem;
+        }
+
+        .cheat-planner-team-grid,
+        .cheat-planner-round-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .cheat-planner-round-grid.single {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .planner-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .planner-field label {
+            font-size: 0.84rem;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.74);
+        }
+
+        .planner-field select,
+        .planner-field input {
+            width: 100%;
+            min-height: 46px;
+            border-radius: 14px;
+            border: 1px solid rgba(143, 238, 255, 0.18);
+            background: rgba(6, 12, 22, 0.94);
+            color: #f8fbff;
+            font: inherit;
+            padding: 0 14px;
+            outline: none;
+            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.03);
+        }
+
+        .planner-field select:focus,
+        .planner-field input:focus {
+            border-color: rgba(255, 210, 122, 0.52);
+            box-shadow: 0 0 0 2px rgba(255, 210, 122, 0.18);
+        }
+
+        .planner-match-note {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(246, 251, 255, 0.66);
+            font-size: 0.84rem;
+        }
+
+        .cheat-planner-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .cheat-planner-action-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .cheat-planner-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 13px 18px;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        .cheat-planner-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .cheat-planner-btn.primary {
+            color: #07131b;
+            background: linear-gradient(135deg, #ffd27a, #ff9f43);
+            box-shadow: 0 0 18px rgba(255, 159, 67, 0.28);
+        }
+
+        .cheat-planner-btn.secondary {
+            color: #f8fbff;
+            background: linear-gradient(135deg, rgba(18, 36, 58, 0.94), rgba(17, 14, 42, 0.94));
+            border: 1px solid rgba(143, 238, 255, 0.18);
+        }
+
+        .cheat-planner-btn.ghost {
+            color: #f8fbff;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 720px) {
+            .main-wrapper {
+                padding: 18px 8px 58px;
+            }
+
+            .bracket-board {
+                padding: 18px 14px 22px;
+                border-radius: 24px;
+            }
+
+            .board-grid {
+                gap: 12px;
+            }
+
+            .match {
+                min-height: 88px;
+            }
+
+            .player-box {
+                min-height: 36px;
+                padding: 0 10px;
+                font-size: 0.84rem;
+            }
+
+            .player-box::before {
+                width: 12px;
+                height: 12px;
+                margin-right: 7px;
+            }
+
+            .champion-bay {
+                min-height: 0;
+                padding: 26px 18px 124px;
+            }
+
+            .champion-bay::before,
+            .champion-bay::after {
+                width: 28px;
+            }
+
+            .wheel-side-controls {
+                position: relative;
+                top: auto;
+                right: auto;
+                transform: none;
+                width: min(100%, 260px);
+                margin: 24px auto 0;
+            }
+
+            .tournament-wheel-readout {
+                top: -64px;
+                min-width: min(76vw, 260px);
+            }
+
+            .cheat-planner-shell {
+                padding: 18px;
+                border-radius: 22px;
+            }
+
+            .cheat-planner-grid,
+            .cheat-planner-team-grid,
+            .cheat-planner-round-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .cheat-planner-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cheat-planner-action-group {
+                width: 100%;
+            }
+
+            .cheat-planner-action-group .cheat-planner-btn,
+            .cheat-planner-actions > .cheat-planner-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .board-title {
+                margin-bottom: 12px;
+            }
+
+            .board-grid {
+                grid-template-columns: 1.18fr 0.92fr 0.9fr;
+                gap: 10px;
+            }
+
+            .board-heading {
+                font-size: 1.12rem;
+                margin-bottom: 8px;
+            }
+
+            .match::before {
+                font-size: 0.72rem;
+                top: -15px;
+            }
+
+            .board-column.semi-column .match-stack {
+                padding-top: 42px;
+                gap: 48px;
+            }
+
+            .board-column.final-column .match-stack {
+                padding-top: 112px;
+            }
+
+            .match-cluster,
+            .match-shell {
+                padding-right: 14px;
+            }
+
+            .match-cluster::after,
+            .match-shell::after {
+                width: 10px;
+            }
+
+            .status-pill {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .board-grid {
+                grid-template-columns: 1.14fr 0.88fr 0.88fr;
+            }
+
+            .player-box {
+                font-size: 0.74rem;
+                letter-spacing: 0.4px;
+            }
+
+            .match {
+                min-height: 82px;
+                border-radius: 12px;
+                padding: 3px;
+            }
+
+            .champion-bay::before,
+            .champion-bay::after {
+                display: none;
+            }
+
+            .wheel-side-controls .mode-btn,
+            .wheel-side-controls #tourani-enabled-badge {
+                min-height: 48px;
+                font-size: 0.86rem;
+            }
         }
 </style>
 </head>
 <body>
     <div class="main-wrapper">
-        <button id="trophy-btn" onclick="toggleHallOfFame()" title="Champions Gallery">🏆</button>
+        <div class="tournament-stage">
+            <button id="trophy-btn" onclick="toggleHallOfFame()" title="Champions Gallery">🏆</button>
 
-        <div class="arena-grid">
-            <!-- Left Wing -->
-            <div class="bracket-wing">
-                <div class="round">
-                    <div class="match" id="match-qf-1" data-round="Quarter Final" style="margin-bottom:25px;"><div class="player-box" id="p-qf-1-1">?</div><div class="player-box" id="p-qf-1-2">?</div></div>
-                    <div class="match" id="match-qf-2" data-round="Quarter Final"><div class="player-box" id="p-qf-2-1">?</div><div class="player-box" id="p-qf-2-2">?</div></div>
-                </div>
-                <div class="round">
-                    <div class="match" id="match-sf-1" data-round="Semi Final"><div class="player-box" id="p-sf-1-1">?</div><div class="player-box" id="p-sf-1-2">?</div></div>
-                </div>
-            </div>
+            <div class="cosmic-layout">
+                <section class="bracket-board">
+                    <h1 class="board-title">Global Tournament Bracket</h1>
 
-            <!-- Center Stage -->
-            <div class="center-stage">
-                <div class="status-pill" id="status-msg">SELECTION PHASE (0/8)</div>
-                <div class="mode-controls">
-                    <button id="auto-mode-btn" class="mode-btn" type="button">Auto Mode: Off</button>
-                </div>
-                <div id="tourani-enabled-badge">TourAni Enabled</div>
-                <div id="wheel-container">
-                    <div id="wheel"></div>
-                    <div id="pointer" style="position:absolute; top:50%; right:-10px; transform:translateY(-50%); width:0; height:0; border-top:15px solid transparent; border-bottom:15px solid transparent; border-left:25px solid var(--neon-pink); z-index:10; filter:drop-shadow(0 0 5px var(--neon-pink));"></div>
-                </div>
+                    <div class="board-grid">
+                        <div class="board-column quarter-column">
+                            <h2 class="board-heading">Quarter Final</h2>
+                            <div class="match-stack">
+                                <div class="match-cluster">
+                                    <div class="match" id="match-qf-1" data-round="Quarter Final">
+                                        <div class="player-box" id="p-qf-1-1">?</div>
+                                        <div class="player-box" id="p-qf-1-2">?</div>
+                                    </div>
+                                    <div class="match" id="match-qf-2" data-round="Quarter Final">
+                                        <div class="player-box" id="p-qf-2-1">?</div>
+                                        <div class="player-box" id="p-qf-2-2">?</div>
+                                    </div>
+                                </div>
 
-                <div id="final-area">
-                    <div id="final-title-container" style="display:none; margin-bottom:10px;">
-                        <span style="color:var(--neon-gold); font-weight:900; letter-spacing:3px; text-shadow:0 0 10px var(--neon-gold);">THE GRAND FINAL</span>
+                                <div class="match-cluster">
+                                    <div class="match" id="match-qf-3" data-round="Quarter Final">
+                                        <div class="player-box" id="p-qf-3-1">?</div>
+                                        <div class="player-box" id="p-qf-3-2">?</div>
+                                    </div>
+                                    <div class="match" id="match-qf-4" data-round="Quarter Final">
+                                        <div class="player-box" id="p-qf-4-1">?</div>
+                                        <div class="player-box" id="p-qf-4-2">?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-column semi-column">
+                            <h2 class="board-heading">Semi Final</h2>
+                            <div class="match-stack">
+                                <div class="match-shell">
+                                    <div class="match" id="match-sf-1" data-round="Semi Final">
+                                        <div class="player-box" id="p-sf-1-1">?</div>
+                                        <div class="player-box" id="p-sf-1-2">?</div>
+                                    </div>
+                                </div>
+
+                                <div class="match-shell">
+                                    <div class="match" id="match-sf-2" data-round="Semi Final">
+                                        <div class="player-box" id="p-sf-2-1">?</div>
+                                        <div class="player-box" id="p-sf-2-2">?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-column final-column">
+                            <h2 class="board-heading">Final</h2>
+                            <div class="match-stack">
+                                <div id="final-area">
+                                    <div id="final-title-container">
+                                        <span>The Grand Final</span>
+                                    </div>
+                                    <div class="match final-match" id="match-f-1" data-round="Grand Final">
+                                        <div class="player-box" id="p-f-1-1">?</div>
+                                        <div class="player-box" id="p-f-1-2">?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="match final-match" id="match-f-1" data-round="Grand Final">
-                        <div class="player-box" id="p-f-1-1">?</div>
-                        <div class="player-box" id="p-f-1-2">?</div>
+
+                    <div class="board-controls">
+                        <div class="status-pill" id="status-msg">SELECTION PHASE (0/8)</div>
                     </div>
-                    <div id="tournament-winner" style="font-size:2.2rem; font-weight:900; margin-top:15px; color:gold; text-shadow:0 0 20px gold; font-family:serif;"></div>
+                </section>
+
+                <section class="champion-bay">
+                    <div class="champion-path">
+                        <div class="champion-frame"></div>
+                        <div class="champion-label">Final Champion?</div>
+                        <div id="tournament-winner"></div>
+                    </div>
+
+                    <div class="wheel-dais">
+                        <div class="tournament-wheel-readout"><span id="tournamentWheelLabel">Spin To Reveal</span></div>
+                        <div id="wheel-container">
+                            <div id="wheel"></div>
+                            <div id="pointer"></div>
+                        </div>
+                    </div>
+
+                    <div class="wheel-side-controls">
+                        <div class="mode-controls">
+                            <button id="auto-mode-btn" class="mode-btn" type="button">Auto Mode: Off</button>
+                            <div id="tourani-enabled-badge">TourAni Enabled</div>
+                        </div>
+                    </div>
+
                     <div id="tourani-panel">
                         <button id="tourani-panel-close" type="button" aria-label="Close TourAni panel">×</button>
                         <div class="tourani-panel-eyebrow">TourAni Final Replay</div>
@@ -386,19 +1319,36 @@
                             <button id="tourani-download-film-btn" class="tourani-btn primary-alt" type="button">Download World Cup Replay</button>
                             <a id="tourani-download-link" class="tourani-link" href="#" download="tournament-world-cup-replay.webm">Save Replay File</a>
                         </div>
+                        <div id="tourani-progress" class="tourani-progress" aria-live="polite">
+                            <div class="tourani-progress-meta">
+                                <span id="tourani-progress-label">Ready to render</span>
+                                <span id="tourani-progress-time">0s left</span>
+                            </div>
+                            <div class="tourani-progress-track">
+                                <div id="tourani-progress-fill" class="tourani-progress-fill"></div>
+                            </div>
+                        </div>
                         <div id="tourani-status"></div>
                     </div>
-                </div>
+                </section>
             </div>
-
-            <!-- Right Wing -->
-            <div class="bracket-wing" style="flex-direction: row-reverse;">
-                <div class="round">
-                    <div class="match" id="match-qf-3" data-round="Quarter Final" style="margin-bottom:25px;"><div class="player-box" id="p-qf-3-1">?</div><div class="player-box" id="p-qf-3-2">?</div></div>
-                    <div class="match" id="match-qf-4" data-round="Quarter Final"><div class="player-box" id="p-qf-4-1">?</div><div class="player-box" id="p-qf-4-2">?</div></div>
+        </div>
+    </div>
+    <div id="cheat-planner-overlay" class="cheat-planner-overlay">
+        <div class="cheat-planner-shell">
+            <div class="cheat-planner-badge">Secret Mode Control Room</div>
+            <h2>Script The Knockout Night</h2>
+            <p>Type the countries you want in the quarter-final slots, then the tournament will still begin from an empty board and the wheel will land on those entries during the live draw. Any slot or round can stay random.</p>
+            <div id="cheat-planner-summary" class="cheat-planner-summary"></div>
+            <div id="cheat-planner-body" class="cheat-planner-grid"></div>
+            <div class="cheat-planner-actions">
+                <div class="cheat-planner-action-group">
+                    <button id="cheat-planner-randomize-teams" class="cheat-planner-btn ghost" type="button">Randomize Countries</button>
+                    <button id="cheat-planner-randomize-all" class="cheat-planner-btn ghost" type="button">Randomize All</button>
                 </div>
-                <div class="round">
-                    <div class="match" id="match-sf-2" data-round="Semi Final"><div class="player-box" id="p-sf-2-1">?</div><div class="player-box" id="p-sf-2-2">?</div></div>
+                <div class="cheat-planner-action-group">
+                    <button id="cheat-planner-normal" class="cheat-planner-btn secondary" type="button">Use Normal Draw</button>
+                    <button id="cheat-planner-start" class="cheat-planner-btn primary" type="button">Lock Bracket And Kick Off</button>
                 </div>
             </div>
         </div>
@@ -411,7 +1361,7 @@
         <div id="celeb-winner-name" style="font-size:clamp(2.5rem, 9vw, 5rem); font-weight:900; letter-spacing:4px;"></div>
         <div style="margin-top:12px; color:var(--neon-gold); text-shadow:0 0 10px var(--neon-gold);">TOURNAMENT CHAMPION</div>
     </div>
-    <canvas id="tourani-canvas" width="1280" height="720"></canvas>
+    <canvas id="tourani-canvas" width="1080" height="1920"></canvas>
  <script>
         function getStoredJson(key, fallbackValue) {
             try {
@@ -444,9 +1394,21 @@
         let autoModeEnabled = false;
         let autoModeTimeoutId = null;
         const tourAniEnabled = getStoredValue('tourAniEnabled', 'false') === 'true';
+        const cheatPlannerArmed = getStoredValue('tournamentCheatPlannerArmed', 'false') === 'true';
         const TOURANI_RENDER_PROFILE = {
-            fps: 18,
-            videoBitsPerSecond: 2200000
+            designWidth: 720,
+            designHeight: 1280,
+            exportWidth: 480,
+            exportHeight: 854,
+            fps: 24,
+            videoBitsPerSecond: 450000,
+            audioBitsPerSecond: 64000,
+            durationScale: 1.0,
+            progressUpdateIntervalMs: 300,
+            finalizeTimeoutMs: 4000,
+            maxDurationMs: 0,
+            recorderStopTimeoutMs: 5000,
+            includeAudio: true
         };
         let tourAniVideoUrl = null;
         let tourAniVideoFileName = 'tournament-world-cup-replay.webm';
@@ -458,6 +1420,8 @@
             matches: [],
             champion: null
         };
+        let cheatTournamentConfig = null;
+        let cheatPlannerState = null;
 
         const matches = [
             { id: 'match-qf-1', p1Id: 'p-qf-1-1', p2Id: 'p-qf-1-2', winnerBoxId: 'p-sf-1-1' },
@@ -492,10 +1456,490 @@
         pool = Array.isArray(pool) ? pool.map(normalizePoolEntry) : [];
         availablePool = pool.slice();
 
+        function resetPlayerBox(boxId, winnerBox) {
+            var box = document.getElementById(boxId);
+            if (!box) return;
+            box.textContent = '?';
+            box.style.color = winnerBox ? '#ffd700' : '#3b4a54';
+            box.style.textShadow = 'none';
+            box.style.fontWeight = winnerBox ? '900' : '800';
+        }
+
+        function resetBracketBoard() {
+            [
+                'p-qf-1-1', 'p-qf-1-2', 'p-qf-2-1', 'p-qf-2-2',
+                'p-qf-3-1', 'p-qf-3-2', 'p-qf-4-1', 'p-qf-4-2',
+                'p-sf-1-1', 'p-sf-1-2', 'p-sf-2-1', 'p-sf-2-2',
+                'p-f-1-1', 'p-f-1-2'
+            ].forEach(function (boxId) {
+                resetPlayerBox(boxId, false);
+            });
+            resetPlayerBox('tournament-winner', true);
+
+            Array.prototype.forEach.call(document.querySelectorAll('.match'), function (el) {
+                el.classList.remove('active');
+            });
+
+            var finalTitle = document.getElementById('final-title-container');
+            if (finalTitle) {
+                finalTitle.style.display = 'none';
+            }
+        }
+
+        function hashString(input) {
+            var hash = 2166136261;
+            for (var index = 0; index < input.length; index += 1) {
+                hash ^= input.charCodeAt(index);
+                hash = Math.imul(hash, 16777619);
+            }
+            return hash >>> 0;
+        }
+
+        function createSeededRandom(seedInput) {
+            var seed = hashString(String(seedInput || 'tournament-seed')) || 1;
+            return function () {
+                seed += 0x6D2B79F5;
+                var temp = Math.imul(seed ^ (seed >>> 15), seed | 1);
+                temp ^= temp + Math.imul(temp ^ (temp >>> 7), temp | 61);
+                return ((temp ^ (temp >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        function createPlannerState() {
+            return {
+                quarterTeamTexts: ['', '', '', '', '', '', '', ''],
+                quarterWinnerRules: ['random', 'random', 'random', 'random'],
+                semiWinnerRules: ['random', 'random'],
+                finalWinnerRule: 'random'
+            };
+        }
+
+        function getPoolEntryIndexByText(text) {
+            var normalized = String(text || '').trim().toLowerCase();
+            if (!normalized || normalized === 'random') return null;
+
+            for (var index = 0; index < pool.length; index += 1) {
+                if (String(pool[index].text || '').trim().toLowerCase() === normalized) {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        function getQuarterSlotLabel(slotIndex, quarterTeamTexts) {
+            var text = quarterTeamTexts && quarterTeamTexts[slotIndex] ? quarterTeamTexts[slotIndex].trim() : '';
+            return text || ('Quarter Slot ' + (slotIndex + 1));
+        }
+
+        function getPlannerRuleText(rule, labels) {
+            if (rule === 'slot:0') return labels[0];
+            if (rule === 'slot:1') return labels[1];
+            return 'Random';
+        }
+
+        function resolveCheatTournamentPlan(state) {
+            if (!state) {
+                return null;
+            }
+
+            var quarterTeamTexts = Array.isArray(state.quarterTeamTexts) ? state.quarterTeamTexts.slice(0, 8) : [];
+            while (quarterTeamTexts.length < 8) {
+                quarterTeamTexts.push('');
+            }
+
+            var seenPoolIndices = new Set();
+            var selectionTargets = quarterTeamTexts.map(function (teamText, slotIndex) {
+                var poolIndex = getPoolEntryIndexByText(teamText);
+                if (poolIndex === -1) {
+                    throw new Error('Quarter Slot ' + (slotIndex + 1) + ' does not match any wheel entry.');
+                }
+                if (poolIndex !== null) {
+                    if (seenPoolIndices.has(poolIndex)) {
+                        throw new Error('Each quarter-final country must be unique.');
+                    }
+                    seenPoolIndices.add(poolIndex);
+                }
+                return poolIndex;
+            });
+
+            var quarterMatches = [
+                {
+                    participants: [getQuarterSlotLabel(0, quarterTeamTexts), getQuarterSlotLabel(1, quarterTeamTexts)],
+                    winnerRule: state.quarterWinnerRules[0]
+                },
+                {
+                    participants: [getQuarterSlotLabel(2, quarterTeamTexts), getQuarterSlotLabel(3, quarterTeamTexts)],
+                    winnerRule: state.quarterWinnerRules[1]
+                },
+                {
+                    participants: [getQuarterSlotLabel(4, quarterTeamTexts), getQuarterSlotLabel(5, quarterTeamTexts)],
+                    winnerRule: state.quarterWinnerRules[2]
+                },
+                {
+                    participants: [getQuarterSlotLabel(6, quarterTeamTexts), getQuarterSlotLabel(7, quarterTeamTexts)],
+                    winnerRule: state.quarterWinnerRules[3]
+                }
+            ];
+
+            var semiParticipantsA = [
+                state.quarterWinnerRules[0] === 'slot:0' ? quarterMatches[0].participants[0] : (state.quarterWinnerRules[0] === 'slot:1' ? quarterMatches[0].participants[1] : 'Winner of Quarter Final 1'),
+                state.quarterWinnerRules[1] === 'slot:0' ? quarterMatches[1].participants[0] : (state.quarterWinnerRules[1] === 'slot:1' ? quarterMatches[1].participants[1] : 'Winner of Quarter Final 2')
+            ];
+            var semiParticipantsB = [
+                state.quarterWinnerRules[2] === 'slot:0' ? quarterMatches[2].participants[0] : (state.quarterWinnerRules[2] === 'slot:1' ? quarterMatches[2].participants[1] : 'Winner of Quarter Final 3'),
+                state.quarterWinnerRules[3] === 'slot:0' ? quarterMatches[3].participants[0] : (state.quarterWinnerRules[3] === 'slot:1' ? quarterMatches[3].participants[1] : 'Winner of Quarter Final 4')
+            ];
+
+            var semiMatches = [
+                {
+                    participants: semiParticipantsA,
+                    winnerRule: state.semiWinnerRules[0]
+                },
+                {
+                    participants: semiParticipantsB,
+                    winnerRule: state.semiWinnerRules[1]
+                }
+            ];
+
+            var finalMatch = {
+                participants: [
+                    state.semiWinnerRules[0] === 'slot:0' ? semiMatches[0].participants[0] : (state.semiWinnerRules[0] === 'slot:1' ? semiMatches[0].participants[1] : 'Winner of Semi Final 1'),
+                    state.semiWinnerRules[1] === 'slot:0' ? semiMatches[1].participants[0] : (state.semiWinnerRules[1] === 'slot:1' ? semiMatches[1].participants[1] : 'Winner of Semi Final 2')
+                ],
+                winnerRule: state.finalWinnerRule
+            };
+
+            return {
+                quarterTeamTexts: quarterTeamTexts,
+                selectionTargets: selectionTargets,
+                quarterMatches: quarterMatches,
+                semiMatches: semiMatches,
+                finalMatch: finalMatch,
+                matchWinnerRules: {
+                    'match-qf-1': state.quarterWinnerRules[0],
+                    'match-qf-2': state.quarterWinnerRules[1],
+                    'match-qf-3': state.quarterWinnerRules[2],
+                    'match-qf-4': state.quarterWinnerRules[3],
+                    'match-sf-1': state.semiWinnerRules[0],
+                    'match-sf-2': state.semiWinnerRules[1],
+                    'match-f-1': state.finalWinnerRule
+                }
+            };
+        }
+
+        function createPlannerSelect(fieldId, label, extraAttributes) {
+            return '<div class="planner-field"><label for="' + fieldId + '">' + label + '</label><select id="' + fieldId + '" ' + (extraAttributes || '') + '></select></div>';
+        }
+
+        function createPlannerTextInput(fieldId, label, extraAttributes) {
+            return '<div class="planner-field"><label for="' + fieldId + '">' + label + '</label><input id="' + fieldId + '" type="text" list="cheat-country-options" placeholder="Type a country or leave blank for random" ' + (extraAttributes || '') + '></div>';
+        }
+
+        function getRandomQuarterTeamTexts() {
+            var indices = pool.map(function (_, index) {
+                return index;
+            });
+
+            for (var cursor = indices.length - 1; cursor > 0; cursor -= 1) {
+                var swapIndex = Math.floor(Math.random() * (cursor + 1));
+                var temp = indices[cursor];
+                indices[cursor] = indices[swapIndex];
+                indices[swapIndex] = temp;
+            }
+
+            return indices.slice(0, 8).map(function (poolIndex) {
+                return pool[poolIndex].text;
+            });
+        }
+
+        function buildCheatPlannerLayout() {
+            var body = document.getElementById('cheat-planner-body');
+            if (!body) return;
+
+            var quarterTeamFields = '';
+            for (var teamIndex = 0; teamIndex < 8; teamIndex += 1) {
+                quarterTeamFields += createPlannerTextInput('cheat-qf-team-' + teamIndex, 'Quarter Slot ' + (teamIndex + 1), 'data-planner-type="quarter-team" data-team-slot="' + teamIndex + '"');
+            }
+
+            var countryOptions = pool.map(function (entry) {
+                return '<option value="' + entry.text.replace(/"/g, '&quot;') + '"></option>';
+            }).join('');
+
+            var quarterWinnerFields = '';
+            for (var qfIndex = 0; qfIndex < 4; qfIndex += 1) {
+                quarterWinnerFields += createPlannerSelect('cheat-qf-winner-' + qfIndex, 'Quarter Final ' + (qfIndex + 1) + ' Winner', 'data-planner-type="quarter-winner" data-match-slot="' + qfIndex + '"');
+            }
+
+            var semiWinnerFields = '';
+            for (var sfIndex = 0; sfIndex < 2; sfIndex += 1) {
+                semiWinnerFields += createPlannerSelect('cheat-sf-winner-' + sfIndex, 'Semi Final ' + (sfIndex + 1) + ' Winner', 'data-planner-type="semi-winner" data-match-slot="' + sfIndex + '"');
+            }
+
+            body.innerHTML = [
+                '<section class="cheat-planner-card full">',
+                '<h3>Quarter Final Countries</h3>',
+                '<p>Type the countries you want the wheel to land on for the eight quarter-final slots. Leave a slot blank if you want that draw to stay random.</p>',
+                '<datalist id="cheat-country-options">' + countryOptions + '</datalist>',
+                '<div class="cheat-planner-team-grid">',
+                quarterTeamFields,
+                '</div>',
+                '<div class="planner-match-note" id="cheat-team-preview"></div>',
+                '</section>',
+                '<section class="cheat-planner-card">',
+                '<h3>Quarter Final Results</h3>',
+                '<p>Choose whether each match goes to the first slot, second slot, or stays random.</p>',
+                '<div class="cheat-planner-round-grid">',
+                quarterWinnerFields,
+                '</div>',
+                '<div class="planner-match-note" id="cheat-quarter-preview"></div>',
+                '</section>',
+                '<section class="cheat-planner-card">',
+                '<h3>Semi Final Results</h3>',
+                '<p>Decide whether each semi goes to the left path, right path, or stays random.</p>',
+                '<div class="cheat-planner-round-grid">',
+                semiWinnerFields,
+                '</div>',
+                '<div class="planner-match-note" id="cheat-semi-preview"></div>',
+                '</section>',
+                '<section class="cheat-planner-card full">',
+                '<h3>Grand Final</h3>',
+                '<p>Set the champion directly or let the final stay volatile.</p>',
+                '<div class="cheat-planner-round-grid single">',
+                createPlannerSelect('cheat-final-winner', 'Grand Final Winner', 'data-planner-type="final-winner"'),
+                '</div>',
+                '<div class="planner-match-note" id="cheat-final-preview"></div>',
+                '</section>'
+            ].join('');
+        }
+
+        function populateWinnerSelector(select, participants, currentRule) {
+            if (!select || !participants || participants.length !== 2) return;
+            var options = [
+                { value: 'random', text: 'Random' },
+                { value: 'slot:0', text: participants[0].text },
+                { value: 'slot:1', text: participants[1].text }
+            ];
+
+            select.innerHTML = '';
+            options.forEach(function (item) {
+                var option = document.createElement('option');
+                option.value = item.value;
+                option.textContent = item.text;
+                select.appendChild(option);
+            });
+            select.value = options.some(function (item) { return item.value === currentRule; }) ? currentRule : 'random';
+        }
+
+        function populateQuarterTeamInputs() {
+            cheatPlannerState.quarterTeamTexts.forEach(function (text, slotIndex) {
+                var input = document.getElementById('cheat-qf-team-' + slotIndex);
+                if (input) {
+                    input.value = text || '';
+                }
+            });
+        }
+
+        function updatePlannerSummary(plan) {
+            var summary = document.getElementById('cheat-planner-summary');
+            var teamPreview = document.getElementById('cheat-team-preview');
+            var quarterPreview = document.getElementById('cheat-quarter-preview');
+            var semiPreview = document.getElementById('cheat-semi-preview');
+            var finalPreview = document.getElementById('cheat-final-preview');
+            if (!summary || !plan) return;
+
+            summary.textContent = 'The tournament will start empty. The wheel will first draw the countries assigned here, then it will play the knockout results you scripted below.';
+            if (teamPreview) {
+                teamPreview.textContent = plan.quarterTeamTexts.map(function (text, index) {
+                    return 'Slot ' + (index + 1) + ': ' + (text && text.trim() ? text.trim() : 'Random');
+                }).join(' • ');
+            }
+            if (quarterPreview) {
+                quarterPreview.textContent = plan.quarterMatches.map(function (match, index) {
+                    return 'QF' + (index + 1) + ': ' + getPlannerRuleText(match.winnerRule, match.participants);
+                }).join(' • ');
+            }
+            if (semiPreview) {
+                semiPreview.textContent = plan.semiMatches.map(function (match, index) {
+                    return 'SF' + (index + 1) + ': ' + getPlannerRuleText(match.winnerRule, match.participants);
+                }).join(' • ');
+            }
+            if (finalPreview) {
+                finalPreview.textContent = 'Final path: ' + getPlannerRuleText(plan.finalMatch.winnerRule, plan.finalMatch.participants) + '.';
+            }
+        }
+
+        function syncCheatPlannerUi() {
+            if (!cheatPlannerState) return;
+
+            populateQuarterTeamInputs();
+
+            var plan;
+            try {
+                plan = resolveCheatTournamentPlan(cheatPlannerState);
+            } catch (error) {
+                var summary = document.getElementById('cheat-planner-summary');
+                if (summary) {
+                    summary.textContent = error.message;
+                }
+                return;
+            }
+            if (!plan) return;
+
+            plan.quarterMatches.forEach(function (match, matchIndex) {
+                var select = document.getElementById('cheat-qf-winner-' + matchIndex);
+                populateWinnerSelector(select, match.participants, cheatPlannerState.quarterWinnerRules[matchIndex]);
+                cheatPlannerState.quarterWinnerRules[matchIndex] = select.value;
+            });
+
+            plan = resolveCheatTournamentPlan(cheatPlannerState);
+            if (!plan) return;
+
+            plan.semiMatches.forEach(function (match, matchIndex) {
+                var select = document.getElementById('cheat-sf-winner-' + matchIndex);
+                populateWinnerSelector(select, match.participants, cheatPlannerState.semiWinnerRules[matchIndex]);
+                cheatPlannerState.semiWinnerRules[matchIndex] = select.value;
+            });
+
+            plan = resolveCheatTournamentPlan(cheatPlannerState);
+            if (!plan) return;
+
+            var finalWinnerSelect = document.getElementById('cheat-final-winner');
+            populateWinnerSelector(finalWinnerSelect, plan.finalMatch.participants, cheatPlannerState.finalWinnerRule);
+            cheatPlannerState.finalWinnerRule = finalWinnerSelect.value;
+
+            plan = resolveCheatTournamentPlan(cheatPlannerState);
+            if (!plan) return;
+
+            updatePlannerSummary(plan);
+        }
+
+        function randomizeCheatPlannerOutcomes() {
+            cheatPlannerState.quarterWinnerRules = ['random', 'random', 'random', 'random'];
+            cheatPlannerState.semiWinnerRules = ['random', 'random'];
+            cheatPlannerState.finalWinnerRule = 'random';
+        }
+
+        function prepareCheatTournament(plan) {
+            cheatTournamentConfig = plan;
+            selectedPlayers = [];
+            availablePool = pool.slice();
+            currentPhase = 'selection';
+            currentMatchIndex = 0;
+            isTransitioning = false;
+
+            tournamentStory.selections = [];
+            tournamentStory.matches = [];
+            tournamentStory.champion = null;
+            resetBracketBoard();
+            drawWheel();
+            setPlainStatusMessage('Bracket script locked. Spin the wheel and it will draw the assigned quarter-final countries first.', '#ffd27a');
+        }
+
+        function closeCheatPlanner(useNormalDraw) {
+            var overlay = document.getElementById('cheat-planner-overlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+
+            if (useNormalDraw) {
+                localStorage.removeItem('tournamentCheatPlannerArmed');
+                cheatTournamentConfig = null;
+                cheatPlannerState = null;
+                currentPhase = 'selection';
+                setPlainStatusMessage('SELECTION PHASE (0/8)', '#8feeff');
+            }
+        }
+
+        function showCheatPlanner() {
+            if (!cheatPlannerArmed || pool.length < 8) return false;
+
+            currentPhase = 'planning';
+            cheatPlannerState = createPlannerState();
+            buildCheatPlannerLayout();
+            syncCheatPlannerUi();
+            resetBracketBoard();
+            setPlainStatusMessage('Secret planner is open. Type the quarter-final countries, then let the wheel build the bracket from scratch.', '#ffd27a');
+
+            var overlay = document.getElementById('cheat-planner-overlay');
+            var randomizeTeamsButton = document.getElementById('cheat-planner-randomize-teams');
+            var randomizeAllButton = document.getElementById('cheat-planner-randomize-all');
+            var normalDrawButton = document.getElementById('cheat-planner-normal');
+            var startButton = document.getElementById('cheat-planner-start');
+
+            if (!overlay || !randomizeTeamsButton || !randomizeAllButton || !normalDrawButton || !startButton) {
+                return false;
+            }
+
+            overlay.style.display = 'block';
+
+            overlay.addEventListener('input', function (event) {
+                var target = event.target;
+                if (!target || target.getAttribute('data-planner-type') !== 'quarter-team') return;
+
+                cheatPlannerState.quarterTeamTexts[parseInt(target.getAttribute('data-team-slot'), 10)] = target.value;
+                syncCheatPlannerUi();
+            }, { once: false });
+
+            overlay.addEventListener('change', function (event) {
+                var target = event.target;
+                if (!target) return;
+
+                var type = target.getAttribute('data-planner-type');
+                if (type === 'quarter-team') {
+                    cheatPlannerState.quarterTeamTexts[parseInt(target.getAttribute('data-team-slot'), 10)] = target.value;
+                } else if (type === 'quarter-winner') {
+                    cheatPlannerState.quarterWinnerRules[parseInt(target.getAttribute('data-match-slot'), 10)] = target.value;
+                } else if (type === 'semi-winner') {
+                    cheatPlannerState.semiWinnerRules[parseInt(target.getAttribute('data-match-slot'), 10)] = target.value;
+                } else if (type === 'final-winner') {
+                    cheatPlannerState.finalWinnerRule = target.value;
+                }
+
+                syncCheatPlannerUi();
+            }, { once: false });
+
+            randomizeTeamsButton.addEventListener('click', function () {
+                cheatPlannerState.quarterTeamTexts = getRandomQuarterTeamTexts();
+                syncCheatPlannerUi();
+            });
+
+            randomizeAllButton.addEventListener('click', function () {
+                cheatPlannerState.quarterTeamTexts = getRandomQuarterTeamTexts();
+                randomizeCheatPlannerOutcomes();
+                syncCheatPlannerUi();
+            });
+
+            normalDrawButton.addEventListener('click', function () {
+                closeCheatPlanner(true);
+            });
+
+            startButton.addEventListener('click', function () {
+                var plan;
+                try {
+                    plan = resolveCheatTournamentPlan(cheatPlannerState);
+                } catch (error) {
+                    setPlainStatusMessage(error.message, '#ff7b7b');
+                    return;
+                }
+                if (!plan) {
+                    setPlainStatusMessage('The bracket script is incomplete. Check the quarter-final field.', '#ff7b7b');
+                    return;
+                }
+
+                localStorage.removeItem('tournamentCheatPlannerArmed');
+                closeCheatPlanner(false);
+                prepareCheatTournament(plan);
+            });
+
+            return true;
+        }
+
         // Initialize Wheel
         let container;
         let wheelSpinAnimationId = null;
         let activeSlices = pool;
+        var WHEEL_RESULT_REVEAL_DELAY = 550;
 
         function createSvgElement(tagName) {
             return document.createElementNS('http://www.w3.org/2000/svg', tagName);
@@ -530,6 +1974,43 @@
             container.setAttribute('transform', 'rotate(' + angle + ' 200 200)');
         }
 
+        function getWheelSliceIndexFromRotation(rotation, sliceCount) {
+            if (!sliceCount) return -1;
+            var normalizedRotation = ((rotation % 360) + 360) % 360;
+            var sliceAngle = 360 / sliceCount;
+            var adjustedAngle = (360 - normalizedRotation - (sliceAngle / 2) + 360) % 360;
+            return Math.floor(adjustedAngle / sliceAngle) % sliceCount;
+        }
+
+        function getWheelReadoutText(slices, rotation) {
+            if (!slices || !slices.length) return 'Spin To Reveal';
+            var index = getWheelSliceIndexFromRotation(rotation, slices.length);
+            if (index < 0 || !slices[index]) return 'Spin To Reveal';
+            return slices[index].text || 'Spin To Reveal';
+        }
+
+        function updateTournamentWheelReadout(rotation, slices) {
+            var label = document.getElementById('tournamentWheelLabel');
+            if (!label) return;
+            label.textContent = getWheelReadoutText(slices || getRenderableSlices(), rotation);
+        }
+
+        function styleLivePlayerBox(box, player, emphasisLevel) {
+            if (!box || !player) return;
+            var glowColor = player.color || '#8feeff';
+            var strong = emphasisLevel === 'winner' || emphasisLevel === 'champion';
+            box.style.color = '#f8fbff';
+            box.style.borderColor = strong ? 'rgba(255, 210, 122, 0.46)' : glowColor;
+            box.style.background = strong
+                ? 'linear-gradient(135deg, rgba(48, 37, 15, 0.96), rgba(20, 18, 36, 0.94))'
+                : 'linear-gradient(135deg, rgba(18, 35, 58, 0.96), rgba(12, 18, 34, 0.96))';
+            box.style.textShadow = '0 0 14px rgba(0,0,0,0.48), 0 0 8px ' + glowColor;
+            box.style.fontWeight = '900';
+            box.style.boxShadow = strong
+                ? 'inset 0 0 22px rgba(255, 210, 122, 0.12), 0 0 18px rgba(255, 210, 122, 0.18), 0 8px 24px rgba(0,0,0,0.22)'
+                : 'inset 0 0 18px rgba(255,255,255,0.04), 0 0 16px ' + glowColor + ', 0 8px 20px rgba(0,0,0,0.18)';
+        }
+
         function easeOutCubic(value) {
             return 1 - Math.pow(1 - value, 3);
         }
@@ -550,6 +2031,7 @@
                 var eased = easeOutCubic(progress);
                 var currentRotation = fromAngle + ((toAngle - fromAngle) * eased);
                 setWheelRotation(currentRotation);
+                updateTournamentWheelReadout(currentRotation, activeSlices);
 
                 var tickIndex = Math.floor(currentRotation / tickStep);
                 if (tickIndex !== lastTick) {
@@ -562,6 +2044,8 @@
                     return;
                 }
 
+                setWheelRotation(toAngle);
+                updateTournamentWheelReadout(toAngle, activeSlices);
                 wheelSpinAnimationId = null;
                 if (onComplete) onComplete();
             }
@@ -642,6 +2126,7 @@
 
             wheelDiv.appendChild(svg);
             setWheelRotation(idleRotation);
+            updateTournamentWheelReadout(idleRotation, slices);
         }
 
         function startContinuousSpin() {
@@ -650,6 +2135,7 @@
                 if (!isSpinning && container) {
                     idleRotation = (idleRotation + 0.8) % 360;
                     setWheelRotation(idleRotation);
+                    updateTournamentWheelReadout(idleRotation, getRenderableSlices());
                 }
                 idleRafId = requestAnimationFrame(step);
             }
@@ -705,6 +2191,10 @@
 
         document.getElementById('wheel-container').onclick = function () {
             if (isSpinning || isTransitioning) return;
+            if (currentPhase === 'planning') {
+                setPlainStatusMessage('Finish the secret bracket planner first.', '#ffd27a');
+                return;
+            }
             if (!availablePool.length && currentPhase === 'selection') {
                 document.getElementById('status-msg').textContent = 'No tournament players were loaded.';
                 return;
@@ -725,29 +2215,43 @@
             drawWheel();
 
             var stopIndex = Math.floor(Math.random() * availablePool.length);
+            if (cheatTournamentConfig && Array.isArray(cheatTournamentConfig.selectionTargets)) {
+                var targetPoolIndex = cheatTournamentConfig.selectionTargets[selectedPlayers.length];
+                if (targetPoolIndex !== null && targetPoolIndex !== undefined) {
+                    var targetEntry = pool[targetPoolIndex];
+                    var forcedIndex = availablePool.indexOf(targetEntry);
+                    if (forcedIndex !== -1) {
+                        stopIndex = forcedIndex;
+                    }
+                }
+            }
             var sliceAngle = 360 / availablePool.length;
             var finalAngle = idleRotation + 360 * 5 + (360 - (stopIndex * sliceAngle) - (sliceAngle / 2));
 
             animateWheelRotation(idleRotation, finalAngle, 3600, Math.max(8, sliceAngle), function () {
-                    isSpinning = false;
                     idleRotation = finalAngle % 360;
 
                     var winner = availablePool[stopIndex];
-                    selectedPlayers.push(winner);
-                    availablePool.splice(stopIndex, 1);
-                    placeInBracket(winner, selectedPlayers.length);
-                    recordSelectionStory(winner, selectedPlayers.length);
-                    document.getElementById('status-msg').textContent = 'Selected (' + selectedPlayers.length + '/8): ' + winner.text;
+                    setPlainStatusMessage('Wheel stopped on ' + winner.text + '. Adding it to the bracket...', winner.color);
 
-                    if (selectedPlayers.length === 8) {
-                        currentPhase = 'matches';
-                        isTransitioning = true;
-                        setTimeout(function () {
-                            setupMatch(0);
-                        }, 1200);
-                    } else if (autoModeEnabled) {
-                        queueAutoModeSpin(850);
-                    }
+                    setTimeout(function () {
+                        isSpinning = false;
+                        selectedPlayers.push(winner);
+                        availablePool.splice(stopIndex, 1);
+                        placeInBracket(winner, selectedPlayers.length);
+                        recordSelectionStory(winner, selectedPlayers.length);
+                        setPlainStatusMessage('Selected (' + selectedPlayers.length + '/8): ' + winner.text, winner.color);
+
+                        if (selectedPlayers.length === 8) {
+                            currentPhase = 'matches';
+                            isTransitioning = true;
+                            setTimeout(function () {
+                                setupMatch(0);
+                            }, 1200);
+                        } else if (autoModeEnabled) {
+                            queueAutoModeSpin(850);
+                        }
+                    }, WHEEL_RESULT_REVEAL_DELAY);
                 });
         }
 
@@ -756,8 +2260,7 @@
             var box = document.getElementById(mapIds[count - 1]);
             if (!box) return;
             box.textContent = player.text;
-            box.style.color = player.color;
-            box.style.textShadow = '0 0 8px ' + player.color;
+            styleLivePlayerBox(box, player, 'entry');
         }
 
         function isRealPlayerText(value) {
@@ -776,6 +2279,16 @@
                 status.style.color = color || 'var(--neon-blue)';
                 status.style.textShadow = color ? '0 0 10px ' + color : '0 0 5px var(--neon-blue)';
                 status.style.borderColor = color || 'var(--neon-blue)';
+                status.style.fontWeight = '900';
+            }
+
+            function setMatchStatus(playerOne, playerTwo) {
+                var status = document.getElementById('status-msg');
+                if (!status) return;
+                status.innerHTML = '<span style="font-weight:900;color:' + playerOne.color + ';text-shadow:0 0 10px ' + playerOne.color + '">' + playerOne.text + '</span> <span style="font-weight:800;color:rgba(255,255,255,0.88)">VS</span> <span style="font-weight:900;color:' + playerTwo.color + ';text-shadow:0 0 10px ' + playerTwo.color + '">' + playerTwo.text + '</span>';
+                status.style.borderColor = 'rgba(122, 234, 255, 0.44)';
+                status.style.color = 'var(--neon-blue)';
+                status.style.fontWeight = '900';
             }
 
         function setupMatch(mIndex) {
@@ -804,7 +2317,7 @@
                 { text: p2.textContent, color: p2.style.color || '#ff00ff' }
             ];
 
-            document.getElementById('status-msg').innerHTML = '<span style="color:' + activeSlices[0].color + '">' + activeSlices[0].text + '</span> vs <span style="color:' + activeSlices[1].color + '">' + activeSlices[1].text + '</span>';
+            setMatchStatus(activeSlices[0], activeSlices[1]);
             drawWheel();
             if (autoModeEnabled) {
                 queueAutoModeSpin(match.id === 'match-f-1' ? 1500 : 1100);
@@ -821,37 +2334,46 @@
                 document.getElementById('status-msg').textContent = 'This match cannot start until both players are set.';
                 return;
             }
+            var forcedWinnerRule = cheatTournamentConfig && cheatTournamentConfig.matchWinnerRules ? cheatTournamentConfig.matchWinnerRules[match.id] : null;
             var stopIndex = Math.floor(Math.random() * 2);
+            if (forcedWinnerRule === 'slot:0') {
+                stopIndex = 0;
+            } else if (forcedWinnerRule === 'slot:1') {
+                stopIndex = 1;
+            }
             var sliceAngle = 180;
             var finalAngle = idleRotation + 360 * 6 + (360 - (stopIndex * sliceAngle) - (sliceAngle / 2));
 
             animateWheelRotation(idleRotation, finalAngle, 3800, 20, function () {
-                    isSpinning = false;
                     idleRotation = finalAngle % 360;
 
                     var winner = activeSlices[stopIndex];
-                    var winnerBox = document.getElementById(match.winnerBoxId);
-                    winnerBox.textContent = winner.text;
-                    winnerBox.style.color = winner.color;
-                    winnerBox.style.textShadow = '0 0 10px ' + winner.color;
-                    recordMatchStory(match, winner);
+                    setPlainStatusMessage('Wheel stopped on ' + winner.text + '. Confirming the result...', winner.color);
 
-                    if (match.id === 'match-f-1') {
-                        clearAutoModeTimer();
-                        tournamentMusic.pause();
-                        tournamentMusic.currentTime = 0;
-                        setPlainStatusMessage(winner.text + ' wins the tournament!', winner.color);
-                        saveTrophy(winner.text, winner.color);
-                        showTourAniPanel();
-                        showCelebration(winner);
-                    } else {
-                        isTransitioning = true;
-                        setPlainStatusMessage(winner.text + ' advances to the next round', winner.color);
-                        var nextMatchIndex = currentMatchIndex + 1;
-                        setTimeout(function () {
-                            setupMatch(nextMatchIndex);
-                        }, getAdvanceDelay(match.id));
-                    }
+                    setTimeout(function () {
+                        isSpinning = false;
+                        var winnerBox = document.getElementById(match.winnerBoxId);
+                        winnerBox.textContent = winner.text;
+                        styleLivePlayerBox(winnerBox, winner, match.id === 'match-f-1' ? 'champion' : 'winner');
+                        recordMatchStory(match, winner);
+
+                        if (match.id === 'match-f-1') {
+                            clearAutoModeTimer();
+                            tournamentMusic.pause();
+                            tournamentMusic.currentTime = 0;
+                            setPlainStatusMessage(winner.text + ' wins the tournament!', winner.color);
+                            saveTrophy(winner.text, winner.color);
+                            showTourAniPanel();
+                            showCelebration(winner);
+                        } else {
+                            isTransitioning = true;
+                            setPlainStatusMessage(winner.text + ' advances to the next round', winner.color);
+                            var nextMatchIndex = currentMatchIndex + 1;
+                            setTimeout(function () {
+                                setupMatch(nextMatchIndex);
+                            }, getAdvanceDelay(match.id));
+                        }
+                    }, WHEEL_RESULT_REVEAL_DELAY);
                 });
         }
 
@@ -919,8 +2441,26 @@
             var status = document.getElementById('tourani-status');
             if (!status) return;
 
+            updateTourAniProgress(0, 0, false, 'Ready to render');
             status.textContent = 'TourAni is enabled. Click download to render the World Cup replay with music, drama, and the full tournament story.';
             openTourAniPanel();
+        }
+
+        function updateTourAniProgress(percent, secondsLeft, active, label) {
+            var progress = document.getElementById('tourani-progress');
+            var fill = document.getElementById('tourani-progress-fill');
+            var progressLabel = document.getElementById('tourani-progress-label');
+            var progressTime = document.getElementById('tourani-progress-time');
+            if (!progress || !fill || !progressLabel || !progressTime) return;
+
+            var safePercent = Math.max(0, Math.min(100, Math.round(percent || 0)));
+            var safeSecondsLeft = Math.max(0, Math.ceil(secondsLeft || 0));
+            progress.classList.toggle('is-visible', !!active || safePercent > 0);
+            fill.style.width = safePercent + '%';
+            progressLabel.textContent = label || (active ? 'Rendering replay' : 'Ready to render');
+            progressTime.textContent = active
+                ? (safeSecondsLeft > 0 ? safeSecondsLeft + 's left' : 'Almost done')
+                : (safePercent >= 100 ? 'Ready' : '0s left');
         }
 
         function syncTourAniUi() {
@@ -947,6 +2487,9 @@
             if (primaryDownloadButton) {
                 primaryDownloadButton.textContent = hasVideo ? 'Save World Cup Replay' : 'Render World Cup Replay';
             }
+            if (hasVideo) {
+                updateTourAniProgress(100, 0, false, 'Replay ready');
+            }
             if (closeButton) {
                 closeButton.style.display = tournamentStory.champion ? 'inline-flex' : 'none';
             }
@@ -960,14 +2503,20 @@
                 return;
             }
 
-            tourAniPendingDownload = false;
+            tourAniPendingDownload = true;
             if (status) {
-                status.textContent = 'Rendering the replay now. When it finishes, use the Save button or the Save Replay File link.';
+                status.textContent = 'Rendering the replay now. The file will download automatically when it is ready.';
             }
+            updateTourAniProgress(0, TOURANI_RENDER_PROFILE.maxDurationMs / 1000, true, 'Starting render');
             if (tourAniRenderPromise) {
                 await tourAniRenderPromise;
             } else if (!tourAniVideoUrl) {
                 await generateTournamentFilm();
+            }
+
+            if (tourAniPendingDownload && tourAniVideoUrl) {
+                tourAniPendingDownload = false;
+                triggerTourAniDownload();
             }
         }
 
@@ -1015,13 +2564,20 @@
                 return fixWebmDurationModulePromise;
             }
 
-            fixWebmDurationModulePromise = import('https://cdn.jsdelivr.net/npm/@fix-webm-duration/fix/+esm')
-                .then(function (module) {
-                    return module && module.fixWebmDuration ? module.fixWebmDuration : null;
+            fixWebmDurationModulePromise = Promise.race([
+                import('https://cdn.jsdelivr.net/npm/@fix-webm-duration/fix/+esm')
+                    .then(function (module) {
+                        return module && module.fixWebmDuration ? module.fixWebmDuration : null;
+                    })
+                    .catch(function () {
+                        return null;
+                    }),
+                new Promise(function (resolve) {
+                    setTimeout(function () {
+                        resolve(null);
+                    }, TOURANI_RENDER_PROFILE.finalizeTimeoutMs);
                 })
-                .catch(function () {
-                    return null;
-                });
+            ]);
 
             return fixWebmDurationModulePromise;
         }
@@ -1057,15 +2613,15 @@
                 'video/mp4'
             ];
             var webmWithAudio = [
-                'video/webm;codecs=vp8,opus',
                 'video/webm;codecs=vp9,opus',
-                'video/webm;codecs=vp8',
+                'video/webm;codecs=vp8,opus',
                 'video/webm;codecs=vp9',
+                'video/webm;codecs=vp8',
                 'video/webm'
             ];
             var webmVideoOnly = [
-                'video/webm;codecs=vp8',
                 'video/webm;codecs=vp9',
+                'video/webm;codecs=vp8',
                 'video/webm'
             ];
 
@@ -1089,7 +2645,8 @@
                     return {
                         recorder: new MediaRecorder(stream, {
                             mimeType: mimeType,
-                            videoBitsPerSecond: TOURANI_RENDER_PROFILE.videoBitsPerSecond
+                            videoBitsPerSecond: TOURANI_RENDER_PROFILE.videoBitsPerSecond,
+                            audioBitsPerSecond: TOURANI_RENDER_PROFILE.audioBitsPerSecond
                         }),
                         mimeType: mimeType
                     };
@@ -1100,7 +2657,8 @@
             try {
                 return {
                     recorder: new MediaRecorder(stream, {
-                        videoBitsPerSecond: TOURANI_RENDER_PROFILE.videoBitsPerSecond
+                        videoBitsPerSecond: TOURANI_RENDER_PROFILE.videoBitsPerSecond,
+                        audioBitsPerSecond: TOURANI_RENDER_PROFILE.audioBitsPerSecond
                     }),
                     mimeType: 'video/webm'
                 };
@@ -1111,6 +2669,40 @@
 
         function cloneSnapshot(snapshot) {
             return JSON.parse(JSON.stringify(snapshot));
+        }
+
+        function scaleFilmScenesForRender(scenes, durationScale) {
+            var scale = Math.max(0.12, Math.min(durationScale || 1, 1));
+            if (scale === 1) {
+                return scenes;
+            }
+
+            return scenes.map(function (scene) {
+                var clone = Object.assign({}, scene);
+                clone.duration = Math.max(scene.type === 'champion' ? 2200 : 1100, Math.round(scene.duration * scale));
+                return clone;
+            });
+        }
+
+        function fitFilmScenesToMaxDuration(scenes, maxDurationMs) {
+            if (!scenes || !scenes.length || !maxDurationMs) {
+                return scenes;
+            }
+
+            var totalDuration = scenes.reduce(function (sum, scene) {
+                return sum + scene.duration;
+            }, 0);
+
+            if (totalDuration <= maxDurationMs) {
+                return scenes;
+            }
+
+            var durationScale = maxDurationMs / totalDuration;
+            return scenes.map(function (scene) {
+                var clone = Object.assign({}, scene);
+                clone.duration = Math.max(120, Math.round(scene.duration * durationScale));
+                return clone;
+            });
         }
 
         function createBaseSnapshot() {
@@ -1162,6 +2754,69 @@
             return winnerName + ' rises above the bracket and takes the crown.';
         }
 
+        function getSelectionMomentLabel(selectionIndex, totalSelections) {
+            if (selectionIndex === 0) return 'Opening Draw';
+            if (selectionIndex === totalSelections - 1) return 'Final Slot Locked';
+            if (selectionIndex >= totalSelections - 3) return 'Bracket Tension';
+            return 'Draw Drama';
+        }
+
+        function getMatchMomentProfile(entry, roundLabel, matchIndex, totalMatches) {
+            var winnerIsSecondSlot = entry && entry.p2 && entry.winner && entry.winner.text === entry.p2.text;
+            if (roundLabel === 'Grand Final') {
+                return {
+                    label: 'Crowning Spin',
+                    accent: '#ffd700',
+                    audioProfile: 'coronation'
+                };
+            }
+            if (roundLabel === 'Semi Final') {
+                return {
+                    label: winnerIsSecondSlot ? 'Final Shockwave' : 'Final Ticket',
+                    accent: winnerIsSecondSlot ? '#ff66c4' : '#8feeff',
+                    audioProfile: winnerIsSecondSlot ? 'shock' : 'surge'
+                };
+            }
+            if (winnerIsSecondSlot) {
+                return {
+                    label: 'Bracket Breaker',
+                    accent: '#ff66c4',
+                    audioProfile: 'shock'
+                };
+            }
+            if (matchIndex === totalMatches - 1) {
+                return {
+                    label: 'Statement Win',
+                    accent: '#ffd27a',
+                    audioProfile: 'surge'
+                };
+            }
+            return {
+                label: 'Knockout Charge',
+                accent: '#8feeff',
+                audioProfile: 'pulse'
+            };
+        }
+
+        function drawMomentBadge(ctx, canvas, label, color, y, alignRight) {
+            if (!label) return;
+            var badgeWidth = 208;
+            var badgeHeight = 44;
+            var badgeX = alignRight ? (canvas.width - badgeWidth - 42) : 42;
+            ctx.save();
+            ctx.fillStyle = 'rgba(7, 11, 22, 0.9)';
+            ctx.strokeStyle = color || '#ffd700';
+            ctx.lineWidth = 2;
+            drawRoundedRectPath(ctx, badgeX, y, badgeWidth, badgeHeight, 999);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 22px Bebas Neue';
+            ctx.textAlign = 'center';
+            ctx.fillText(label.toUpperCase(), badgeX + badgeWidth / 2, y + 29);
+            ctx.restore();
+        }
+
         function drawFittedCenterText(ctx, text, x, y, maxWidth, fontWeight, initialSize, fontFamily) {
             var size = initialSize;
             var family = fontFamily || 'Segoe UI';
@@ -1173,34 +2828,255 @@
             ctx.fillText(text, x, y);
         }
 
+        function drawFittedLeftText(ctx, text, x, y, maxWidth, fontWeight, initialSize, fontFamily) {
+            var size = initialSize;
+            var family = fontFamily || 'Segoe UI';
+            while (size > 14) {
+                ctx.font = fontWeight + ' ' + size + 'px ' + family;
+                if (ctx.measureText(text).width <= maxWidth) break;
+                size -= 1;
+            }
+            ctx.fillText(text, x, y);
+        }
+
+        function drawPulseRing(ctx, x, y, radius, color, progress, lineWidth) {
+            var pulseRadius = radius + (progress * 22);
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, 0.42 - progress * 0.32);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth || 4;
+            ctx.beginPath();
+            ctx.arc(x, y, pulseRadius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function drawSceneSpotlight(ctx, canvas, color, elapsed, progress) {
+            var sweepX = canvas.width * 0.2 + Math.sin(elapsed * 0.0014 + progress * Math.PI) * 160 + (progress * canvas.width * 0.36);
+            var sweepY = canvas.height * 0.34 + Math.cos(elapsed * 0.001 + progress * Math.PI * 0.8) * 42;
+            var glow = ctx.createRadialGradient(sweepX, sweepY, 0, sweepX, sweepY, 220);
+            glow.addColorStop(0, color);
+            glow.addColorStop(0.42, 'rgba(255,255,255,0.08)');
+            glow.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.save();
+            ctx.globalAlpha = 0.54;
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(sweepX, sweepY, 220, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawSelectionFocusBanner(ctx, canvas, scene, progress, elapsed) {
+            if (!scene || !scene.focusPlayer) return;
+
+            var player = scene.focusPlayer;
+            var color = player.color || '#8feeff';
+            var bannerWidth = canvas.width - 96;
+            var bannerX = 48;
+            var bannerY = 168 + Math.sin(elapsed * 0.004) * 10;
+            var bannerHeight = 128;
+
+            ctx.save();
+            ctx.translate(canvas.width / 2, bannerY + bannerHeight / 2);
+            ctx.rotate(Math.sin(elapsed * 0.0017) * 0.018);
+            ctx.translate(-canvas.width / 2, -(bannerY + bannerHeight / 2));
+
+            var bannerGradient = ctx.createLinearGradient(bannerX, bannerY, bannerX + bannerWidth, bannerY + bannerHeight);
+            bannerGradient.addColorStop(0, 'rgba(5, 10, 20, 0.9)');
+            bannerGradient.addColorStop(0.52, 'rgba(18, 28, 48, 0.92)');
+            bannerGradient.addColorStop(1, 'rgba(12, 10, 30, 0.88)');
+            ctx.fillStyle = bannerGradient;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 24;
+            drawRoundedRectPath(ctx, bannerX, bannerY, bannerWidth, bannerHeight, 28);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            drawPulseRing(ctx, bannerX + 70, bannerY + bannerHeight / 2, 34, color, progress, 3);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(bannerX + 70, bannerY + bannerHeight / 2, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffe4a1';
+            ctx.font = '800 18px Rajdhani';
+            ctx.textAlign = 'left';
+            ctx.fillText('DRAW SPOTLIGHT', bannerX + 110, bannerY + 34);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 22;
+            drawFittedLeftText(ctx, player.text.toUpperCase(), bannerX + 110, bannerY + 78, bannerWidth - 152, '900', 40, 'Rajdhani');
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = 'rgba(255,255,255,0.84)';
+            ctx.font = '700 18px Rajdhani';
+            ctx.fillText('A new country storms into the quarter-finals and the noise inside the arena jumps another level.', bannerX + 110, bannerY + 106);
+            ctx.restore();
+        }
+
+        function getFullPoolWheelSlices() {
+            return pool && pool.length
+                ? pool.map(function (entry) { return copyStoryPlayer(entry); })
+                : [];
+        }
+
+        function drawCountryRosterPanel(ctx, canvas, slices, title, accentColor) {
+            if (!slices || !slices.length) return;
+
+            var panelX = 46;
+            var panelY = 154;
+            var panelW = canvas.width - 92;
+            var panelH = 454;
+            var columns = slices.length > 24 ? 3 : (slices.length > 16 ? 2 : 2);
+            var rows = Math.ceil(slices.length / columns);
+            var columnWidth = (panelW - 44) / columns;
+            var availableHeight = panelH - 110;
+            var calcLineHeight = Math.floor(availableHeight / Math.max(rows, 1));
+            var lineHeight = Math.min(34, Math.max(15, calcLineHeight));
+
+            ctx.save();
+            var panelGradient = ctx.createLinearGradient(panelX, panelY, panelX + panelW, panelY + panelH);
+            panelGradient.addColorStop(0, 'rgba(6, 11, 24, 0.84)');
+            panelGradient.addColorStop(1, 'rgba(15, 13, 34, 0.74)');
+            ctx.fillStyle = panelGradient;
+            ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+            ctx.lineWidth = 2;
+            drawRoundedRectPath(ctx, panelX, panelY, panelW, panelH, 28);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffe4a1';
+            ctx.font = '900 30px Bebas Neue';
+            ctx.textAlign = 'center';
+            ctx.fillText((title || 'FULL TOURNAMENT WHEEL').toUpperCase(), canvas.width / 2, panelY + 36);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.82)';
+            ctx.font = '800 17px Rajdhani';
+            ctx.fillText('EVERY COUNTRY IS ON THE WHEEL. THE DRAW AND RESULTS COME FROM RANDOM STOPS.', canvas.width / 2, panelY + 66);
+
+            slices.forEach(function (slice, index) {
+                var column = index % columns;
+                var row = Math.floor(index / columns);
+                var itemX = panelX + 22 + column * columnWidth;
+                var itemY = panelY + 102 + row * lineHeight;
+
+                ctx.fillStyle = slice.color || accentColor || '#8feeff';
+                drawRoundedRectPath(ctx, itemX, itemY - 14, 14, 14, 4);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'left';
+                ctx.shadowColor = 'rgba(0,0,0,0.75)';
+                ctx.shadowBlur = 10;
+                drawFittedLeftText(ctx, slice.text.toUpperCase(), itemX + 24, itemY - 2, columnWidth - 42, '900', 22, 'Rajdhani');
+                ctx.shadowBlur = 0;
+            });
+
+            ctx.restore();
+        }
+
+        function drawWheelDecisionBadge(ctx, canvas, label, color, y) {
+            var badgeWidth = 280;
+            var badgeHeight = 48;
+            var badgeX = (canvas.width - badgeWidth) / 2;
+            var badgeY = y;
+            ctx.save();
+            ctx.fillStyle = 'rgba(6, 10, 19, 0.84)';
+            ctx.strokeStyle = color || '#ffd700';
+            ctx.lineWidth = 2;
+            drawRoundedRectPath(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 999);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 24px Bebas Neue';
+            ctx.textAlign = 'center';
+            ctx.fillText((label || 'RANDOM WHEEL DECISION').toUpperCase(), canvas.width / 2, badgeY + 31);
+            ctx.restore();
+        }
+
+        function drawSideMatchPlate(ctx, x, y, width, height, text, color, align) {
+            ctx.save();
+            var plateGradient = ctx.createLinearGradient(x, y, x + width, y + height);
+            plateGradient.addColorStop(0, 'rgba(7, 10, 22, 0.9)');
+            plateGradient.addColorStop(1, 'rgba(18, 16, 36, 0.82)');
+            ctx.fillStyle = plateGradient;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 18;
+            drawRoundedRectPath(ctx, x, y, width, height, 24);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = 'rgba(255,255,255,0.68)';
+            ctx.font = '800 16px Rajdhani';
+            ctx.textAlign = align;
+            ctx.fillText('RANDOM ENTRY', align === 'left' ? x + 18 : x + width - 18, y + 28);
+
+            ctx.fillStyle = color;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 18;
+            drawFittedCenterText(ctx, text.toUpperCase(), x + width / 2, y + 68, width - 24, '900', 30, 'Rajdhani');
+            ctx.shadowBlur = 0;
+            ctx.restore();
+        }
+
         function buildFilmScenes(mode) {
             var filmMode = mode || 'thriller';
             var scenes = [];
             var snapshot = createBaseSnapshot();
-            var selectionBatchSize = 2;
+            var selectionBatchSize = 1;
             var lastRoundLabel = '';
+            var fullPoolSlices = getFullPoolWheelSlices();
+            var totalSelections = tournamentStory.selections.length;
+            var totalMatches = tournamentStory.matches.length;
 
             scenes.push({
                 type: 'intro',
-                duration: 2500,
+                duration: filmMode === 'thriller' ? 2600 : 2200,
                 title: 'WORLD CUP NIGHT',
-                subtitle: 'Floodlights blaze, the crowd rises, and eight contenders step into a knockout tournament built on pure nerve.',
-                snapshot: cloneSnapshot(snapshot)
+                subtitle: 'Floodlights blaze, the crowd swells, and eight contenders step into a knockout arena where every spin changes the night.',
+                snapshot: cloneSnapshot(snapshot),
+                wheelSlices: fullPoolSlices,
+                promotionColor: '#ffd700',
+                editProfile: 'glide'
+            });
+
+            scenes.push({
+                type: 'full-pool',
+                duration: filmMode === 'thriller' ? 2600 : 2300,
+                title: 'FULL TOURNAMENT WHEEL',
+                subtitle: 'Every country waits on the wheel before the quarter-finals. One by one, the draw turns chaos into a bracket.',
+                snapshot: cloneSnapshot(snapshot),
+                wheelSlices: fullPoolSlices,
+                promotionColor: '#8feeff',
+                editProfile: 'parade'
             });
 
             scenes.push({
                 type: 'overview',
-                duration: 2200,
+                duration: filmMode === 'thriller' ? 2100 : 1800,
                 title: 'THE CUP STORY BEGINS',
-                subtitle: 'The wheel becomes the draw machine, the bracket becomes the stadium, and every name is chasing the same trophy.',
-                snapshot: cloneSnapshot(snapshot)
+                subtitle: 'The wheel becomes the draw machine, the bracket becomes the stadium, and every country starts the same distance from glory.',
+                snapshot: cloneSnapshot(snapshot),
+                wheelSlices: fullPoolSlices,
+                promotionColor: '#ff66c4',
+                editProfile: 'glide'
             });
 
             for (var selectionIndex = 0; selectionIndex < tournamentStory.selections.length; selectionIndex += selectionBatchSize) {
                 var selectionBatch = tournamentStory.selections.slice(selectionIndex, selectionIndex + selectionBatchSize);
+                var selectionBeforeSnapshot = cloneSnapshot(snapshot);
                 selectionBatch.forEach(function (entry) {
                     snapshot[getSelectionSlotId(entry.slot)] = copyStoryPlayer(entry.player);
                 });
+                var selectionAfterSnapshot = cloneSnapshot(snapshot);
 
                 if (selectionBatch.length) {
                     var featuredSelection = selectionBatch[selectionBatch.length - 1];
@@ -1209,58 +3085,78 @@
                     });
                     scenes.push({
                         type: 'selection',
-                        duration: filmMode === 'thriller' ? 1800 : 1500,
+                        duration: filmMode === 'thriller' ? 2100 : 1800,
                         title: 'DRAW REVEAL ' + (Math.floor(selectionIndex / selectionBatchSize) + 1),
-                        subtitle: selectionNames.join(' and ') + ' are pulled into the bracket as the stadium reacts to the latest draw drama.',
-                        snapshot: cloneSnapshot(snapshot),
-                        wheelSlices: tournamentStory.selections.slice(0, selectionIndex + selectionBatch.length).map(function (entry) {
-                            return copyStoryPlayer(entry.player);
-                        }),
-                        focusPlayer: copyStoryPlayer(featuredSelection.player)
+                        subtitle: selectionNames.join(' and ') + ' are pulled into the bracket on a random wheel stop as the arena locks onto the next reveal.',
+                        snapshot: selectionAfterSnapshot,
+                        beforeSnapshot: selectionBeforeSnapshot,
+                        afterSnapshot: selectionAfterSnapshot,
+                        wheelSlices: fullPoolSlices,
+                        focusPlayer: copyStoryPlayer(featuredSelection.player),
+                        focusSlotId: getSelectionSlotId(featuredSelection.slot),
+                        promotionColor: featuredSelection.player.color || '#ffd700',
+                        momentLabel: getSelectionMomentLabel(selectionIndex, totalSelections),
+                        audioProfile: selectionIndex === totalSelections - 1 ? 'surge' : 'pulse',
+                        editProfile: selectionIndex === totalSelections - 1 ? 'impact' : 'focus'
                     });
                 }
             }
 
-            tournamentStory.matches.forEach(function (entry) {
+            tournamentStory.matches.forEach(function (entry, matchIndex) {
                 var roundLabel = getRoundLabel(entry.matchId);
+                var matchMomentProfile = getMatchMomentProfile(entry, roundLabel, matchIndex, totalMatches);
                 if (roundLabel !== lastRoundLabel) {
                     scenes.push({
                         type: 'round',
-                        duration: roundLabel === 'Grand Final' ? 2500 : 2000,
+                        duration: roundLabel === 'Grand Final' ? 2400 : 1900,
                         title: roundLabel.toUpperCase(),
                         subtitle: getRoundStageText(entry.matchId),
                         snapshot: cloneSnapshot(snapshot),
                         activeMatchId: entry.matchId,
-                        wheelSlices: [copyStoryPlayer(entry.p1), copyStoryPlayer(entry.p2)]
+                        wheelSlices: [copyStoryPlayer(entry.p1), copyStoryPlayer(entry.p2)],
+                        momentLabel: roundLabel === 'Grand Final' ? 'Title Night' : 'Pressure Rising',
+                        audioProfile: roundLabel === 'Grand Final' ? 'surge' : 'pulse',
+                        editProfile: roundLabel === 'Grand Final' ? 'impact' : 'glide'
                     });
                     lastRoundLabel = roundLabel;
                 }
 
+                var matchBeforeSnapshot = cloneSnapshot(snapshot);
                 snapshot[entry.winnerBoxId] = copyStoryPlayer(entry.winner);
+                var matchAfterSnapshot = cloneSnapshot(snapshot);
                 scenes.push({
                     type: 'match',
-                    duration: roundLabel === 'Grand Final' ? 3500 : (roundLabel === 'Semi Final' ? 2800 : 2400),
+                    duration: roundLabel === 'Grand Final' ? 4200 : (roundLabel === 'Semi Final' ? 3200 : 2600),
                     title: entry.p1.text + ' VS ' + entry.p2.text,
-                    subtitle: getPromotionLine(entry.matchId, entry.winner.text),
-                    snapshot: cloneSnapshot(snapshot),
+                    subtitle: getPromotionLine(entry.matchId, entry.winner.text) + ' The wheel decides the match under full knockout pressure.',
+                    snapshot: matchAfterSnapshot,
+                    beforeSnapshot: matchBeforeSnapshot,
+                    afterSnapshot: matchAfterSnapshot,
                     wheelSlices: [copyStoryPlayer(entry.p1), copyStoryPlayer(entry.p2)],
                     focusPlayer: copyStoryPlayer(entry.winner),
                     activeMatchId: entry.matchId,
                     winnerBoxId: entry.winnerBoxId,
-                    promotionColor: entry.winner.color || '#ffd700'
+                    promotionColor: entry.winner.color || '#ffd700',
+                    momentLabel: matchMomentProfile.label,
+                    momentAccent: matchMomentProfile.accent,
+                    audioProfile: matchMomentProfile.audioProfile,
+                    editProfile: roundLabel === 'Grand Final' ? 'finale' : 'impact'
                 });
             });
 
             if (tournamentStory.champion) {
                 scenes.push({
                     type: 'champion',
-                    duration: 4600,
+                    duration: 5200,
                     title: tournamentStory.champion.text,
                     subtitle: 'Champion of the night',
                     honorLine: 'All honour to the champion',
                     snapshot: cloneSnapshot(snapshot),
                     focusPlayer: copyStoryPlayer(tournamentStory.champion),
-                    promotionColor: tournamentStory.champion.color || '#ffd700'
+                    promotionColor: tournamentStory.champion.color || '#ffd700',
+                    momentLabel: 'Champion Crowned',
+                    audioProfile: 'coronation',
+                    editProfile: 'coronation'
                 });
             }
 
@@ -1269,24 +3165,33 @@
 
         function getFilmLayout() {
             return {
-                boxes: {
-                    'p-qf-1-1': { x: 82, y: 140, w: 170, h: 36 },
-                    'p-qf-1-2': { x: 82, y: 182, w: 170, h: 36 },
-                    'p-qf-2-1': { x: 82, y: 300, w: 170, h: 36 },
-                    'p-qf-2-2': { x: 82, y: 342, w: 170, h: 36 },
-                    'p-qf-3-1': { x: 1028, y: 140, w: 170, h: 36 },
-                    'p-qf-3-2': { x: 1028, y: 182, w: 170, h: 36 },
-                    'p-qf-4-1': { x: 1028, y: 300, w: 170, h: 36 },
-                    'p-qf-4-2': { x: 1028, y: 342, w: 170, h: 36 },
-                    'p-sf-1-1': { x: 302, y: 190, w: 170, h: 36 },
-                    'p-sf-1-2': { x: 302, y: 232, w: 170, h: 36 },
-                    'p-sf-2-1': { x: 808, y: 190, w: 170, h: 36 },
-                    'p-sf-2-2': { x: 808, y: 232, w: 170, h: 36 },
-                    'p-f-1-1': { x: 555, y: 470, w: 170, h: 36 },
-                    'p-f-1-2': { x: 555, y: 512, w: 170, h: 36 },
-                    'tournament-winner': { x: 502, y: 590, w: 276, h: 52 }
+                board: { x: 46, y: 88, w: 628, h: 610, r: 30 },
+                bay: { x: 84, y: 748, w: 552, h: 356, r: 36 },
+                controlRail: { x: 516, y: 892, w: 96, h: 132, r: 22 },
+                title: { x: 360, y: 126 },
+                headings: {
+                    quarter: { x: 172, y: 176 },
+                    semi: { x: 408, y: 176 },
+                    final: { x: 574, y: 176 }
                 },
-                wheel: { x: 640, y: 335, r: 160 } // Centered wheel with a larger, visible radius
+                boxes: {
+                    'p-qf-1-1': { x: 72, y: 214, w: 196, h: 30 },
+                    'p-qf-1-2': { x: 72, y: 248, w: 196, h: 30 },
+                    'p-qf-2-1': { x: 72, y: 302, w: 196, h: 30 },
+                    'p-qf-2-2': { x: 72, y: 336, w: 196, h: 30 },
+                    'p-qf-3-1': { x: 72, y: 420, w: 196, h: 30 },
+                    'p-qf-3-2': { x: 72, y: 454, w: 196, h: 30 },
+                    'p-qf-4-1': { x: 72, y: 508, w: 196, h: 30 },
+                    'p-qf-4-2': { x: 72, y: 542, w: 196, h: 30 },
+                    'p-sf-1-1': { x: 334, y: 260, w: 148, h: 30 },
+                    'p-sf-1-2': { x: 334, y: 294, w: 148, h: 30 },
+                    'p-sf-2-1': { x: 334, y: 462, w: 148, h: 30 },
+                    'p-sf-2-2': { x: 334, y: 496, w: 148, h: 30 },
+                    'p-f-1-1': { x: 514, y: 350, w: 118, h: 30 },
+                    'p-f-1-2': { x: 514, y: 384, w: 118, h: 30 },
+                    'tournament-winner': { x: 192, y: 880, w: 336, h: 64 }
+                },
+                wheel: { x: 360, y: 1012, r: 104 }
             };
         }
 
@@ -1299,7 +3204,7 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            var horizon = canvas.height * 0.74;
+            var horizon = canvas.height * 0.84;
             var pitch = ctx.createLinearGradient(0, horizon - 20, 0, canvas.height);
             pitch.addColorStop(0, 'rgba(11, 41, 33, 0.1)');
             pitch.addColorStop(1, 'rgba(8, 28, 18, 0.88)');
@@ -1319,7 +3224,7 @@
             }
 
             for (var j = 0; j < 3; j += 1) {
-                var sweepX = 180 + j * 360 + Math.sin(elapsed * 0.00055 + j) * 90;
+                var sweepX = 110 + j * 220 + Math.sin(elapsed * 0.00055 + j) * 60;
                 ctx.save();
                 ctx.translate(sweepX, horizon - 120);
                 ctx.rotate(-0.18 + j * 0.18 + Math.sin(elapsed * 0.00045 + j) * 0.1);
@@ -1340,23 +3245,85 @@
             ctx.strokeStyle = 'rgba(255,255,255,0.08)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.ellipse(canvas.width / 2, horizon + 18, 460, 74, 0, Math.PI, Math.PI * 2);
+            ctx.ellipse(canvas.width / 2, horizon + 18, 260, 74, 0, Math.PI, Math.PI * 2);
             ctx.stroke();
         }
 
-        function drawBracketLines(ctx) {
-            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        function drawBracketLines(ctx, layout) {
+            function getBox(id) {
+                return layout.boxes[id];
+            }
+
+            function getMatchCenter(ids) {
+                var first = getBox(ids[0]);
+                var second = getBox(ids[1]);
+                return {
+                    x: first.x + first.w,
+                    y: ((first.y + (first.h / 2)) + (second.y + (second.h / 2))) / 2
+                };
+            }
+
+            function getTargetCenter(ids) {
+                var first = getBox(ids[0]);
+                var second = getBox(ids[1]);
+                return {
+                    x: first.x,
+                    y: ((first.y + (first.h / 2)) + (second.y + (second.h / 2))) / 2
+                };
+            }
+
+            function connectPair(sourceTopIds, sourceBottomIds, targetIds) {
+                var sourceA = getMatchCenter(sourceTopIds);
+                var sourceB = getMatchCenter(sourceBottomIds);
+                var target = getTargetCenter(targetIds);
+                var branchX = sourceA.x + 46;
+                var targetX = target.x - 18;
+
+                ctx.beginPath();
+                ctx.moveTo(sourceA.x, sourceA.y);
+                ctx.lineTo(branchX, sourceA.y);
+                ctx.moveTo(sourceB.x, sourceB.y);
+                ctx.lineTo(branchX, sourceB.y);
+                ctx.moveTo(branchX, sourceA.y);
+                ctx.lineTo(branchX, sourceB.y);
+                ctx.moveTo(branchX, target.y);
+                ctx.lineTo(targetX, target.y);
+                ctx.lineTo(target.x, target.y);
+                ctx.stroke();
+            }
+
+            function connectSemiToFinal(sourceTopIds, sourceBottomIds, targetIds) {
+                var sourceA = getTargetCenter(sourceTopIds);
+                var sourceB = getTargetCenter(sourceBottomIds);
+                var target = getTargetCenter(targetIds);
+                var branchX = sourceA.x + 62;
+                var targetX = target.x - 18;
+
+                ctx.beginPath();
+                ctx.moveTo(sourceA.x, sourceA.y);
+                ctx.lineTo(branchX, sourceA.y);
+                ctx.moveTo(sourceB.x, sourceB.y);
+                ctx.lineTo(branchX, sourceB.y);
+                ctx.moveTo(branchX, sourceA.y);
+                ctx.lineTo(branchX, sourceB.y);
+                ctx.moveTo(branchX, target.y);
+                ctx.lineTo(targetX, target.y);
+                ctx.lineTo(target.x, target.y);
+                ctx.stroke();
+            }
+
+            ctx.save();
+            ctx.strokeStyle = 'rgba(126, 231, 255, 0.32)';
+            ctx.shadowColor = 'rgba(126, 231, 255, 0.2)';
+            ctx.shadowBlur = 14;
             ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(252, 200); ctx.lineTo(302, 200);
-            ctx.moveTo(252, 360); ctx.lineTo(302, 360);
-            ctx.moveTo(472, 208); ctx.lineTo(555, 208);
-            ctx.moveTo(472, 360); ctx.lineTo(555, 360);
-            ctx.moveTo(1028, 200); ctx.lineTo(978, 200);
-            ctx.moveTo(1028, 360); ctx.lineTo(978, 360);
-            ctx.moveTo(808, 208); ctx.lineTo(725, 208);
-            ctx.moveTo(808, 360); ctx.lineTo(725, 360);
-            ctx.stroke();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            connectPair(['p-qf-1-1', 'p-qf-1-2'], ['p-qf-2-1', 'p-qf-2-2'], ['p-sf-1-1', 'p-sf-1-2']);
+            connectPair(['p-qf-3-1', 'p-qf-3-2'], ['p-qf-4-1', 'p-qf-4-2'], ['p-sf-2-1', 'p-sf-2-2']);
+            connectSemiToFinal(['p-sf-1-1', 'p-sf-1-2'], ['p-sf-2-1', 'p-sf-2-2'], ['p-f-1-1', 'p-f-1-2']);
+            ctx.restore();
         }
 
         function drawRoundedRectPath(ctx, x, y, width, height, radius) {
@@ -1376,23 +3343,131 @@
 
         function drawPlayerCard(ctx, box, player, active, championBox) {
             var bg = ctx.createLinearGradient(box.x, box.y, box.x + box.w, box.y + box.h);
-            bg.addColorStop(0, active ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.08)');
-            bg.addColorStop(1, 'rgba(6,8,16,0.92)');
+            bg.addColorStop(0, championBox ? 'rgba(74, 56, 18, 0.96)' : (active ? 'rgba(51, 74, 110, 0.95)' : 'rgba(32, 45, 69, 0.9)'));
+            bg.addColorStop(1, championBox ? 'rgba(20, 16, 10, 0.96)' : 'rgba(9,13,24,0.95)');
             ctx.fillStyle = bg;
-            ctx.strokeStyle = active ? (player.color || '#00f2ff') : 'rgba(255,255,255,0.16)';
+            ctx.strokeStyle = championBox ? 'rgba(255,210,122,0.78)' : (active ? (player.color || '#8feeff') : 'rgba(126, 231, 255, 0.18)');
             ctx.lineWidth = championBox ? 3 : 2;
-            ctx.shadowColor = active ? (player.color || '#00f2ff') : 'transparent';
-            ctx.shadowBlur = active ? 18 : 0;
+            ctx.shadowColor = championBox ? 'rgba(255,210,122,0.42)' : (active ? (player.color || '#8feeff') : 'transparent');
+            ctx.shadowBlur = championBox ? 24 : (active ? 18 : 0);
             drawRoundedRectPath(ctx, box.x, box.y, box.w, box.h, championBox ? 18 : 14);
             ctx.fill();
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            ctx.fillStyle = player.text === '?' ? '#7a8791' : (player.color || '#ffffff');
-            ctx.font = championBox ? '800 28px Segoe UI' : '700 17px Segoe UI';
+            if (player.text !== '?') {
+                ctx.save();
+                ctx.globalAlpha = championBox ? 0.22 : 0.16;
+                ctx.fillStyle = player.color || '#8feeff';
+                drawRoundedRectPath(ctx, box.x + 2, box.y + 2, Math.max(28, Math.min(58, box.w * 0.18)), box.h - 4, championBox ? 14 : 10);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            ctx.fillStyle = player.text === '?' ? '#7a8791' : 'rgba(255,255,255,0.92)';
+            ctx.font = championBox ? '900 28px Rajdhani' : (active ? '900 17px Rajdhani' : '800 15px Rajdhani');
+            ctx.textAlign = championBox ? 'center' : 'left';
+            ctx.textBaseline = 'middle';
+
+            if (!championBox) {
+                ctx.fillStyle = player.text === '?' ? 'rgba(255,255,255,0.18)' : (player.color || '#8feeff');
+                drawRoundedRectPath(ctx, box.x + 7, box.y + 7, 16, box.h - 14, 4);
+                ctx.fill();
+                ctx.fillStyle = player.text === '?' ? '#7a8791' : '#f6fbff';
+                ctx.shadowColor = player.text === '?' ? 'transparent' : 'rgba(0,0,0,0.75)';
+                ctx.shadowBlur = 10;
+                drawFittedLeftText(ctx, player.text, box.x + 33, box.y + box.h / 2 + 1, box.w - 42, active ? '900' : '800', active ? 17 : 15, 'Rajdhani');
+                ctx.shadowBlur = 0;
+                return;
+            }
+
+            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowBlur = 12;
+            ctx.fillText(player.text, box.x + box.w / 2, box.y + box.h / 2 + 1);
+            ctx.shadowBlur = 0;
+        }
+
+        function drawReplayShell(ctx, layout) {
+            var board = layout.board;
+            var bay = layout.bay;
+            var rail = layout.controlRail;
+
+            ctx.save();
+            var boardGradient = ctx.createLinearGradient(board.x, board.y, board.x, board.y + board.h);
+            boardGradient.addColorStop(0, 'rgba(12, 29, 48, 0.98)');
+            boardGradient.addColorStop(0.55, 'rgba(8, 18, 34, 0.98)');
+            boardGradient.addColorStop(1, 'rgba(4, 10, 19, 0.98)');
+            ctx.fillStyle = boardGradient;
+            ctx.strokeStyle = 'rgba(152, 233, 255, 0.34)';
+            ctx.lineWidth = 2;
+            ctx.shadowColor = 'rgba(107, 228, 255, 0.16)';
+            ctx.shadowBlur = 24;
+            drawRoundedRectPath(ctx, board.x, board.y, board.w, board.h, board.r);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            var boardGlow = ctx.createRadialGradient(board.x + board.w * 0.22, board.y + 110, 0, board.x + board.w * 0.22, board.y + 110, 180);
+            boardGlow.addColorStop(0, 'rgba(255, 102, 196, 0.12)');
+            boardGlow.addColorStop(1, 'rgba(255, 102, 196, 0)');
+            ctx.fillStyle = boardGlow;
+            drawRoundedRectPath(ctx, board.x, board.y, board.w, board.h, board.r);
+            ctx.fill();
+
+            ctx.strokeStyle = 'rgba(138, 230, 255, 0.08)';
+            drawRoundedRectPath(ctx, board.x + 14, board.y + 14, board.w - 28, board.h - 28, board.r - 8);
+            ctx.stroke();
+
+            var bayGradient = ctx.createLinearGradient(bay.x, bay.y, bay.x, bay.y + bay.h);
+            bayGradient.addColorStop(0, 'rgba(10, 22, 37, 0.96)');
+            bayGradient.addColorStop(1, 'rgba(4, 8, 14, 0.98)');
+            ctx.fillStyle = bayGradient;
+            ctx.strokeStyle = 'rgba(145, 232, 255, 0.26)';
+            drawRoundedRectPath(ctx, bay.x, bay.y, bay.w, bay.h, bay.r);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(189, 145, 88, 0.52)';
+            ctx.lineWidth = 5;
+            drawRoundedRectPath(ctx, bay.x + 18, bay.y + 16, 36, bay.h - 76, 18);
+            ctx.stroke();
+            drawRoundedRectPath(ctx, bay.x + bay.w - 54, bay.y + 16, 36, bay.h - 76, 18);
+            ctx.stroke();
+
+            ctx.fillStyle = 'rgba(11, 22, 38, 0.94)';
+            ctx.strokeStyle = 'rgba(126, 231, 255, 0.18)';
+            ctx.lineWidth = 1.5;
+            drawRoundedRectPath(ctx, rail.x, rail.y, rail.w, rail.h, rail.r);
+            ctx.fill();
+            ctx.stroke();
+
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(player.text, box.x + box.w / 2, box.y + box.h / 2 + 1);
+            var titleGradient = ctx.createLinearGradient(board.x, 0, board.x + board.w, 0);
+            titleGradient.addColorStop(0, '#f8fbff');
+            titleGradient.addColorStop(0.42, '#ffd27a');
+            titleGradient.addColorStop(0.74, '#8feeff');
+            titleGradient.addColorStop(1, '#ff66c4');
+            ctx.fillStyle = titleGradient;
+            ctx.font = '900 28px Bebas Neue';
+            ctx.fillText('GLOBAL TOURNAMENT BRACKET', layout.title.x, layout.title.y);
+
+            ctx.fillStyle = '#ffd27a';
+            ctx.font = '800 14px Rajdhani';
+            ctx.fillText('QUARTER FINAL', layout.headings.quarter.x, layout.headings.quarter.y);
+            ctx.fillText('SEMI FINAL', layout.headings.semi.x, layout.headings.semi.y);
+            ctx.fillText('FINAL', layout.headings.final.x, layout.headings.final.y);
+
+            ctx.font = '900 22px Bebas Neue';
+            ctx.fillText('FINAL CHAMPION?', bay.x + (bay.w / 2), bay.y + 82);
+
+            ctx.fillStyle = 'rgba(237, 247, 255, 0.9)';
+            ctx.font = '800 16px Rajdhani';
+            ctx.fillText('AUTO', rail.x + (rail.w / 2), rail.y + 36);
+            ctx.fillText('SPIN', rail.x + (rail.w / 2), rail.y + 58);
+            ctx.fillText('TOURANI', rail.x + (rail.w / 2), rail.y + 98);
+            ctx.fillText('ENABLED', rail.x + (rail.w / 2), rail.y + 120);
+            ctx.restore();
         }
 
         function drawReplayBracket(ctx, snapshot, activeMatchId, elapsed) {
@@ -1408,7 +3483,8 @@
             };
             var highlighted = highlightMap[activeMatchId] || [];
 
-            drawBracketLines(ctx);
+            drawReplayShell(ctx, layout);
+            drawBracketLines(ctx, layout);
 
             Object.keys(layout.boxes).forEach(function (key) {
                 var box = layout.boxes[key];
@@ -1423,18 +3499,164 @@
                 drawPlayerCard(ctx, box, player, isActive, key === 'tournament-winner');
                 ctx.restore();
             });
-
-            ctx.save();
-            ctx.globalAlpha = activeMatchId ? 0.2 : 0.6; // Hide texts during matches
-            ctx.fillStyle = 'rgba(255,255,255,0.58)';
-            ctx.font = '700 15px Segoe UI';
-            ctx.textAlign = 'center';
-            ctx.fillText('LEFT BRACKET', 220, 92);
-            ctx.fillText('RIGHT BRACKET', 1060, 92);
-            ctx.fillText('THE FINAL', 640, 440);
-            ctx.restore();
         }
 
+
+        function getTourAniDesignCanvas() {
+            return {
+                width: TOURANI_RENDER_PROFILE.designWidth,
+                height: TOURANI_RENDER_PROFILE.designHeight
+            };
+        }
+
+        function easeInOutCubic(value) {
+            var t = Math.max(0, Math.min(value, 1));
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function easeOutQuart(value) {
+            var t = Math.max(0, Math.min(value, 1));
+            return 1 - Math.pow(1 - t, 4);
+        }
+
+        function clampNumber(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+
+        function getSceneFocusPoint(scene) {
+            if (!scene) return null;
+            var layout = getFilmLayout();
+            var focusBoxId = scene.focusSlotId || scene.winnerBoxId;
+            if (focusBoxId && layout.boxes[focusBoxId]) {
+                var box = layout.boxes[focusBoxId];
+                return {
+                    x: box.x + box.w / 2,
+                    y: box.y + box.h / 2
+                };
+            }
+
+            if (scene.type === 'champion') {
+                return { x: layout.bay.x + (layout.bay.w / 2), y: layout.bay.y + 136 };
+            }
+
+            if (scene.type === 'full-pool' || scene.type === 'selection' || scene.type === 'match') {
+                return { x: 360, y: 864 };
+            }
+
+            return { x: 360, y: 564 };
+        }
+
+        function applySceneCamera(ctx, canvas, scene, progress, elapsed) {
+            var editProfile = scene && scene.editProfile ? scene.editProfile : 'glide';
+            var focus = getSceneFocusPoint(scene) || { x: canvas.width / 2, y: canvas.height / 2 };
+            var smoothProgress = easeInOutCubic(progress);
+            var revealLift = progress > 0.72 ? easeOutQuart((progress - 0.72) / 0.28) : 0;
+            var zoom = 1.02;
+            var rotation = Math.sin(elapsed * 0.0007) * 0.0035;
+            var driftX = Math.sin(elapsed * 0.00032 + progress * Math.PI) * 10;
+            var driftY = Math.cos(elapsed * 0.00028 + progress * Math.PI * 0.9) * 8;
+
+            if (editProfile === 'focus') {
+                zoom = 1.06 + (1 - smoothProgress) * 0.06 + revealLift * 0.03;
+                rotation *= 0.6;
+            } else if (editProfile === 'impact') {
+                zoom = 1.05 + Math.sin(progress * Math.PI) * 0.04 + revealLift * 0.05;
+                rotation = Math.sin(elapsed * 0.0016) * 0.005;
+                driftX *= 1.25;
+                driftY *= 0.7;
+            } else if (editProfile === 'finale') {
+                zoom = 1.08 + Math.sin(progress * Math.PI) * 0.05 + revealLift * 0.06;
+                rotation = Math.sin(elapsed * 0.0012) * 0.004;
+                driftX *= 0.8;
+                driftY *= 0.55;
+            } else if (editProfile === 'coronation') {
+                zoom = 1.03 + Math.sin(elapsed * 0.0011) * 0.014 + Math.sin(progress * Math.PI) * 0.03;
+                rotation = Math.sin(elapsed * 0.0008) * 0.002;
+                driftX *= 0.45;
+                driftY *= 0.35;
+            } else if (editProfile === 'parade') {
+                zoom = 1.03 + Math.sin(elapsed * 0.0009) * 0.016;
+                driftX *= 1.15;
+                driftY *= 0.6;
+            } else {
+                zoom = 1.025 + Math.sin(elapsed * 0.00075) * 0.01;
+            }
+
+            var maxPanX = 42;
+            var maxPanY = 64;
+            var panX = clampNumber((canvas.width / 2 - focus.x) * 0.18, -maxPanX, maxPanX) + driftX;
+            var panY = clampNumber((canvas.height * 0.45 - focus.y) * 0.14, -maxPanY, maxPanY) + driftY;
+
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rotation);
+            ctx.scale(zoom, zoom);
+            ctx.translate(-(canvas.width / 2) + panX, -(canvas.height / 2) + panY);
+        }
+
+        function drawSceneTransitionEffects(ctx, canvas, scene, progress) {
+            var fadeIn = 1 - easeOutQuart(Math.min(progress / 0.12, 1));
+            var fadeOut = progress > 0.88 ? easeOutQuart((progress - 0.88) / 0.12) : 0;
+            var flashStrength = 0;
+            if (scene && (scene.type === 'selection' || scene.type === 'match')) {
+                if (progress > 0.74 && progress < 0.92) {
+                    flashStrength = Math.sin(((progress - 0.74) / 0.18) * Math.PI) * 0.16;
+                }
+            }
+            if (scene && scene.type === 'champion') {
+                flashStrength = Math.max(flashStrength, Math.sin(progress * Math.PI) * 0.1);
+            }
+
+            if (fadeIn > 0.001 || fadeOut > 0.001) {
+                var matteStrength = Math.max(fadeIn, fadeOut) * 0.65;
+                ctx.save();
+                ctx.fillStyle = 'rgba(3, 6, 16,' + matteStrength.toFixed(3) + ')';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+            }
+
+            if (flashStrength > 0.001) {
+                var centerX = canvas.width / 2;
+                var centerY = scene && scene.type === 'champion' ? canvas.height * 0.42 : canvas.height * 0.52;
+                var flash = ctx.createRadialGradient(centerX, centerY, 20, centerX, centerY, canvas.width * 0.72);
+                flash.addColorStop(0, 'rgba(255, 255, 255,' + (flashStrength * 0.9).toFixed(3) + ')');
+                flash.addColorStop(0.3, 'rgba(255, 223, 145,' + (flashStrength * 0.45).toFixed(3) + ')');
+                flash.addColorStop(1, 'rgba(255, 223, 145,0)');
+                ctx.save();
+                ctx.fillStyle = flash;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+            }
+        }
+
+        function drawFilmFinish(ctx, canvas, scene, progress, elapsed) {
+            var vignette = ctx.createRadialGradient(canvas.width / 2, canvas.height * 0.44, canvas.width * 0.18, canvas.width / 2, canvas.height * 0.5, canvas.height * 0.84);
+            vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
+            vignette.addColorStop(0.72, 'rgba(3, 8, 18, 0.08)');
+            vignette.addColorStop(1, 'rgba(2, 4, 12, 0.44)');
+            ctx.save();
+            ctx.fillStyle = vignette;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.globalAlpha = 0.08;
+            for (var row = 0; row < canvas.height; row += 4) {
+                var bandAlpha = 0.022 + (((row + Math.floor(elapsed * 0.08)) % 24) / 24) * 0.018;
+                ctx.fillStyle = 'rgba(255,255,255,' + bandAlpha.toFixed(3) + ')';
+                ctx.fillRect(0, row, canvas.width, 1);
+            }
+            ctx.restore();
+
+            if (scene && scene.type === 'champion') {
+                var crownGlow = ctx.createRadialGradient(canvas.width / 2, canvas.height * 0.38, 24, canvas.width / 2, canvas.height * 0.38, 260);
+                crownGlow.addColorStop(0, 'rgba(255, 226, 129, 0.26)');
+                crownGlow.addColorStop(0.45, 'rgba(255, 226, 129, 0.11)');
+                crownGlow.addColorStop(1, 'rgba(255, 226, 129, 0)');
+                ctx.save();
+                ctx.globalAlpha = 0.8 + Math.sin(progress * Math.PI) * 0.18;
+                ctx.fillStyle = crownGlow;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+            }
+        }
         function drawReplayWheel(ctx, scene, progress, elapsed) {
             var layout = getFilmLayout();
             var wheel = layout.wheel;
@@ -1446,13 +3668,48 @@
             ];
             var angleStep = (Math.PI * 2) / slices.length;
             
-            // INCREASED SPIN SPEED FOR HIGHER VISIBILITY IN REPLAY
-            var spinMultiplier = scene.type === 'match' ? 1.8 : 0.6;
-            var baseRotation = elapsed * 0.0007 + progress * Math.PI * spinMultiplier;
+            var spinMultiplier = scene.type === 'match' ? 2.8 : (scene.type === 'selection' ? 1.5 : 0.8);
+            var baseRotation = elapsed * 0.0011 + progress * Math.PI * spinMultiplier;
+            var readoutText = getWheelReadoutText(slices, baseRotation * (180 / Math.PI));
+
+            drawPulseRing(ctx, wheel.x, wheel.y, wheel.r + 22, scene.promotionColor || '#8feeff', (elapsed * 0.0006) % 1, 5);
+
+            ctx.save();
+            var readoutWidth = 312;
+            var readoutHeight = 54;
+            var readoutX = wheel.x - readoutWidth / 2;
+            var readoutY = wheel.y - wheel.r - 116;
+            ctx.fillStyle = 'rgba(5, 10, 21, 0.88)';
+            ctx.strokeStyle = scene.promotionColor || '#ffd700';
+            ctx.lineWidth = 2;
+            drawRoundedRectPath(ctx, readoutX, readoutY, readoutWidth, readoutHeight, 999);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 14px Bebas Neue';
+            ctx.textAlign = 'center';
+            ctx.fillText('COUNTRY UNDER THE POINTER', wheel.x, readoutY + 16);
+            ctx.fillStyle = '#fff4cf';
+            ctx.shadowColor = scene.promotionColor || '#ffd700';
+            ctx.shadowBlur = 16;
+            drawFittedCenterText(ctx, readoutText.toUpperCase(), wheel.x, readoutY + 38, readoutWidth - 26, '900', 24, 'Rajdhani');
+            ctx.shadowBlur = 0;
+            ctx.restore();
 
             ctx.save();
             ctx.translate(wheel.x, wheel.y);
             ctx.rotate(baseRotation);
+
+            ctx.save();
+            var ringGradient = ctx.createRadialGradient(0, 0, wheel.r * 0.25, 0, 0, wheel.r + 24);
+            ringGradient.addColorStop(0, 'rgba(255, 239, 191, 0.52)');
+            ringGradient.addColorStop(0.35, 'rgba(37, 72, 121, 0.22)');
+            ringGradient.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = ringGradient;
+            ctx.beginPath();
+            ctx.arc(0, 0, wheel.r + 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
 
             for (var i = 0; i < slices.length; i += 1) {
                 var start = i * angleStep;
@@ -1462,44 +3719,42 @@
                 ctx.arc(0, 0, wheel.r, start, end);
                 ctx.closePath();
                 ctx.fillStyle = slices[i].color;
-                ctx.globalAlpha = 0.98; // High visibility
+                ctx.globalAlpha = 0.98;
                 ctx.fill();
                 ctx.globalAlpha = 1;
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+                ctx.lineWidth = 2;
                 ctx.stroke();
 
                 ctx.save();
                 ctx.rotate(start + angleStep / 2);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = '800 18px Segoe UI'; // Increased font size for player names inside wheel
+                ctx.font = slices.length > 12 ? '900 8px Rajdhani' : (slices.length > 6 ? '900 10px Rajdhani' : '900 14px Rajdhani');
                 ctx.shadowColor = 'rgba(0,0,0,0.8)';
-                ctx.shadowBlur = 6;
+                ctx.shadowBlur = 14;
                 ctx.textAlign = 'center';
-                ctx.fillText(slices[i].text.toUpperCase(), wheel.r * 0.65, 6);
+                drawFittedCenterText(ctx, slices[i].text.toUpperCase(), wheel.r * 0.6, 6, wheel.r * 0.78, '900', slices.length > 12 ? 8 : (slices.length > 6 ? 10 : 14), 'Rajdhani');
                 ctx.restore();
             }
 
             ctx.restore();
 
-            // Wheel center and pointer
             ctx.beginPath();
-            ctx.arc(wheel.x, wheel.y, 35, 0, Math.PI * 2);
+            ctx.arc(wheel.x, wheel.y, 24, 0, Math.PI * 2);
             ctx.fillStyle = '#111';
             ctx.fill();
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = '#00f2ff';
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#8feeff';
             ctx.stroke();
 
-            // Arrow on top
             ctx.beginPath();
-            ctx.moveTo(wheel.x + wheel.r + 10, wheel.y);
-            ctx.lineTo(wheel.x + wheel.r + 60, wheel.y - 25);
-            ctx.lineTo(wheel.x + wheel.r + 60, wheel.y + 25);
+            ctx.moveTo(wheel.x, wheel.y - wheel.r - 20);
+            ctx.lineTo(wheel.x - 18, wheel.y - wheel.r - 56);
+            ctx.lineTo(wheel.x + 18, wheel.y - wheel.r - 56);
             ctx.closePath();
-            ctx.fillStyle = '#ff00ff';
-            ctx.shadowColor = '#ff00ff';
-            ctx.shadowBlur = 20;
+            ctx.fillStyle = '#8feeff';
+            ctx.shadowColor = '#8feeff';
+            ctx.shadowBlur = 18;
             ctx.fill();
             ctx.shadowBlur = 0;
         }
@@ -1508,7 +3763,7 @@
             var champion = scene.focusPlayer || { text: 'Champion', color: '#ffd700' };
             var championColor = champion.color || '#ffd700';
             var cx = canvas.width / 2;
-            var cy = canvas.height * 0.48;
+            var cy = canvas.height * 0.43;
             var pulse = 0.92 + Math.sin(elapsed * 0.006) * 0.08;
 
             ctx.save();
@@ -1516,21 +3771,21 @@
             drawReplayBracket(ctx, scene.snapshot, null, elapsed);
             ctx.restore();
 
-            var backGlow = ctx.createRadialGradient(cx, cy - 20, 30, cx, cy, 320);
+            var backGlow = ctx.createRadialGradient(cx, cy - 20, 30, cx, cy, 250);
             backGlow.addColorStop(0, 'rgba(255,215,0,0.32)');
             backGlow.addColorStop(0.45, 'rgba(255,255,255,0.08)');
             backGlow.addColorStop(1, 'rgba(255,215,0,0)');
             ctx.fillStyle = backGlow;
             ctx.beginPath();
-            ctx.arc(cx, cy, 320, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 250, 0, Math.PI * 2);
             ctx.fill();
 
             for (var beamIndex = 0; beamIndex < 5; beamIndex += 1) {
                 var beamAngle = -0.6 + beamIndex * 0.3 + Math.sin(elapsed * 0.0007 + beamIndex) * 0.08;
                 ctx.save();
-                ctx.translate(cx, cy + 220);
+                ctx.translate(cx, cy + 180);
                 ctx.rotate(beamAngle);
-                var beamGradient = ctx.createLinearGradient(0, 0, 0, -420);
+                var beamGradient = ctx.createLinearGradient(0, 0, 0, -320);
                 beamGradient.addColorStop(0, 'rgba(255,215,0,0)');
                 beamGradient.addColorStop(0.4, 'rgba(255,255,255,0.08)');
                 beamGradient.addColorStop(1, 'rgba(255,215,0,0.24)');
@@ -1538,8 +3793,8 @@
                 ctx.beginPath();
                 ctx.moveTo(-34, 0);
                 ctx.lineTo(34, 0);
-                ctx.lineTo(10, -420);
-                ctx.lineTo(-10, -420);
+                ctx.lineTo(10, -320);
+                ctx.lineTo(-10, -320);
                 ctx.closePath();
                 ctx.fill();
                 ctx.restore();
@@ -1560,7 +3815,7 @@
             }
 
             ctx.save();
-            ctx.translate(cx, cy + 34);
+            ctx.translate(cx, cy + 26);
             ctx.scale(1.05 + (pulse - 0.92) * 0.18, 1.05 + (pulse - 0.92) * 0.18);
             ctx.fillStyle = 'rgba(255,215,0,0.95)';
             ctx.shadowColor = 'rgba(255,215,0,0.4)';
@@ -1583,10 +3838,10 @@
             ctx.fill();
             ctx.restore();
 
-            var plaqueWidth = 740;
-            var plaqueHeight = 250;
+            var plaqueWidth = 560;
+            var plaqueHeight = 196;
             var plaqueX = cx - plaqueWidth / 2;
-            var plaqueY = cy + 70;
+            var plaqueY = cy + 138;
             var plaqueGradient = ctx.createLinearGradient(plaqueX, plaqueY, plaqueX + plaqueWidth, plaqueY + plaqueHeight);
             plaqueGradient.addColorStop(0, 'rgba(10, 14, 30, 0.84)');
             plaqueGradient.addColorStop(0.55, 'rgba(28, 18, 10, 0.92)');
@@ -1602,23 +3857,25 @@
             ctx.shadowBlur = 0;
 
             ctx.fillStyle = '#ffe7a8';
-            ctx.font = '800 24px Segoe UI';
+            ctx.font = '800 19px Segoe UI';
             ctx.textAlign = 'center';
-            ctx.fillText((scene.honorLine || 'ALL HONOUR TO THE CHAMPION').toUpperCase(), cx, plaqueY + 52);
+            ctx.fillText((scene.honorLine || 'ALL HONOUR TO THE CHAMPION').toUpperCase(), cx, plaqueY + 44);
 
             ctx.fillStyle = championColor;
             ctx.shadowColor = championColor;
             ctx.shadowBlur = 24;
-            drawFittedCenterText(ctx, champion.text.toUpperCase(), cx, plaqueY + 130, plaqueWidth - 80, '900', 68, 'Segoe UI');
+            drawFittedCenterText(ctx, champion.text.toUpperCase(), cx, plaqueY + 106, plaqueWidth - 70, '900', 48, 'Segoe UI');
             ctx.shadowBlur = 0;
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '700 24px Segoe UI';
-            ctx.fillText((scene.subtitle || 'Champion of the night').toUpperCase(), cx, plaqueY + 180);
+            ctx.font = '700 19px Segoe UI';
+            ctx.fillText((scene.subtitle || 'Champion of the night').toUpperCase(), cx, plaqueY + 146);
 
             ctx.fillStyle = 'rgba(255,255,255,0.8)';
-            ctx.font = '700 18px Segoe UI';
-            ctx.fillText('CROWNED WITH PRIDE, GLORY, AND THE FULL RESPECT OF THE BRACKET', cx, plaqueY + 218);
+            ctx.font = '700 14px Segoe UI';
+            ctx.fillText('CROWNED WITH PRIDE, GLORY, AND THE FULL RESPECT OF THE BRACKET', cx, plaqueY + 176);
+
+            drawPulseRing(ctx, cx, cy + 20, 118, championColor, (elapsed * 0.0007) % 1, 5);
         }
 
         function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1644,17 +3901,17 @@
         }
 
         function drawFilmChrome(ctx, canvas) {
-            var topGradient = ctx.createLinearGradient(0, 0, 0, 120);
+            var topGradient = ctx.createLinearGradient(0, 0, 0, 160);
             topGradient.addColorStop(0, 'rgba(0,0,0,0.88)');
             topGradient.addColorStop(1, 'rgba(0,0,0,0)');
             ctx.fillStyle = topGradient;
-            ctx.fillRect(0, 0, canvas.width, 120);
+            ctx.fillRect(0, 0, canvas.width, 160);
 
-            var bottomGradient = ctx.createLinearGradient(0, canvas.height - 160, 0, canvas.height);
+            var bottomGradient = ctx.createLinearGradient(0, canvas.height - 220, 0, canvas.height);
             bottomGradient.addColorStop(0, 'rgba(0,0,0,0)');
             bottomGradient.addColorStop(1, 'rgba(0,0,0,0.9)');
             ctx.fillStyle = bottomGradient;
-            ctx.fillRect(0, canvas.height - 160, canvas.width, 160);
+            ctx.fillRect(0, canvas.height - 220, canvas.width, 220);
 
             ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
             ctx.fillRect(0, 0, canvas.width, 34);
@@ -1683,61 +3940,42 @@
             var p2Color = (scene.wheelSlices && scene.wheelSlices[1]) ? (scene.wheelSlices[1].color || '#ff00ff') : '#ff00ff';
 
             var cx = canvas.width / 2;
-            var layout = getFilmLayout();
-            var wheel = layout.wheel;
 
             ctx.save();
 
-            // 1. TOP ROUND LABEL (Pushed higher to clear the wheel)
             ctx.textAlign = 'center';
             ctx.shadowColor = accentColor;
             ctx.shadowBlur = 30 * pulse;
             ctx.fillStyle = '#ffffff';
-            ctx.font = '900 60px Segoe UI'; 
-            ctx.fillText(roundLabel, cx, 100);
+            ctx.font = '900 42px Segoe UI'; 
+            ctx.fillText(roundLabel, cx, 104);
             
-            // 2. THE MATCHUP (Pushed to the very bottom to clear the wheel)
             if (p1 && p2) {
-                var vsY = canvas.height - 110;
+                drawWheelDecisionBadge(ctx, canvas, 'RANDOM RESULT FROM THE WHEEL', accentColor, 714);
+                drawSideMatchPlate(ctx, 42, 892, 186, 104, p1, p1Color, 'left');
+                drawSideMatchPlate(ctx, canvas.width - 228, 892, 186, 104, p2, p2Color, 'right');
 
-                // Background Glow for names at the bottom
-                var grd = ctx.createLinearGradient(0, vsY - 60, 0, vsY + 60);
-                grd.addColorStop(0, 'rgba(0,0,0,0)');
-                grd.addColorStop(0.5, 'rgba(0,0,0,0.8)');
-                grd.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = grd;
-                ctx.fillRect(0, vsY - 60, canvas.width, 120);
-
-                // Player 1
-                ctx.shadowColor = p1Color;
-                ctx.shadowBlur = 20;
-                ctx.fillStyle = p1Color;
-                ctx.font = '900 54px Segoe UI';
-                ctx.textAlign = 'right';
-                ctx.fillText(p1.toUpperCase(), cx - 80, vsY + 20);
-
-                // VS
-                ctx.shadowColor = '#ffffff';
-                ctx.shadowBlur = 10;
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '900 32px Segoe UI';
+                ctx.shadowColor = '#ffe4a1';
+                ctx.shadowBlur = 18;
+                ctx.fillStyle = '#ffe4a1';
+                ctx.font = '900 26px Bebas Neue';
                 ctx.textAlign = 'center';
-                ctx.fillText('VS', cx, vsY + 15);
-
-                // Player 2
-                ctx.shadowColor = p2Color;
-                ctx.shadowBlur = 20;
-                ctx.fillStyle = p2Color;
-                ctx.font = '900 54px Segoe UI';
-                ctx.textAlign = 'left';
-                ctx.fillText(p2.toUpperCase(), cx + 80, vsY + 20);
+                ctx.fillText('THE WHEEL DECIDES', cx, 872);
             }
 
             ctx.restore();
         }
 
         function renderFilmFrame(ctx, canvas, scene, progress, elapsed) {
+            var designCanvas = getTourAniDesignCanvas();
             var pulse = 0.92 + Math.sin(elapsed * 0.005) * 0.08;
+            var effectiveSnapshot = scene.snapshot;
+            if (scene.type === 'selection' || scene.type === 'match') {
+                var revealThreshold = scene.type === 'selection' ? 0.84 : 0.88;
+                effectiveSnapshot = progress < revealThreshold
+                    ? (scene.beforeSnapshot || scene.snapshot)
+                    : (scene.afterSnapshot || scene.snapshot);
+            }
             
             // Cinematic Fading: 
             // Progress goes from 0 to 1 throughout the scene duration.
@@ -1750,58 +3988,85 @@
                 alpha = (1.0 - progress) / edgeFade;
             }
             
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#040814';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(canvas.width / designCanvas.width, canvas.height / designCanvas.height);
             ctx.globalAlpha = alpha;
-            drawBackdrop(ctx, canvas, elapsed);
+
+            ctx.save();
+            applySceneCamera(ctx, designCanvas, scene, progress, elapsed);
+            drawBackdrop(ctx, designCanvas, elapsed);
+            drawSceneSpotlight(ctx, designCanvas, scene.promotionColor || '#8feeff', elapsed, progress);
 
             if (scene.type === 'champion') {
-                drawChampionSpotlight(ctx, canvas, scene, progress, elapsed);
+                drawChampionSpotlight(ctx, designCanvas, scene, progress, elapsed);
             } else {
-                drawReplayBracket(ctx, scene.snapshot, scene.activeMatchId, elapsed);
+                drawReplayBracket(ctx, effectiveSnapshot, scene.activeMatchId, elapsed);
                 drawReplayWheel(ctx, scene, progress, elapsed);
-                drawStageAnnouncement(ctx, canvas, scene, elapsed, pulse);
+                drawStageAnnouncement(ctx, designCanvas, scene, elapsed, pulse);
+                if (scene.type === 'full-pool') {
+                    drawCountryRosterPanel(ctx, designCanvas, scene.wheelSlices, 'FULL TOURNAMENT WHEEL', scene.promotionColor || '#8feeff');
+                    drawWheelDecisionBadge(ctx, designCanvas, 'RANDOM DRAW STARTS HERE', scene.promotionColor || '#8feeff', 624);
+                }
+                if (scene.type === 'selection') {
+                    drawSelectionFocusBanner(ctx, designCanvas, scene, progress, elapsed);
+                    drawWheelDecisionBadge(ctx, designCanvas, 'LIVE RANDOM DRAW', scene.promotionColor || '#ffd700', 624);
+                }
+                if (scene.type === 'round') {
+                    drawWheelDecisionBadge(ctx, designCanvas, 'EVERY RESULT COMES FROM A WHEEL SPIN', scene.promotionColor || '#8feeff', 714);
+                }
+            }
+            ctx.restore();
+
+            drawSceneTransitionEffects(ctx, designCanvas, scene, progress);
+
+            if (scene.momentLabel) {
+                drawMomentBadge(ctx, designCanvas, scene.momentLabel, scene.momentAccent || scene.promotionColor || '#ffd700', scene.type === 'champion' ? 150 : 118, scene.type === 'match' || scene.type === 'champion');
             }
 
-            drawFilmChrome(ctx, canvas);
+            drawFilmChrome(ctx, designCanvas);
+            drawFilmFinish(ctx, designCanvas, scene, progress, elapsed);
 
-            // Clean overlay layout
-            ctx.globalAlpha = alpha * 0.5;
+            ctx.globalAlpha = alpha * 0.55;
             ctx.strokeStyle = 'rgba(255,255,255,0.1)';
             ctx.lineWidth = 4;
-            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-            
-            ctx.globalAlpha = alpha;
-            
-            // Header
-            ctx.fillStyle = 'rgba(0,0,0,0.4)';
-            drawRoundedRectPath(ctx, 40, 40, 320, 50, 0);
-            ctx.fill();
-            
-            ctx.fillStyle = '#FFD700';
-            ctx.font = '800 20px Segoe UI';
-            ctx.textAlign = 'left';
-            ctx.fillText('• TOURANI CHAMPIONSHIP CUT', 65, 75);
+            ctx.strokeRect(30, 36, designCanvas.width - 60, designCanvas.height - 72);
 
-            // Footer / Title of Scene (Big but clean)
+            ctx.globalAlpha = alpha;
+
+            ctx.fillStyle = 'rgba(0,0,0,0.46)';
+            drawRoundedRectPath(ctx, 30, 42, designCanvas.width - 60, 50, 0);
+            ctx.fill();
+
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '800 18px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('• TOURANI CINEMATIC MASTER', designCanvas.width / 2, 76);
+
             if (scene.title) {
-                var footerHeight = scene.subtitle ? 114 : 80;
-                var footerTop = canvas.height - (footerHeight + 30);
+                var footerHeight = scene.subtitle ? 134 : 92;
+                var footerTop = designCanvas.height - (footerHeight + 42);
                 ctx.fillStyle = 'rgba(0,0,0,0.64)';
-                ctx.fillRect(0, footerTop, canvas.width, footerHeight);
-                
+                ctx.fillRect(0, footerTop, designCanvas.width, footerHeight);
+
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
-                drawFittedCenterText(ctx, scene.title.toUpperCase(), canvas.width / 2, footerTop + 40, canvas.width - 120, '900', 40, 'Segoe UI');
+                drawFittedCenterText(ctx, scene.title.toUpperCase(), designCanvas.width / 2, footerTop + 42, designCanvas.width - 90, '900', 38, 'Rajdhani');
 
                 if (scene.subtitle) {
                     ctx.fillStyle = scene.promotionColor || '#ffd700';
                     ctx.shadowColor = scene.promotionColor || '#ffd700';
-                    ctx.shadowBlur = 16;
-                    drawFittedCenterText(ctx, scene.subtitle.toUpperCase(), canvas.width / 2, footerTop + 78, canvas.width - 140, '800', 24, 'Segoe UI');
+                    ctx.shadowBlur = 18;
+                    drawFittedCenterText(ctx, scene.subtitle.toUpperCase(), designCanvas.width / 2, footerTop + 88, designCanvas.width - 100, '800', 23, 'Rajdhani');
                     ctx.shadowBlur = 0;
                 }
             }
 
-            ctx.globalAlpha = 1.0; // Reset
+            ctx.restore();
+            ctx.globalAlpha = 1.0;
         }
 
         function createTone(audioContext, destination, config) {
@@ -1840,6 +4105,48 @@
             gain.connect(destination);
             source.start(config.start);
             source.stop(config.start + duration + 0.02);
+        }
+
+        function createSweepTone(audioContext, destination, config) {
+            var oscillator = audioContext.createOscillator();
+            var gain = audioContext.createGain();
+            oscillator.type = config.type || 'sawtooth';
+            oscillator.frequency.setValueAtTime(config.fromFrequency || 220, config.start);
+            oscillator.frequency.exponentialRampToValueAtTime(config.toFrequency || 880, config.start + (config.duration || 0.5));
+            gain.gain.setValueAtTime(0.0001, config.start);
+            gain.gain.exponentialRampToValueAtTime(config.volume || 0.03, config.start + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0001, config.start + (config.duration || 0.5));
+            oscillator.connect(gain);
+            gain.connect(destination);
+            oscillator.start(config.start);
+            oscillator.stop(config.start + (config.duration || 0.5) + 0.04);
+        }
+
+        function createCrowdRise(audioContext, destination, config) {
+            var duration = config.duration || 0.9;
+            var buffer = audioContext.createBuffer(1, Math.max(1, Math.floor(audioContext.sampleRate * duration)), audioContext.sampleRate);
+            var channel = buffer.getChannelData(0);
+            for (var index = 0; index < channel.length; index += 1) {
+                var noise = Math.random() * 2 - 1;
+                var envelope = Math.sin((index / channel.length) * Math.PI);
+                channel[index] = noise * envelope * 0.6;
+            }
+
+            var source = audioContext.createBufferSource();
+            var filter = audioContext.createBiquadFilter();
+            var gain = audioContext.createGain();
+            source.buffer = buffer;
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(config.frequency || 700, config.start);
+            filter.Q.value = 0.7;
+            gain.gain.setValueAtTime(0.0001, config.start);
+            gain.gain.exponentialRampToValueAtTime(config.volume || 0.024, config.start + 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.0001, config.start + duration);
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(destination);
+            source.start(config.start);
+            source.stop(config.start + duration + 0.04);
         }
 
         function createTourAniAudioBed(scenes, totalDuration, includeMusic, mode) {
@@ -1986,6 +4293,65 @@
                     });
                 }
 
+                if (scene.audioProfile === 'pulse') {
+                    createSweepTone(audioContext, master, {
+                        start: sceneTime + 0.16,
+                        fromFrequency: 180,
+                        toFrequency: 520,
+                        duration: 0.48,
+                        volume: 0.02
+                    });
+                }
+
+                if (scene.audioProfile === 'surge') {
+                    createSweepTone(audioContext, master, {
+                        start: sceneTime + 0.12,
+                        fromFrequency: 160,
+                        toFrequency: 760,
+                        duration: 0.62,
+                        volume: 0.024
+                    });
+                    createCrowdRise(audioContext, master, {
+                        start: sceneTime + 0.18,
+                        duration: 0.92,
+                        frequency: 840,
+                        volume: 0.024
+                    });
+                }
+
+                if (scene.audioProfile === 'shock') {
+                    createNoiseBurst(audioContext, master, {
+                        start: sceneTime + 0.1,
+                        duration: 0.36,
+                        volume: 0.03,
+                        frequency: 1400
+                    });
+                    createSweepTone(audioContext, master, {
+                        start: sceneTime + 0.16,
+                        fromFrequency: 680,
+                        toFrequency: 180,
+                        duration: 0.54,
+                        volume: 0.022,
+                        type: 'square'
+                    });
+                }
+
+                if (scene.audioProfile === 'coronation') {
+                    createCrowdRise(audioContext, master, {
+                        start: sceneTime + 0.16,
+                        duration: 1.4,
+                        frequency: 920,
+                        volume: 0.032
+                    });
+                    createSweepTone(audioContext, master, {
+                        start: sceneTime + 0.24,
+                        fromFrequency: 220,
+                        toFrequency: 980,
+                        duration: 0.88,
+                        volume: 0.028
+                    });
+                }
+
                 cursor += scene.duration;
             });
 
@@ -2013,24 +4379,104 @@
             return merged;
         }
 
-        async function createMp3AudioBed() {
+        async function createMp3AudioBed(scenes) {
             if (!window.AudioContext) return null;
             try {
                 var audioContext = new AudioContext();
                 var destination = audioContext.createMediaStreamDestination();
-                var response = await fetch('tournament.mp3');
-                var arrayBuffer = await response.arrayBuffer();
-                var audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                var master = audioContext.createGain();
+                master.gain.value = 0.94;
+                master.connect(destination);
+
+                async function fetchAudioBuffer(urls) {
+                    for (var index = 0; index < urls.length; index += 1) {
+                        try {
+                            var response = await fetch(urls[index]);
+                            if (!response.ok) continue;
+                            var arrayBuffer = await response.arrayBuffer();
+                            return await audioContext.decodeAudioData(arrayBuffer);
+                        } catch (error) {
+                        }
+                    }
+                    return null;
+                }
+
+                var audioBuffer = await fetchAudioBuffer(['tournament.mp3']);
+                if (!audioBuffer) {
+                    if (audioContext.state !== 'closed') audioContext.close();
+                    return null;
+                }
                 var source = audioContext.createBufferSource();
                 source.buffer = audioBuffer;
                 source.loop = true;
-                source.connect(destination);
+                var musicGain = audioContext.createGain();
+                musicGain.gain.value = 0.78;
+                source.connect(musicGain);
+                musicGain.connect(master);
                 source.start(0);
+
+                var tickBuffer = await fetchAudioBuffer(['ticksound.mp3', 'tick_sound.mp3']);
+                var tickSources = [];
+                if (tickBuffer && scenes && scenes.length) {
+                    var cursor = 0;
+                    scenes.forEach(function (scene) {
+                        var startSeconds = cursor / 1000;
+                        var sceneSeconds = scene.duration / 1000;
+                        var interval = null;
+                        if (scene.type === 'full-pool') interval = 0.14;
+                        else if (scene.type === 'selection') interval = 0.13;
+                        else if (scene.type === 'match') interval = 0.11;
+                        else if (scene.type === 'round') interval = 0.2;
+
+                        if (interval) {
+                            for (var time = 0; time < sceneSeconds; time += interval) {
+                                var tickSource = audioContext.createBufferSource();
+                                var tickGain = audioContext.createGain();
+                                tickSource.buffer = tickBuffer;
+                                tickGain.gain.value = scene.type === 'match' ? 0.18 : 0.12;
+                                tickSource.connect(tickGain);
+                                tickGain.connect(master);
+                                tickSource.start(audioContext.currentTime + 0.05 + startSeconds + time);
+                                tickSources.push(tickSource);
+                            }
+                        }
+
+                        if (scene.audioProfile === 'surge' || scene.audioProfile === 'coronation') {
+                            var swellSource = audioContext.createBufferSource();
+                            var swellGain = audioContext.createGain();
+                            swellSource.buffer = tickBuffer;
+                            swellSource.playbackRate.value = scene.audioProfile === 'coronation' ? 0.72 : 0.84;
+                            swellGain.gain.value = scene.audioProfile === 'coronation' ? 0.22 : 0.16;
+                            swellSource.connect(swellGain);
+                            swellGain.connect(master);
+                            swellSource.start(audioContext.currentTime + 0.12 + startSeconds);
+                            tickSources.push(swellSource);
+                        }
+
+                        if (scene.audioProfile === 'shock') {
+                            var shockSource = audioContext.createBufferSource();
+                            var shockGain = audioContext.createGain();
+                            shockSource.buffer = tickBuffer;
+                            shockSource.playbackRate.value = 1.45;
+                            shockGain.gain.value = 0.18;
+                            shockSource.connect(shockGain);
+                            shockGain.connect(master);
+                            shockSource.start(audioContext.currentTime + 0.2 + startSeconds);
+                            tickSources.push(shockSource);
+                        }
+
+                        cursor += scene.duration;
+                    });
+                }
+
                 return {
                     stream: destination.stream,
                     context: audioContext,
                     stop: function () {
                         try { source.stop(); } catch (e) {}
+                        tickSources.forEach(function (tickSource) {
+                            try { tickSource.stop(); } catch (error) {}
+                        });
                         if (audioContext.state !== 'closed') audioContext.close();
                     }
                 };
@@ -2057,7 +4503,11 @@
                     return;
                 }
 
-                var scenes = buildFilmScenes(filmMode);
+                var storyScenes = buildFilmScenes(filmMode);
+                var scenes = fitFilmScenesToMaxDuration(
+                    scaleFilmScenesForRender(storyScenes, TOURANI_RENDER_PROFILE.durationScale),
+                    TOURANI_RENDER_PROFILE.maxDurationMs
+                );
                 if (!scenes.length) {
                     status.textContent = 'No tournament story was recorded yet.';
                     return;
@@ -2073,22 +4523,32 @@
                 primaryDownloadButton.disabled = true;
                 primaryDownloadButton.textContent = 'Rendering World Cup Replay...';
                 link.style.display = 'none';
-                status.textContent = 'Rendering a cinematic World Cup style replay with music, knockout drama, and a full tournament recap.';
+                status.textContent = 'Preparing the replay render. This now uses a faster export profile so the download appears reliably.';
+                updateTourAniProgress(2, Math.ceil(TOURANI_RENDER_PROFILE.maxDurationMs / 1000), true, 'Preparing frames');
 
+                canvas.width = TOURANI_RENDER_PROFILE.exportWidth;
+                canvas.height = TOURANI_RENDER_PROFILE.exportHeight;
                 var ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                }
                 var baseStream = canvas.captureStream(TOURANI_RENDER_PROFILE.fps);
                 var chunks = [];
                 var totalDuration = scenes.reduce(function (sum, scene) {
                     return sum + scene.duration;
                 }, 0);
-                var audioBed = await createMp3AudioBed();
-                if (!audioBed) {
-                    audioBed = createTourAniAudioBed(scenes, totalDuration, true, filmMode);
-                }
-                if (audioBed && audioBed.context && audioBed.context.state === 'suspended') {
-                    try {
-                        await audioBed.context.resume();
-                    } catch (resumeError) {
+                var audioBed = null;
+                if (TOURANI_RENDER_PROFILE.includeAudio) {
+                    audioBed = await createMp3AudioBed(scenes);
+                    if (!audioBed) {
+                        audioBed = createTourAniAudioBed(scenes, totalDuration, true, filmMode);
+                    }
+                    if (audioBed && audioBed.context && audioBed.context.state === 'suspended') {
+                        try {
+                            await audioBed.context.resume();
+                        } catch (resumeError) {
+                        }
                     }
                 }
                 var hasAudioTrack = !!(audioBed && audioBed.stream && audioBed.stream.getAudioTracks().length);
@@ -2111,26 +4571,37 @@
 
                 var recorder = recorderConfig.recorder;
                 var mimeType = recorderConfig.mimeType || recorder.mimeType || 'video/webm';
+                var lastProgressUpdate = -TOURANI_RENDER_PROFILE.progressUpdateIntervalMs;
+                var recorderStopped = false;
 
                 recorder.ondataavailable = function (event) {
                     if (event.data && event.data.size > 0) chunks.push(event.data);
                 };
 
                 var stopPromise = new Promise(function (resolve, reject) {
-                    recorder.onstop = resolve;
+                    recorder.onstop = function () {
+                        recorderStopped = true;
+                        resolve();
+                    };
                     recorder.onerror = function (event) {
                         reject(event.error || new Error('MediaRecorder failed while building the replay.'));
                     };
                 });
 
-                recorder.start(200);
+                recorder.start(250);
+
+                renderFilmFrame(ctx, canvas, scenes[0], 0, 0);
 
                 await new Promise(function (resolve) {
-                    var startTime = null;
+                    setTimeout(resolve, 120);
+                });
 
-                    function renderFrame(now) {
-                        if (startTime === null) startTime = now;
-                        var elapsed = now - startTime;
+                await new Promise(async function (resolve) {
+                    var frameInterval = 1000 / TOURANI_RENDER_PROFILE.fps;
+                    var totalFrames = Math.max(1, Math.ceil(totalDuration / frameInterval));
+
+                    for (var frameIndex = 0; frameIndex <= totalFrames; frameIndex += 1) {
+                        var elapsed = Math.min(totalDuration, frameIndex * frameInterval);
                         var cursor = 0;
                         var activeScene = scenes[scenes.length - 1];
                         var progress = 1;
@@ -2146,18 +4617,52 @@
 
                         renderFilmFrame(ctx, canvas, activeScene, Math.max(0, Math.min(progress, 1)), elapsed);
 
-                        if (elapsed < totalDuration) {
-                            requestAnimationFrame(renderFrame);
-                        } else {
-                            resolve();
+                        if (elapsed - lastProgressUpdate >= TOURANI_RENDER_PROFILE.progressUpdateIntervalMs || elapsed >= totalDuration) {
+                            lastProgressUpdate = elapsed;
+                            var percent = Math.max(1, Math.min(100, Math.round((elapsed / totalDuration) * 100)));
+                            var secondsLeft = Math.max(0, Math.ceil((totalDuration - elapsed) / 1000));
+                            status.textContent = 'Rendering replay ' + percent + '% complete. About ' + secondsLeft + 's remaining before the download is ready.';
+                            updateTourAniProgress(percent, secondsLeft, true, 'Rendering replay');
                         }
+
+                        if (elapsed >= totalDuration) {
+                            break;
+                        }
+
+                        await new Promise(function (next) {
+                            setTimeout(next, frameInterval);
+                        });
                     }
 
-                    requestAnimationFrame(renderFrame);
+                    resolve();
                 });
 
-                recorder.stop();
-                await stopPromise;
+                updateTourAniProgress(98, 1, true, 'Finalizing video');
+
+                await new Promise(function (resolve) {
+                    setTimeout(resolve, 180);
+                });
+
+                if (recorder.state !== 'inactive') {
+                    try {
+                        recorder.requestData();
+                    } catch (requestDataError) {
+                    }
+                    recorder.stop();
+                }
+
+                await Promise.race([
+                    stopPromise,
+                    new Promise(function (resolve, reject) {
+                        setTimeout(function () {
+                            if (recorderStopped) {
+                                resolve();
+                                return;
+                            }
+                            reject(new Error('Replay recording timed out while finalizing.'));
+                        }, TOURANI_RENDER_PROFILE.recorderStopTimeoutMs);
+                    })
+                ]);
                 if (audioBed) {
                     audioBed.stop();
                 }
@@ -2176,7 +4681,12 @@
                 primaryDownloadButton.disabled = false;
                 primaryDownloadButton.textContent = 'Save World Cup Replay';
                 syncTourAniUi();
+                updateTourAniProgress(100, 0, false, 'Replay ready');
                 status.textContent = 'The World Cup replay is ready with editor-friendly export metadata. Click Save World Cup Replay or use the Save Replay File link to download it.';
+                if (tourAniPendingDownload) {
+                    tourAniPendingDownload = false;
+                    triggerTourAniDownload();
+                }
             })();
 
             try {
@@ -2191,6 +4701,8 @@
                 if (status) {
                     status.textContent = error && error.message ? error.message : 'Replay generation failed.';
                 }
+                updateTourAniProgress(0, 0, false, 'Render failed');
+                tourAniPendingDownload = false;
             } finally {
                 tourAniRenderPromise = null;
             }
@@ -2235,8 +4747,13 @@
             updateAutoModeButton();
             syncTourAniUi();
 
+            resetBracketBoard();
             drawWheel();
             startContinuousSpin();
+
+            if (!showCheatPlanner()) {
+                setPlainStatusMessage('SELECTION PHASE (0/8)', '#8feeff');
+            }
         }
 
         initializeTournamentPage();
